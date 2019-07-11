@@ -4,3 +4,4 @@ draft: false
 title: Blog
 ---
 
+My thoughts, recorded.
