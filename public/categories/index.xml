@@ -6,35 +6,26 @@
     <description>Recent content in Categories on Tanner</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 18 Aug 2018 20:14:59 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 10 Jul 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/categories/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
+      <title>data</title>
+      <link>/categories/data/</link>
+      <pubDate>Wed, 10 Jul 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/data/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>杂技浅尝</title>
       <link>/categories/%E6%9D%82%E6%8A%80%E6%B5%85%E5%B0%9D/</link>
-      <pubDate>Sat, 18 Aug 2018 20:14:59 +0800</pubDate>
+      <pubDate>Tue, 30 Jan 2018 20:21:13 +0800</pubDate>
       
       <guid>/categories/%E6%9D%82%E6%8A%80%E6%B5%85%E5%B0%9D/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>品鉴评论</title>
-      <link>/categories/%E5%93%81%E9%89%B4%E8%AF%84%E8%AE%BA/</link>
-      <pubDate>Sun, 12 Aug 2018 23:03:12 +0800</pubDate>
-      
-      <guid>/categories/%E5%93%81%E9%89%B4%E8%AF%84%E8%AE%BA/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>test</title>
-      <link>/categories/test/</link>
-      <pubDate>Wed, 19 Aug 2015 20:29:37 -0700</pubDate>
-      
-      <guid>/categories/test/</guid>
       <description></description>
     </item>
     

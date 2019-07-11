@@ -6,35 +6,17 @@
     <description>Recent content in Series on Tanner</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 18 Aug 2018 20:14:59 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 10 Jul 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/series/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>Blog养成记</title>
-      <link>/series/blog%E5%85%BB%E6%88%90%E8%AE%B0/</link>
-      <pubDate>Sat, 18 Aug 2018 20:14:59 +0800</pubDate>
+      <title>data</title>
+      <link>/series/data/</link>
+      <pubDate>Wed, 10 Jul 2019 00:00:00 +0000</pubDate>
       
-      <guid>/series/blog%E5%85%BB%E6%88%90%E8%AE%B0/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>观后repo</title>
-      <link>/series/%E8%A7%82%E5%90%8Erepo/</link>
-      <pubDate>Sun, 12 Aug 2018 23:03:12 +0800</pubDate>
-      
-      <guid>/series/%E8%A7%82%E5%90%8Erepo/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>前端试水</title>
-      <link>/series/%E5%89%8D%E7%AB%AF%E8%AF%95%E6%B0%B4/</link>
-      <pubDate>Thu, 02 Aug 2018 15:49:22 +0800</pubDate>
-      
-      <guid>/series/%E5%89%8D%E7%AB%AF%E8%AF%95%E6%B0%B4/</guid>
+      <guid>/series/data/</guid>
       <description></description>
     </item>
     

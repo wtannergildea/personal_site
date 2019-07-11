@@ -6,10 +6,19 @@
     <description>Recent content on Tanner</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 30 Jan 2018 20:21:13 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 10 Jul 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Test</title>
+      <link>/moment/tanner-test/</link>
+      <pubDate>Wed, 10 Jul 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/moment/tanner-test/</guid>
+      <description> R Markdown Test  </description>
+    </item>
     
     <item>
       <title>Mac小白探索记(2) Finder设置</title>
