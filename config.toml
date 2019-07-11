@@ -11,7 +11,7 @@ summaryLength              = 200
 Paginate                   = 3
 
 theme = "AllinOne"
-title                      = "Orianna"
+title                      = "Tanner"
 
 pygmentsuseclasses         = true
 
@@ -55,7 +55,7 @@ pygmentsuseclasses         = true
   welcome_head             = "Hello, World!"
   welcome_word             = "~ No Day But Today ~"
 
-  latestpostscount         = 5                             # how many posts to display on the home page
+  latestpostscount         = 3                             # how many posts to display on the home page
   bloggroupby              = 'month'
   dateform                 = "Jan 2, 2006"
   dateformfull             = "2006-01-02  Monday  15:04:05"
