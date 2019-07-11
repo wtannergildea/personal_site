@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tanner</title>
+    <link>/</link>
+    <description>Recent content on Tanner</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 10 Aug 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Blog Test</title>
+      <link>/blog/2019-08/blog-test/</link>
+      <pubDate>Sat, 10 Aug 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2019-08/blog-test/</guid>
+      <description> Blog Test WHy won’t this show up on the blog section?? ahhh
+ </description>
+    </item>
+    
+    <item>
+      <title>Test</title>
+      <link>/moment/tanner-test/</link>
+      <pubDate>Wed, 10 Jul 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/moment/tanner-test/</guid>
+      <description> R Markdown Test  </description>
+    </item>
+    
+  </channel>
+</rss>
