@@ -30,12 +30,6 @@
   </url>
   
   <url>
-    <loc>/</loc>
-    <lastmod>2018-08-18T20:14:59+08:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
     <loc>/series/</loc>
     <lastmod>2018-08-18T20:14:59+08:00</lastmod>
     <priority>0</priority>
@@ -43,6 +37,12 @@
   
   <url>
     <loc>/tags/</loc>
+    <lastmod>2018-08-18T20:14:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/</loc>
     <lastmod>2018-08-18T20:14:59+08:00</lastmod>
     <priority>0</priority>
   </url>
