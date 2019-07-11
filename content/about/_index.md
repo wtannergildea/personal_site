@@ -4,15 +4,14 @@ draft: false
 title: About
 ---
 
-My name is Tanner Gildea and I am originally from a suburb south of Boston, MA.
+My name is Tanner Gildea and I am originally from the suburbs south of Boston, MA.
 
 I recently graduated from Harvard with a degree in Social Studies. I primarily studied government and social theory, and wrote an honors thesis on the foreign policy rhetoric of American presidents. During my time at school, I was involved with the [Harvard College Democrats](http://harvarddems.org), [Harvard Model Congress](https://www.harvardmodelcongress.org), and the [Institute of Politics](https://iop.harvard.edu).
 
 Most recently, I spent time working in the [Office of the New York Attorney General](https://ag.ny.gov), where I conducted qualitative and quantitative research. 
 
-
-
-
+<br/><br/>
+<br/><br/>
 
 Thank you to Orianna for developing the [AllinOne Theme](https://github.com/orianna-zzo/AllinOne)  used for this website. 
 
