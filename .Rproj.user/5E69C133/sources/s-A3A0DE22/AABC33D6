@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1562816914460.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2788496760",
+    "id" : "AABC33D6",
+    "lastKnownWriteTime" : 1562815862,
+    "last_content_update" : 1562815862,
+    "path" : "~/Desktop/R.projects/personal_site/data/series.toml",
+    "project_path" : "data/series.toml",
+    "properties" : {
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "toml"
+}
