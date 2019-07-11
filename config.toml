@@ -73,11 +73,10 @@ pygmentsuseclasses         = true
 
   # links
   email                    = "tannergildea@icloud.com"
+  twitter                  = "//twitter.com/wtannergildea" 
   github                   = "//github.com/wtannergildea"
   linkedin                 = "//linkedin.com/in/w-tanner-gildea-ba1314112/"
-  facebook                 = "//facebook.com/tanner.gildea"
-  twitter                  = "//twitter.com/wtannergildea" 
-  instagram                = "//instagram.com/tannergildea/?hl=en"
+
 
   
   # analytics
