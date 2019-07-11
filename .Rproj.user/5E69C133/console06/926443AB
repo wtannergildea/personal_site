@@ -1207,4 +1207,9 @@ rm 'themes/AllinOne/theme.toml'
 ]0;~/Desktop/R.projects/personal_siteTanners-MacBook-Pro:personal_site tanner$ git commit -m ".gitignore is now working"
 [master 9bbf23e] .gitignore is now working
  1 file changed, 339 insertions(+), 1 deletion(-)
-]0;~/Desktop/R.projects/personal_siteTanners-MacBook-Pro:personal_site tanner$ 
+]0;~/Desktop/R.projects/personal_siteTanners-MacBook-Pro:personal_site tanner$ git add.
+git: 'add.' is not a git command. See 'git --help'.
+
+The most similar command is
+	add
+]0;~/Desktop/R.projects/personal_siteTanners-MacBook-Pro:personal_site tanner$ git add .
