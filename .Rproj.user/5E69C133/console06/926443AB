@@ -1204,3 +1204,7 @@ rm 'themes/AllinOne/static/js/vendors/mdb/mdw-search.js'
 rm 'themes/AllinOne/static/js/vendors/popper.min.js'
 rm 'themes/AllinOne/theme.toml'
 ]0;~/Desktop/R.projects/personal_siteTanners-MacBook-Pro:personal_site tanner$ git add .
+]0;~/Desktop/R.projects/personal_siteTanners-MacBook-Pro:personal_site tanner$ git commit -m ".gitignore is now working"
+[master 9bbf23e] .gitignore is now working
+ 1 file changed, 339 insertions(+), 1 deletion(-)
+]0;~/Desktop/R.projects/personal_siteTanners-MacBook-Pro:personal_site tanner$ 
