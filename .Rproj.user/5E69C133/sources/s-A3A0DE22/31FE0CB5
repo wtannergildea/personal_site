@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1562853087260.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3281138398",
+    "id" : "31FE0CB5",
+    "lastKnownWriteTime" : 1562853106,
+    "last_content_update" : 1562853106,
+    "path" : "~/Desktop/R.projects/personal_site/content/moment/tanner-test.Rmd",
+    "project_path" : "content/moment/tanner-test.Rmd",
+    "properties" : {
+        "cursorPosition" : "1,0",
+        "scrollLine" : "0",
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 9,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}
