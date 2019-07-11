@@ -1,7 +1,7 @@
 ---
 title: "Blog Test"
 author: "Tanner Gildea"
-date: "2019-08-10"
+date: "2019-07-10"
 output: html_document
 categories:
 - blog
