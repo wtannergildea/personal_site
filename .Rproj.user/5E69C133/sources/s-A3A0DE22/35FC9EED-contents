@@ -52,8 +52,8 @@ pygmentsuseclasses         = true
   avatar                   = "img/gildea.jpg"             # path to image in static dir e.g img/avatar.png 
   author                   = "Tanner"
   description              = ["Recent Harvard Grad.", "Proud oldest brother of four.", "Watching the 2020 Presidential Race."]           # appears in the site header when set to a non-empty string
-  welcome_head             = "Hello, World!"
-  welcome_word             = "~ No Day But Today ~"
+  welcome_head             = ""
+  welcome_word             = ""
 
   latestpostscount         = 3                             # how many posts to display on the home page
   bloggroupby              = 'month'
