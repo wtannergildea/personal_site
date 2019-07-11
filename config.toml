@@ -1,4 +1,4 @@
-baseURL                   = "https://example.com"
+baseURL                   = "https://tannergildea.netlify.com"
 builddrafts                = false
 languageCode               = "en-us"
 canonifyurls               = true
