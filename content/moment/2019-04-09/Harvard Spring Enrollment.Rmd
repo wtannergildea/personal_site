@@ -1,7 +1,7 @@
 ---
 title: "Spring Harvard Courses with Largest Jumps in Undergrad Enrollment, 2016-2019"
 author: "Tanner Gildea"
-date: "2019-04-09"
+date: "2019-07-11"
 output: html_document
 categories:
 - data
@@ -53,9 +53,7 @@ download.file(url = "http://registrar.fas.harvard.edu/files/fas-registrar/files/
 download.file(url = "http://registrar.fas.harvard.edu/files/fas-registrar/files/course_enrollment_statistics_0.xlsx",
               destfile  = "~/Desktop/R.projects/personal_site/content/moment/2019-04-09/spring_2016_data.xlsx",
               mode = "wb")  
-```
 
-```{r analysis}
 
 # The following is a commented section of code if I wanted to download the fall 
 # enrollment data and create a similar visualization for Fall 2015 - 2018. Currently,
