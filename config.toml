@@ -29,17 +29,17 @@ pygmentsuseclasses         = true
 [menu]
 
   [[menu.main]]
+    name                   = "Blog"
+    weight                 = -120
+    identifier             = "blog"
+    url                    = "blog/"  
+    
+  [[menu.main]]
     name                   = "Data Projects"
     weight                 = -110
     identifier             = "moment"
     url                    = "moment/" 
     
-  [[menu.main]]
-    name                   = "Blog"
-    weight                 = -120
-    identifier             = "blog"
-    url                    = "blog/"  
-
   [[menu.main]]
     name                   = "About"
     weight                 = -100
