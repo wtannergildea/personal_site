@@ -4,4 +4,4 @@ draft: false
 title: Blog
 ---
 
-My thoughts, recorded.
+My thoughts, recorded. Soon to come!
