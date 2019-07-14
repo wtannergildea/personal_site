@@ -7,7 +7,7 @@ layoutdir                  = "layouts"
 publishdir                 = "public"
 enableEmoji                = true
 hasCJKLanguage             = true
-summaryLength              = 50
+summaryLength              = 0
 Paginate                   = 3
 
 theme = "AllinOne"
