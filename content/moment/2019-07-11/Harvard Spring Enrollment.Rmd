@@ -15,7 +15,7 @@ Using archived Harvard enrollment data, I have isolated the ten spring courses t
 
 
 
-```{r setup, include = FALSE, echo = FALSE, results = "asis", message=FALSE}
+```{r setup, echo = FALSE, message=FALSE}
 
 library(dplyr)
 library(tidyverse)
