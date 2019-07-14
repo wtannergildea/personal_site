@@ -4,6 +4,8 @@ draft: false
 title: About
 ---
 
+<img src="/about/_index_files/img_2991.jpeg" alt="grad headshot" width="50%"/>
+
 My name is Tanner Gildea and I am originally from the suburbs south of Boston, MA.
 
 I recently graduated from Harvard with a degree in Social Studies. I primarily studied government and social theory, and wrote an honors thesis on the foreign policy rhetoric of American presidents. During my time at school, I was involved with the [Harvard College Democrats](http://harvarddems.org), [Harvard Model Congress](https://www.harvardmodelcongress.org), and the [Institute of Politics](https://iop.harvard.edu).
