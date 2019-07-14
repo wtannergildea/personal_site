@@ -1,11 +1,10 @@
 ---
-title: "The Story of the 2020 Democratic Primary"
-author: "Tanner Gildea"
-date: "2019-07-10"
-output: html_document
-
+title: The Story of the 2020 Democratic Primary
+author: Tanner Gildea
+date: '2019-07-10'
 tags:
-- 2020
+  - '2020'
+output: html_document
 ---
 
 ## As Told Through Twitter
