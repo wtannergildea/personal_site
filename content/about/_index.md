@@ -4,7 +4,7 @@ draft: false
 title: About
 ---
 
-<img src="/about/_index_files/img_2991.jpeg" alt="grad headshot" width="50%"/>
+<img style="float: left;" src="/about/_index_files/img_2991.jpeg" alt="grad headshot" width="50%"/>
 
 My name is Tanner Gildea and I am originally from the suburbs south of Boston, MA.
 
