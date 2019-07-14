@@ -15,7 +15,7 @@ Harvard Professor of Psychology Steven Pinker's recent book ["Enlightenment Now:
 
 Arguably, two of the most important measurements of human welfare are life expectancy and GDP per capita. Using data from the [Gapminder](https://www.gapminder.org) dataset, I've created a visualization that previews Pinker's broader argument. 
 
-
+Consider exploring the Gapminder site for yourself or giving Pinker's book a read!
 
 
 ```{r setup, include=FALSE}
