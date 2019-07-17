@@ -38,7 +38,6 @@ In comparing the top ten leading causes of nationwide deaths, the aggregate numb
 
 You'll notice that cancer deaths have consistently increased overtime, whereas deaths from heart disease began to climb again after an historical decrease in 2011. 
 
-<br />
 
 ```{r top_two_totals}
 
@@ -81,12 +80,8 @@ ggplot(trends_top_two, aes(x = Year,
 
 ```
 
-<br />
-<br />
-
 Other leading causes of death in the United States include stroke, chronic lower respiratory diseases (CLRD), Alzheimer's disease, and diabetes. Shark attacks and lightning strikes are notably absent.
 
-<br />
 
 ```{r top_eight_totals}
 
@@ -142,7 +137,6 @@ Age-adjusted death rates give us a better understanding of trends among the lead
 
 For example, the age-adjusted death rates of the two leading causes of death, heart disease and cancer, tell a different story from the total annual number of deaths. Although total deaths are increasing, the death rates are generally falling - which bodes well for treatment.
 
-<br />
 
 ```{r death_props_two}
 
@@ -189,7 +183,6 @@ Notable gains are clear in the prevention of strokes and deaths related to influ
 
 Unfortunately, Alzheimer's disease and deaths related to unintentional injuries are on the rise. Alzheimer's is [projected to cost](https://www.alz.org/news/2018/new_alzheimer_s_association_report_reveals_sharp_i) $1.1 trillion by 2050. Meanwhile, the rise in deaths related to unintentional injuries is likely related to the opioid epidemic, which began its [third wave](https://www.cdc.gov/drugoverdose/epidemic/index.html) in 2013.
 
-<br />
 
 ```{r death_props_eight}
 
@@ -243,12 +236,10 @@ NCHS_states_joined <- left_join(us_states, NCHS_states)
 
 ```
 <br />
-
 ## Looking at the States  
 
 The leading causes of deaths can be isolated according to each specific State. For example, heart disease is the leading cause of death nationwide - but are some state populations more at risk? 
 
-<br />
 
 ```{r map_heart_disease}
 
@@ -288,7 +279,6 @@ The regional South is particularly at-risk for deaths from heart disease, where 
 
 Suicide, another leading cause of death, disproportionately affects a different U.S. region - in this case, the West, particularly the Rocky Mountain region.
 
-<br />
 
 ```{r map_suicide}
 
@@ -357,13 +347,11 @@ ggplot(data = suicide, aes(x = long,
 #         strip.background = element_blank())
 
 ```
-<br />
 
 One particularly interesting cause of death is "unintentional injuries", which could include anything from vehicular accidents to selfie-stick mishaps. You'll see that the rate of death increased sharply in West Virginia, and to a lesser degree in New England. 
 
 The likely culprit? Drug overdoes related to the opioid epidemic, which has hit these areas [particularly hard](https://www.drugabuse.gov/opioid-summaries-by-state/west-virginia-opioid-summary). 
 
-<br />
 
 ```{r map_unintentional}
 unintentional <- NCHS_states_joined %>% 
@@ -398,6 +386,7 @@ ggplot(data = unintentional, aes(x = long,
 
 ```
 <br />
+
 
 Although the CDC's current dataset ends in 2016, this analysis provides an instructive foundation for understanding the leading causes of death in the United States. 
 
