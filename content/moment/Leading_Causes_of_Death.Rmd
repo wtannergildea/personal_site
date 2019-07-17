@@ -389,7 +389,7 @@ ggplot(data = unintentional, aes(x = long,
 <br />
 
 
-Although the CDC's current dataset ends in 2016, this analysis provides an instructive foundation for understanding the leading causes of death in the United States. 
+Although the CDC's current dataset ends in 2016, this analysis provides an instructive foundation for understanding the leading causes of death in the United States. This analysis would be much improved if the CDC collected this data alongside other variables such as gender, race, and age.
 
 I will be interested to see how trends develop as more data is released!
 
