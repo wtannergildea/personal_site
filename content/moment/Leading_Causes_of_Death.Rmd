@@ -236,6 +236,7 @@ NCHS_states_joined <- left_join(us_states, NCHS_states)
 
 ```
 <br />
+
 ## Looking at the States  
 
 The leading causes of deaths can be isolated according to each specific State. For example, heart disease is the leading cause of death nationwide - but are some state populations more at risk? 
