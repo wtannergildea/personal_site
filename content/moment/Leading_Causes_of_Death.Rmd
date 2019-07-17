@@ -36,7 +36,7 @@ Using this data, I present trends in the leading causes of death in the U.S. fro
 
 In comparing the top ten leading causes of nationwide deaths, the aggregate numbers make clear that two diseases are separable from the remaining eight. Heart disease and cancer account for more deaths than the remaining leading causes combined. 
 
-You'll notice that cancer deaths have consistently increased overtime, whereas deaths from heart disease began to climb again after an historical decrease in 2011. 
+You'll notice that cancer deaths have consistently increased overtime, whereas deaths from heart disease began to climb again in 2011 after an historical decrease . 
 
 
 ```{r top_two_totals}
