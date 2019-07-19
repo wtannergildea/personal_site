@@ -5,9 +5,8 @@ date: "2019-07-18"
 output: html_document
 ---
 
-<br />
 
-FiveThirtyEight is currently running an [interesting series](https://fivethirtyeight.com/tag/media/) analyzing how cable news and online media sources are covering the Democratic presidential candidates. [Dhrumil Mehta](https://fivethirtyeight.com/contributors/dhrumil-mehta/), one of FiveThirtyEight's data journalists, has  diligently updated the series each week, keeping track of how coverage of individual candidates has risen and fallen. They have also kindly shared the underlying data [here](https://github.com/fivethirtyeight/data/tree/master/media-mentions-2020).
+FiveThirtyEight is currently running an [interesting series](https://fivethirtyeight.com/tag/media/) analyzing how cable news and online media sources are covering the Democratic presidential candidates. [Dhrumil Mehta](https://fivethirtyeight.com/contributors/dhrumil-mehta/), one of FiveThirtyEight's data journalists, has  diligently kept track of how coverage of individual candidates has risen and fallen week to week. They have also kindly shared the underlying data [here](https://github.com/fivethirtyeight/data/tree/master/media-mentions-2020).
 
 Personally, I was interested in seeing how coverage of the top candidates has changed since the beginning of the race (roughly January of 2019). I also wanted to see if coverage of candidates diverged based on media type - cable or online. 
 
@@ -102,7 +101,7 @@ ggplot(clean_cable_joined_online, aes(x = date,
   labs(x = NULL, y = "Percent of Articles and Stories That Mention Each Candidate",
        title = "How often are the candidates mentioned in cable and online news?",
        subtitle = "Cable includes CNN, Fox News, and MSNBC - Online articles sourced from the Media Cloud database",
-       caption = "Source: FiveThirtyEight.com") +
+       caption = "Source: FiveThirtyEight.com. Percentages can add to greater than 100% since articles or stories often mention multiple candidates.") +
   
   scale_color_brewer(palette = "Paired") +
   scale_fill_brewer(palette = "Paired") +
@@ -123,7 +122,7 @@ ggplot(clean_cable_joined_online, aes(x = date,
 
 ```
 
-You can see that for some candidates, for example Joe Biden or Beto O'Rourke, cable news and online media coverage tracks relatively closely. Coverage diverges more sharply for other candidates, such as Elizabeth Warren, Bernie Sanders, or Pete Buttigieg.
+You can see that for some candidates, e.g. Joe Biden or Beto O'Rourke, cable news and online media coverage tracks relatively closely. Coverage diverges more sharply for other candidates, such as Elizabeth Warren, Bernie Sanders, or Pete Buttigieg.
 
 In general, these nine "higher-tier" candidates are receiving a far higher percentage of the cable news stations' attention than from online sources. Either Joe Biden is gobbling up the internet's attention, or more likely, online articles are slightly more democratized in their coverage of all 24-ish candidates running for the Democratic nomination.
 
