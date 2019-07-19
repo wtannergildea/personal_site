@@ -13,7 +13,6 @@ Personally, I was interested in seeing how coverage of the top candidates has ch
 
 The graph below helps answer these two questions.
 
-<br />
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
@@ -340,7 +339,6 @@ gt(joined_table_bump) %>%
 
 ```
 
-<br />
 
 You'll notice that in cable television stories, Kamala Harris clearly had a burst a coverage. A larger pool of candidates received a post-debate bounce online - one that candidates such as Julian Castro badly needed.
 
