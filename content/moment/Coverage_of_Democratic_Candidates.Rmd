@@ -222,7 +222,7 @@ gt(joined_table) %>%
   # text aesthetics
   
   tab_options(
-    table.width = 50,
+    table.width = 750,
     table.font.size = 12,
     column_labels.font.size = 16, 
     column_labels.font.weight = "bold",
@@ -331,7 +331,7 @@ gt(joined_table_bump) %>%
       domain = NULL)) %>% 
   
     tab_options(
-    table.width = 50,
+    table.width = 750,
     table.font.size = 12,
     column_labels.font.size = 16, 
     column_labels.font.weight = "bold",
