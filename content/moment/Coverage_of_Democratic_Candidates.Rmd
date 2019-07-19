@@ -126,7 +126,7 @@ You can see that for some candidates, e.g. Joe Biden or Beto O'Rourke, cable new
 
 In general, these nine "higher-tier" candidates are receiving a far higher percentage of the cable news stations' attention than from online sources. Either Joe Biden is gobbling up the internet's attention, or more likely, online articles are slightly more democratized in their coverage of all 24-ish candidates running for the Democratic nomination.
 
-It's important to note that in this race, all news is NOT good news. FiveThirtyEight's dataset only tracks total coverage, not it's sentiment - good or bad. And increased coverage invites additional scrutiny. 
+It's important to note that in this race, all news is NOT good news. FiveThirtyEight's dataset only tracks total coverage, not sentiment - good or bad. And increased coverage invites additional scrutiny. 
 
 *****
 
@@ -234,6 +234,12 @@ gt(joined_table) %>%
   #  as_raw_html() %>% as.character() %>% cat()
 
 ```
+
+Candidates who have won the largest increases in coverage include Joe Biden, Kamala Harris, and Pete Buttigieg (who was attracting literally no coverage back in January). Even though he has always attracted significant attention, Biden's front-runner status has led him to dominate coverage since his presidential [campaign announcement](https://time.com/5553949/joe-biden-presidential-campaign-launch-announcement/) in late April.
+
+Other major candidates have trended downwards in their coverage, Beto O'Rourke most precipitously. I would hesistate to read much into Warren's staggering 28 point drop since January - she was the only major candidate announced at the time and was attracting nearly half of the media's attention.
+
+And for the rest of them? The haven't reallymoved much.
 
 ```{r debate_bump}
 
