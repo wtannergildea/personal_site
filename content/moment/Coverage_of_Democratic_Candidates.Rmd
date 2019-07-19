@@ -3,6 +3,8 @@ title: "Which Democratic candidates are getting mentioned the most on cable and 
 author: "Tanner Gildea"
 date: "2019-07-18"
 output: html_document
+tags:
+  - '2020'
 ---
 
 
