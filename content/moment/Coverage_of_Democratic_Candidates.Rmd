@@ -241,7 +241,7 @@ Candidates who have won the largest increases in coverage include Joe Biden, Kam
 
 Other major candidates have trended downwards in their coverage, Beto O'Rourke most precipitously. I would hesistate to read much into Warren's staggering 28 point drop since January - she was the only major candidate announced at the time and was attracting nearly half of the media's attention.
 
-And for the rest of them? The haven't reallymoved much.
+And for the rest of them? The haven't really moved much.
 
 ```{r debate_bump}
 
