@@ -1,9 +1,9 @@
 ---
 date: "2015-08-19T20:29:37-07:00"
 draft: false
-title: My Data Projects
+title: Data Projects
 ---
 
-From time to time, I like to practice my data analysis skills. 
+Some data analyses, politically relevant and irrelevant. 
 
 
