@@ -348,5 +348,6 @@ gt(joined_table_bump) %>%
 You'll notice that in cable television stories, Kamala Harris clearly had a burst of coverage. A larger pool of candidates received a post-debate bounce online - one that candidates such as Julian Castro badly needed. And some candidates should be worried, especially the single-digit candidates that are holding even or trending down. 
 
 *****
+<br />
 
 I realized soon after constructing this table that Mehta had already published [an article](https://fivethirtyeight.com/features/media-outlets-paid-way-more-attention-to-kamala-harris-after-the-debate/) about the effects of the first debate on candidate coverage - makes sense, given this is their full-time job. Maybe I'll beat them to it next time... the [next debates](https://www.cnn.com/politics/live-news/cnn-democratic-debate-draw/index.html) are set for July 30-31 in Detroit!
