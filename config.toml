@@ -1,4 +1,4 @@
-baseURL                   = "https://tannergildea.netlify.com"
+baseURL                   = "https://tannergildea.com"
 builddrafts                = false
 languageCode               = "en-us"
 canonifyurls               = true
@@ -11,7 +11,7 @@ summaryLength              = 25
 Paginate                   = 5
 
 theme = "AllinOne"
-title                      = "Tanner"
+title                      = "Tanner Gildea"
 
 pygmentsuseclasses         = true
 
@@ -51,7 +51,7 @@ pygmentsuseclasses         = true
 [params]
   faviconfile              = "img/gildea.jpg"               # from static/
   avatar                   = "img/gildea.jpg"             # path to image in static dir e.g img/avatar.png 
-  author                   = "Tanner"
+  author                   = "Tanner Gildea"
   description              = ["Recent Harvard Grad.", "Proud oldest brother of four.", "Watching the 2020 Presidential Race."]           # appears in the site header when set to a non-empty string
   welcome_head             = ""
   welcome_word             = ""
