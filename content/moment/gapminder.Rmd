@@ -3,6 +3,9 @@ title: "The World Gets Better Every Year"
 author: "Tanner Gildea"
 date: "2019-03-05"
 output: html_document
+tags: 
+  - animation
+  - Tanner Gildea
 ---
 
 Scroll through your Twitter feed or flip to any news station, and you're likely to hear some news that leads you to believe the state of world affairs is close to collapse. 
