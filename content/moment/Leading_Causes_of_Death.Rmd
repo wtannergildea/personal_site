@@ -6,7 +6,7 @@ output: html_document
 tags:
   - healthcare
   - data.gov
-  - Tanner Gildea
+  - "Tanner Gildea"
 ---
 
 ```{r setup, include=FALSE}
