@@ -1,0 +1,12 @@
+---
+title: "Campaign Advance Work: What is it?"
+author: "Tanner Gildea"
+date: "2019-05-20"
+output: html_document
+tags:
+  - '2020'
+  - "Harvard"
+  - "advance"
+---
+
+### [Click here for my original blog post on Harvard's Institute of Politics' website](https://iop.harvard.edu/iop-now/advance-camp-three-lessons-be-learned)
