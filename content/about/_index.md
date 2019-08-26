@@ -12,7 +12,7 @@ My name is Tanner Gildea and I am originally from the suburbs south of Boston, M
 
 I recently graduated from Harvard with a degree in Social Studies. I primarily studied political science and social theory and wrote an honors thesis on the foreign policy rhetoric of American presidents. During my time at school, I was involved with the [Harvard College Democrats](http://harvarddems.org), [Harvard Model Congress](https://www.harvardmodelcongress.org), and the [Institute of Politics](https://iop.harvard.edu).
 
-I am currently working to help elect [Mayor Pete Buttigieg](www.peteforamerica.com) as the next President of the United States as a field organizer in New Hampshire. Previously, I spent time working in the [Office of the New York Attorney General](https://ag.ny.gov), where I conducted qualitative and quantitative research.
+I am currently working to help elect [Mayor Pete Buttigieg](https://peteforamerica.com) as the next President of the United States as a field organizer in New Hampshire. Previously, I spent time working in the [Office of the New York Attorney General](https://ag.ny.gov), where I conducted qualitative and quantitative research.
 
 <br/><br/>
 
