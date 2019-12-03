@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Data Projects on Tanner Gildea</title>
+    <link>/moment/</link>
+    <description>Recent content in Data Projects on Tanner Gildea</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 19 Aug 2015 20:29:37 -0700</lastBuildDate>
+    
+	<atom:link href="/moment/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Which Democratic candidates are getting mentioned the most on cable and online news?</title>
+      <link>/moment/coverage_of_democratic_candidates/</link>
+      <pubDate>Thu, 18 Jul 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/moment/coverage_of_democratic_candidates/</guid>
+      <description>FiveThirtyEight is currently running an interesting series analyzing how cable news and online media sources are covering the Democratic presidential candidates. Dhrumil Mehta, one of FiveThirtyEight’s data journalists, has diligently kept track of how coverage of individual candidates has risen and fallen week to week.</description>
+    </item>
+    
+    <item>
+      <title>Top Ten Leading Causes of Death in the U.S.</title>
+      <link>/moment/leading_causes_of_death/</link>
+      <pubDate>Wed, 17 Jul 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/moment/leading_causes_of_death/</guid>
+      <description>The Center for Disease Control and Prevention maintains a dataset of the causes of death in the United States.
+Using this data, I present trends in the leading causes of death in the U.</description>
+    </item>
+    
+    <item>
+      <title>The Tweets of the 2020 Democratic Primary</title>
+      <link>/moment/dems_twitter/</link>
+      <pubDate>Wed, 10 Jul 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/moment/dems_twitter/</guid>
+      <description>A record number of Democrats are seeking their party’s nomination for the Presidency in 2020. Presumptive front-runners Joe Biden and Bernie Sanders aren’t scaring away the competition: the field includes former and sitting U.</description>
+    </item>
+    
+    <item>
+      <title>Spring Harvard Courses with Largest Jumps in Undergrad Enrollment, 2016-2019</title>
+      <link>/moment/harvard_spring_enrollment/</link>
+      <pubDate>Sat, 11 May 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/moment/harvard_spring_enrollment/</guid>
+      <description>Enrollment in Harvard courses fluctuates year to year, but a few classes catch fire from time to time. Whether by way of timely material or a star teaching team, the size of some classes can swell exponentially.</description>
+    </item>
+    
+    <item>
+      <title>The World Gets Better Every Year</title>
+      <link>/moment/gapminder/</link>
+      <pubDate>Tue, 05 Mar 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/moment/gapminder/</guid>
+      <description>Scroll through your Twitter feed or flip to any news station, and you’re likely to hear some news that leads you to believe the state of world affairs is close to collapse.</description>
+    </item>
+    
+  </channel>
+</rss>

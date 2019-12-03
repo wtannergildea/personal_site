@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Blog on Tanner Gildea</title>
+    <link>/blog/</link>
+    <description>Recent content in Blog on Tanner Gildea</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 13 Sep 2018 22:31:21 +0800</lastBuildDate>
+    
+	<atom:link href="/blog/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Threats to Prosecute Trump After His Term are Dangerous</title>
+      <link>/blog/2019-06/threats-to-prosecute-trump-after-his-term-are-dangerous/</link>
+      <pubDate>Wed, 12 Jun 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2019-06/threats-to-prosecute-trump-after-his-term-are-dangerous/</guid>
+      <description>In the wake of Special Counsel Mueller’s much-anticipated report on Russian interference into the 2016 election, some Democrats (and lone Republican Rep. Justin Amash) have called for formal impeachment proceedings against President Trump, despite Mueller’s surprisingly inconclusive findings.</description>
+    </item>
+    
+    <item>
+      <title>Campaign Advance Work: What is it?</title>
+      <link>/blog/2019-05/campaign-advance-work-what-is-it/</link>
+      <pubDate>Mon, 20 May 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2019-05/campaign-advance-work-what-is-it/</guid>
+      <description> Click here for my original blog post on Harvard’s Institute of Politics’ website  </description>
+    </item>
+    
+  </channel>
+</rss>

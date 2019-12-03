@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>2020 on Tanner Gildea</title>
+    <link>/tags/2020/</link>
+    <description>Recent content in 2020 on Tanner Gildea</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 18 Jul 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/2020/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Which Democratic candidates are getting mentioned the most on cable and online news?</title>
+      <link>/moment/coverage_of_democratic_candidates/</link>
+      <pubDate>Thu, 18 Jul 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/moment/coverage_of_democratic_candidates/</guid>
+      <description>FiveThirtyEight is currently running an interesting series analyzing how cable news and online media sources are covering the Democratic presidential candidates. Dhrumil Mehta, one of FiveThirtyEight’s data journalists, has diligently kept track of how coverage of individual candidates has risen and fallen week to week.</description>
+    </item>
+    
+    <item>
+      <title>The Tweets of the 2020 Democratic Primary</title>
+      <link>/moment/dems_twitter/</link>
+      <pubDate>Wed, 10 Jul 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/moment/dems_twitter/</guid>
+      <description>A record number of Democrats are seeking their party’s nomination for the Presidency in 2020. Presumptive front-runners Joe Biden and Bernie Sanders aren’t scaring away the competition: the field includes former and sitting U.</description>
+    </item>
+    
+    <item>
+      <title>Threats to Prosecute Trump After His Term are Dangerous</title>
+      <link>/blog/2019-06/threats-to-prosecute-trump-after-his-term-are-dangerous/</link>
+      <pubDate>Wed, 12 Jun 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2019-06/threats-to-prosecute-trump-after-his-term-are-dangerous/</guid>
+      <description>In the wake of Special Counsel Mueller’s much-anticipated report on Russian interference into the 2016 election, some Democrats (and lone Republican Rep. Justin Amash) have called for formal impeachment proceedings against President Trump, despite Mueller’s surprisingly inconclusive findings.</description>
+    </item>
+    
+    <item>
+      <title>Campaign Advance Work: What is it?</title>
+      <link>/blog/2019-05/campaign-advance-work-what-is-it/</link>
+      <pubDate>Mon, 20 May 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2019-05/campaign-advance-work-what-is-it/</guid>
+      <description> Click here for my original blog post on Harvard’s Institute of Politics’ website  </description>
+    </item>
+    
+  </channel>
+</rss>

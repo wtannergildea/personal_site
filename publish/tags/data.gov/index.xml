@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>data.gov on Tanner Gildea</title>
+    <link>/tags/data.gov/</link>
+    <description>Recent content in data.gov on Tanner Gildea</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 17 Jul 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/data.gov/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Top Ten Leading Causes of Death in the U.S.</title>
+      <link>/moment/leading_causes_of_death/</link>
+      <pubDate>Wed, 17 Jul 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/moment/leading_causes_of_death/</guid>
+      <description>The Center for Disease Control and Prevention maintains a dataset of the causes of death in the United States.
+Using this data, I present trends in the leading causes of death in the U.</description>
+    </item>
+    
+  </channel>
+</rss>

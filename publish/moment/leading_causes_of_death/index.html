@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1" />
+  <meta name="author" content="Tanner Gildea">
+  <meta name="description" content="The Center for Disease Control and Prevention maintains a dataset of the causes of death in the United States.
+Using this data, I present trends in the leading causes of death in the U.">
+  
+  <meta property="og:title" content="Top Ten Leading Causes of Death in the U.S." />
+<meta property="og:description" content="The Center for Disease Control and Prevention maintains a dataset of the causes of death in the United States.
+Using this data, I present trends in the leading causes of death in the U." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/moment/leading_causes_of_death/" />
+<meta property="article:published_time" content="2019-07-17T00:00:00+00:00" />
+<meta property="article:modified_time" content="2019-07-17T00:00:00+00:00" />
+
+
+  <title>
+  
+       Top Ten Leading Causes of Death in the U.S. | Tanner Gildea 
+  
+  </title>
+
+  <link rel="canonical" href="/moment/leading_causes_of_death/">
+
+  
+  
+
+  
+  <link href="/css/vendors-extensions/fontawesome/all.min.css" rel="stylesheet">
+
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Ubuntu+Mono:400,400i,700,700i|Raleway:300,400,500,600">
+  <link href="/css/font.css" rel="stylesheet"> 
+    
+  
+  <link href="/css/vendors/bootstrap4/bootstrap.min.css" rel="stylesheet">
+  <link href="/css/vendors-extensions/mdb/mdb.min.css" rel="stylesheet"> 
+  <link href="/css/vendors/mdb/style.min.css" rel="stylesheet"> 
+  <link href="/css/main.css" rel="stylesheet">
+
+
+  
+  <link rel="shortcut icon"
+  
+      href="/img/gildea.jpg"
+  
+  >
+
+
+  
+  
+
+  <style type="text/css">
+      @media (min-width: 800px) and (max-width: 850px) {
+              .navbar:not(.top-nav-collapse) {
+                  background: #1C2331!important;
+              }
+          }
+  </style>
+
+
+  
+    
+    <link rel="stylesheet" href="/js/vendors/katex/katex.min.css">
+  
+  
+
+  
+    
+    <link rel="stylesheet" href="/css/vendors/highlight/github-gist.css">
+  
+
+</head>
+
+  <body class="bg-light" data-spy="scroll" data-target="#page-scrollspy" data-offset="90">
+  
+    
+    
+
+    
+      
+
+
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark scrolling-navbar">
+    <div class="container">
+
+      
+      <a class="navbar-brand" href="/">
+          
+        <img class="avatar" src="/img/gildea.jpg" style="width: 40px!important;height: auto;"  class="d-inline-block align-top" alt="" >
+        
+        <strong> Tanner Gildea</strong>
+      </a>
+
+      
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+        aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+        
+        <ul class="navbar-nav mr-auto ">
+          <li class="nav-item ">
+            <a class="nav-link" href="/">Home</a>
+          </li>
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="/moment/" >Data Projects  </a>
+            </li>
+          
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="/about/" >About  </a>
+            </li>
+          
+          
+        </ul>
+
+      </div>
+
+    </div>
+  </nav>
+  
+ 
+      
+ 
+
+
+
+
+
+
+<div id="site-header" class="carousel slide carousel-fade" data-ride="carousel" style="height: 18rem;" >  
+
+  
+  
+  
+
+  
+  <div class="carousel-inner" role="listbox">
+    
+      
+
+        
+        <div class="carousel-item active">
+          <div class="view" style="background-image: url('/img/header-slides/background.jpeg'); background-repeat: no-repeat; background-size: cover;">
+
+            
+            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
+
+              
+              
+              
+
+            </div>
+            
+
+          </div>
+        </div>
+        
+      
+    
+
+  
+  </div>
+  
+
+  
+  <div class="carousel-content text-center white-text wow fadeIn">
+    <div class="row mx-0 headfont mt-3 pt-4">
+      
+      <div class="col-12 col-sm-5 align-middle">
+        <a href="/">
+          
+            <img class="pull-right avatar avatar-md" src="/img/gildea.jpg" alt="" >
+          
+        </a>
+      </div>
+      
+      <div class="col-12 col-sm-7 text-left pl-2">
+        <a href="/">
+          <h1 class="mb-2 h1" style="font-weight: 300;" >
+            <strong>Tanner Gildea</strong>
+          </h1>
+        </a>
+        
+
+             
+        <div class="mt-2" style="font-size: 1rem; color: white;">
+            
+              <a href="//github.com/wtannergildea" target="_blank" rel="noopener"><i class="fab fa-github pr-1" aria-hidden="true"></i></a>    
+            
+            
+              <a href="//linkedin.com/in/w-tanner-gildea-ba1314112/" target="_blank" rel="noopener"><i class="fab fa-linkedin pr-1" aria-hidden="true"></i></a>
+            
+
+            
+
+            
+
+            
+                <a href="//twitter.com/wtannergildea" target="_blank" rel="noopener"><i class="fab fa-twitter pr-1" aria-hidden="true"></i></a>
+            
+
+            
+    
+            
+    
+        
+            
+                <a href="mailto:tannergildea@icloud.com"><i class="far fa-envelope-open pr-1" aria-hidden="true"></i></a>
+            
+    
+            
+
+            
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+  
+  
+  
+
+</div>
+  
+    
+
+    
+  
+  <main class="post-main-wrapper">
+    
+    
+    <div class="row">
+
+      
+
+      
+      <div class="container pr-5">
+      
+
+        
+        <div class="z-depth-1  post-wrapper white-bg single-post">
+
+          <div class="post-header text-center" >
+  <ul class="post-meta li-x">
+    
+    
+  </ul>
+
+  <div class="px-4 post-heading">Top Ten Leading Causes of Death in the U.S.</div>
+
+  <ul class="post-meta li-x mt-1">
+    
+      <li>Jul 17, 2019</li>
+    
+
+    
+  </ul>
+  
+
+</div>
+
+
+          <div class="post-content markdown">
+            
+
+
+<p>The Center for Disease Control and Prevention maintains a <a href="https://catalog.data.gov/dataset/age-adjusted-death-rates-for-the-top-10-leading-causes-of-death-united-states-2013">dataset</a> of the causes of death in the United States.</p>
+<p>Using this data, I present trends in the leading causes of death in the U.S. from 1999 to 2016. I also highlight disease- and state-specific trends.</p>
+<div id="the-top-two-vs.the-bottom-eight" class="section level2">
+<h2>The Top Two vs. the Bottom Eight</h2>
+<p>In comparing the top ten leading causes of nationwide deaths, the aggregate numbers make clear that two diseases are separable from the remaining eight. Heart disease and cancer account for more deaths than the remaining leading causes combined.</p>
+<p>You’ll notice that cancer deaths have consistently increased overtime, whereas deaths from heart disease began to climb again in 2011 after an historical decrease .</p>
+<p><img src="/moment/Leading_Causes_of_Death_files/figure-html/top_two_totals-1.png" width="768" /></p>
+<p>Other leading causes of death in the United States include stroke, chronic lower respiratory diseases (CLRD), Alzheimer’s disease, and diabetes. Shark attacks and lightning strikes are notably absent.</p>
+<p><img src="/moment/Leading_Causes_of_Death_files/figure-html/top_eight_totals-1.png" width="768" /> <br /></p>
+</div>
+<div id="diving-deeper-age-adjusted-death-rates" class="section level2">
+<h2>Diving Deeper: Age-Adjusted Death Rates</h2>
+<p>Although total death statistics are insightful, they do not take into account changes in population. Between 1999 and 2016, the U.S. population <a href="https://www.worldometers.info/world-population/us-population/">increased</a> from roughly 280 million to 322 million.</p>
+<p>Age-adjusted death rates give us a better understanding of trends among the leading causes of death. This proportional statistic represents number of deaths per 100,000 people, and can be calculated specific to cause of death, state, and year.</p>
+<p>For example, the age-adjusted death rates of the two leading causes of death, heart disease and cancer, tell a different story from the total annual number of deaths. Although total deaths are increasing, the death rates are generally falling - which bodes well for treatment.</p>
+<p><img src="/moment/Leading_Causes_of_Death_files/figure-html/death_props_two-1.png" width="768" /> <br /></p>
+<p>The death rates of the other leading causes of deaths are more of a mixed-bag.</p>
+<p>Notable gains are clear in the prevention of strokes and deaths related to influenza and pneumonia.</p>
+<p>Unfortunately, Alzheimer’s disease and deaths related to unintentional injuries are on the rise. Alzheimer’s is <a href="https://www.alz.org/news/2018/new_alzheimer_s_association_report_reveals_sharp_i">projected to cost</a> $1.1 trillion by 2050. Meanwhile, the rise in deaths related to unintentional injuries is likely related to the opioid epidemic, which began its <a href="https://www.cdc.gov/drugoverdose/epidemic/index.html">third wave</a> in 2013.</p>
+<p><img src="/moment/Leading_Causes_of_Death_files/figure-html/death_props_eight-1.png" width="768" /></p>
+<p><br /></p>
+</div>
+<div id="looking-at-the-states" class="section level2">
+<h2>Looking at the States</h2>
+<p>The leading causes of deaths can be isolated according to each specific State. For example, heart disease is the leading cause of death nationwide - but are some state populations more at risk?</p>
+<p><img src="/moment/Leading_Causes_of_Death_files/figure-html/map_heart_disease-1.png" width="768" /> <br /></p>
+<p>The regional South is particularly at-risk for deaths from heart disease, where death rates are almost 235 per 100,000.</p>
+<p>Suicide, another leading cause of death, disproportionately affects a different U.S. region - in this case, the West, particularly the Rocky Mountain region.</p>
+<p><img src="/moment/Leading_Causes_of_Death_files/figure-html/map_suicide-1.png" width="768" /></p>
+<p>One particularly interesting cause of death is “unintentional injuries”, which could include anything from vehicular accidents to selfie-stick mishaps. You’ll see that the rate of death increased sharply in West Virginia, and to a lesser degree in New England.</p>
+<p>The likely culprit? Drug overdoes related to the opioid epidemic, which has hit these areas <a href="https://www.drugabuse.gov/opioid-summaries-by-state/west-virginia-opioid-summary">particularly hard</a>.</p>
+<p><img src="/moment/Leading_Causes_of_Death_files/figure-html/map_unintentional-1.png" width="768" /> <br /></p>
+<p>Although the CDC’s current dataset ends in 2016, this analysis provides an instructive foundation for understanding the leading causes of death in the United States. This analysis would be much improved if the CDC collected this data alongside other variables such as gender, race, and age.</p>
+<p>I will be interested to see how trends develop as more data is released!</p>
+</div>
+
+          </div>
+
+          
+          <div class="row">
+            <div class="col-md-8">
+            
+              <div class="mb-5">
+                
+<div class="li-x div-x post-meta">
+  <li class="pr-0"><a href="/tags/"><i class="fas fa-tags"></i></a></li>
+  <div class="tags-sm">
+    
+      <li><a href="/tags/healthcare" role="button">healthcare </a></li>
+      
+    
+      <li><a href="/tags/data.gov" role="button">data.gov </a></li>
+      
+    
+      <li><a href="/tags/tanner-gildea" role="button">Tanner Gildea </a></li>
+      
+    
+  </div>
+</div>
+              </div>
+            
+            </div>
+            
+          </div>
+          
+
+          
+          <div class="row pt-3">
+            <div class="col-md-6">
+              
+                <a href=/moment/dems_twitter/ class="post-meta">Previous
+                  <div class="pt-2 pb-5 d-flex">
+                    <i class="fas fa-angle-left text-grey font-weight-bold mr-2 active-color"></i>
+                    <span>The Tweets of the 2020 Democratic Primary</span>
+                  </div>
+                </a>
+              
+            </div>
+            
+            <div class="col-md-6 text-right" >
+              
+                <a href=/moment/coverage_of_democratic_candidates/ class="post-meta">Next
+                  <div class="pt-2 pb-5 flex-reverse">
+                    <i class="fas fa-angle-right text-grey font-weight-bold ml-2 active-color"></i>
+                    <span>Which Democratic candidates are getting mentioned the most on cable and online news?</span>
+                  </div>
+                </a>
+              
+            </div>
+          </div>
+
+          
+
+        </div>
+        
+
+      </div>
+      
+
+      
+
+    </div>
+    
+
+
+  </main>
+  
+
+
+    
+    
+
+<footer class="page-footer text-center font-small mt-4 wow fadeIn">
+
+
+  
+  <div class="pb-2 mt-5 pt-5">
+    
+      <a href="//github.com/wtannergildea " target="_blank" rel="noopener"><i class="fab fa-github mr-3" aria-hidden="true"></i></a>    
+    
+    
+      <a href="//linkedin.com/in/w-tanner-gildea-ba1314112/" target="_blank" rel="noopener"><i class="fab fa-linkedin-in mr-3" aria-hidden="true"></i></a>
+    
+
+    
+
+    
+
+    
+        <a href="//twitter.com/wtannergildea" target="_blank" rel="noopener"><i class="fab fa-twitter mr-3" aria-hidden="true"></i></a>
+    
+
+    
+
+    
+
+
+    
+        <a href="mailto:tannergildea@icloud.com"><i class="far fa-envelope-open mr-3" aria-hidden="true"></i></a>
+    
+
+    
+
+    
+
+  </div>
+  
+
+  
+  <div class="copyright py-4">
+    
+    <span>  2016 - 2019 &copy; | Theme <a href='https://github.com/orianna-zzo/AllinOne' target="_blank">AllinOne</a> by <a href='https://github.com/orianna-zzo' target="_blank">Orianna</a>  </span>
+  </div>
+  
+
+</footer>
+
+
+    
+
+
+
+
+
+
+<script type="text/javascript" src="/js/vendors/jquery/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="/js/vendors/jquery/jquery.smooth-scroll.min.js"></script>
+
+
+
+<script type="text/javascript" src="/js/vendors/popper.min.js"></script>
+<script type="text/javascript" src="/js/vendors/holder.min.js"></script>
+<script type="text/javascript" src="/js/vendors-extensions/bootstrap4/bootstrap.js" ></script>
+
+<script type="text/javascript" src="/js/vendors/mdb/mdb.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+  
+  <script src="/js/vendors/highlight.pack.js"> </script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+ 
+  <script src="/js/vendors/katex/katex.min.js"> </script>
+  <script src="/js/vendors/katex/contrib/auto-render.min.js"></script>
+
+  <script>
+      document.addEventListener("DOMContentLoaded", function () {
+          renderMathInElement(document.body);
+      });
+  </script>
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+  
+  new WOW().init();
+</script>
+
+
+
+
+  </body>
+</html>
