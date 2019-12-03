@@ -27,12 +27,6 @@ pygmentsuseclasses         = true
 
 
 [menu]
-
-#  [[menu.main]]
- #   name                   = "Blog"
-#    weight                 = -120
-#    identifier             = "blog"
-#    url                    = "blog/"  
     
   [[menu.main]]
     name                   = "Data Projects"
@@ -56,7 +50,7 @@ pygmentsuseclasses         = true
   welcome_head             = ""
   welcome_word             = ""
 
-  latestpostscount         = 3                             # how many posts to display on the home page
+  latestpostscount         = 0                             # how many posts to display on the home page
   bloggroupby              = 'month'
   dateform                 = "Jan 2, 2006"
   dateformfull             = "2006-01-02  Monday  15:04:05"
