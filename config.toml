@@ -46,7 +46,7 @@ pygmentsuseclasses         = true
   faviconfile              = "img/gildea.jpg"               # from static/
   avatar                   = "img/gildea.jpg"             # path to image in static dir e.g img/avatar.png 
   author                   = "Tanner Gildea"
-  description              = ["Recent Harvard Grad.", "Proud oldest brother of four.", "Working on the 2020 Presidential Race."]           # appears in the site header when set to a non-empty string
+  description              = ["Former 2020 Democratic primary organizer", "Proud oldest brother of four", "Interested in progressive political opportunities"]           # appears in the site header when set to a non-empty string
   welcome_head             = ""
   welcome_word             = ""
 
