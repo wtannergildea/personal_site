@@ -43,8 +43,8 @@ pygmentsuseclasses         = true
  
 
 [params]
-  faviconfile              = "img/gildea.jpg"               # from static/
-  avatar                   = "img/gildea.jpg"             # path to image in static dir e.g img/avatar.png 
+  faviconfile              = "img/headshot_gildea.jpeg"               # from themes/ allinone/ static/
+  avatar                   = "img/headshot_gildea.jpeg"             # path to image in static dir e.g img/avatar.png 
   author                   = "Tanner Gildea"
   description              = ["Former 2020 Democratic primary organizer", "Proud oldest brother of four", "Interested in progressive political opportunities"]           # appears in the site header when set to a non-empty string
   welcome_head             = ""
