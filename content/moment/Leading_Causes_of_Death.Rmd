@@ -1,5 +1,5 @@
 ---
-title: "Top Ten Leading Causes of Death in the U.S."
+title: "Top Nine Leading Causes of Death in the U.S."
 author: "Tanner Gildea"
 date: "2019-07-17"
 output: html_document
