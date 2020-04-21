@@ -1,0 +1,257 @@
+---
+title: How well do your Senators represent your state's support for Trump's legislative
+  agenda?
+author: "Tanner Gildea"
+date: "4/20/2020"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, 
+                      warning = FALSE, 
+                      message = FALSE,
+                      fig.width = 15,
+                      fig.asp = 0.618,
+                      out.width = "70%",
+                      fig.align = "center")
+library(tidyverse)
+library(readxl)
+library(ggplot2)
+library(ggthemes)
+library(scales)
+library(maps)
+library(statebins)
+library(gt)
+library(plotly)
+data <- read.csv("senate_votes.csv") %>% # current as of March 25 2 trillion Covid bill
+  na.omit() %>% 
+  subset(party == 'Republican' | party == 'Democrat' | party == 'Independent')
+  
+us_states <- map_data("state")  # for later use in state visualization
+```
+
+```{r trump_2016_vote}
+trump_2016 <- data %>% select(state, net_trump_2016_vote) %>% 
+  distinct() %>% 
+  mutate(trump_win = case_when(net_trump_2016_vote > 0 ~ 'Yes',
+                               net_trump_2016_vote < 0 ~ 'No'))
+  
+```
+
+
+```{r senator votes}
+senator_votes <- data %>% 
+  select(-net_trump_2016_vote) %>% 
+  mutate(votes_with_trump = votes*agree_pct) %>% 
+  mutate(votes_against_trump = (votes - votes*agree_pct)) 
+```
+
+```{r state totals}
+state_senate_support <- senator_votes %>% 
+  group_by(state) %>% 
+  mutate(senator_support_by_state = sum(votes_with_trump)) %>% 
+  mutate(senator_opposition_by_state = sum(votes_against_trump)) %>% 
+  mutate(total_votes_by_state = senator_support_by_state + senator_opposition_by_state) %>% 
+  mutate(state_trump_support_pct = (senator_support_by_state/total_votes_by_state)*100) 
+average_state_support <- state_senate_support %>% 
+  select(state, state_abv, state_trump_support_pct) %>% 
+  distinct() %>% 
+  mutate(trump_support_dummy = case_when(state_trump_support_pct >= 50 ~ "Yes",
+                                         state_trump_support_pct < 50 ~ "No"))
+         
+```
+
+
+```{r difference}
+difference <- average_state_support %>% 
+  left_join(trump_2016) %>% 
+  mutate(net_senate_support = state_trump_support_pct - 50) %>% 
+  mutate(trump_senate_difference = net_senate_support - net_trump_2016_vote) %>% 
+  mutate(difference_dummy = case_when(trump_senate_difference >= 0 ~ "Yes",
+                                         trump_senate_difference < 0 ~ "No"))
+avg <- difference %>% 
+  summarise(avg = mean(difference$trump_senate_difference))
+sd <- difference %>% 
+  summarise(sd = sd(difference$trump_senate_difference))
+```
+
+
+```{r vline_trump_win, fig.width=15}
+party_colors <- c("#2E74C0", "#CB454A") # Dem and GOP colors
+# trump state vote over clinton
+ggplot(trump_2016,
+       aes(x = net_trump_2016_vote,
+           y = reorder(state, net_trump_2016_vote),
+           color = trump_win)) +
+  
+  geom_vline(xintercept = 0, color = "purple", size = 2) +
+  geom_point(size = 4) +
+  
+  scale_x_continuous(breaks = c(-30,-20,-15,-10,-5,-2.5,0,2.5,5,10,15,20,30,45),
+                     labels = c("-30", "-20", "-15", "-10", "-5", "-2.5", "0", "+2.5", "+5", "+10", "+15", "+20", "+30", "+45")) +
+  scale_color_manual(values = party_colors) +
+  
+  labs(title = "Trump Vote Margin Over Clinton, 2016",
+       subtitle = "As Percentage Point",
+       x = "", y = "",
+       caption = "Source: FiveThirtyEight") +
+  guides(color = FALSE) +
+  theme_tufte() +
+  theme(axis.text.x = element_text(size = 20),
+        axis.ticks = element_blank(),
+        axis.text.y = element_text(size = 12),
+        plot.title = element_text(size = 30, color = "purple"),
+        plot.subtitle = element_text(size = 20),
+        panel.grid.major = element_line(color = "gray"))
+```
+
+```{r vline_senate_votes}
+# average senate agreement with trump
+ggplot(average_state_support,
+       aes(x = state_trump_support_pct,
+           y = reorder(state, state_trump_support_pct),
+           color = trump_support_dummy)) +
+  
+  geom_vline(xintercept = 50, color = "orange", size = 2) +
+  geom_point(size = 4) +
+  
+  scale_x_continuous(breaks = c(0,10,20,30,40,50,60,70,80,90,100),
+                     labels = c("0%","10%", "20%","30%","40%","50%","60%","70%","80%","90%","100%")) +
+  scale_color_manual(values = party_colors) +
+  
+  labs(title = "Senate Support For Trump's Legislative Agenda",
+       subtitle = "Percent of votes cast in alignment with Trump, average across each state's two senators",
+       x = "", y = "",
+       caption = "Source: FiveThirtyEight") +
+  guides(color = FALSE) +
+  theme_tufte() +
+  theme(axis.text.x = element_text(size = 20),
+        axis.ticks = element_blank(),
+        axis.text.y = element_text(size = 12),
+        plot.title = element_text(size = 30, color = "orange"),
+        plot.subtitle = element_text(size = 20),
+        panel.grid.major = element_line(color = "gray"))
+```
+
+```{r vline_difference}
+# average senate agreement with trump
+ggplot(difference,
+       aes(x = trump_senate_difference,
+           y = reorder(state, trump_senate_difference),
+           color = difference_dummy)) +
+  
+  geom_vline(xintercept = 0, color = "red", size = 2) +
+  geom_point(size = 4) +
+  
+  scale_x_continuous(breaks = c(-30,-20,-15,-10,-5,-2.5,0,2.5,5,10,15,25,40),
+                     labels = c("-30", "-20", "-15", "-10", "-5", "-2.5", "0", "+2.5", "+5", "+10", "+15", "+25", "+40")) +
+  scale_color_manual(values = party_colors) +
+  
+  labs(title = "Difference in Popular Support for Trump vs. Legislative Support in Senate",
+       subtitle = "As percentage point by state",
+       x = "", y = "",
+       caption = "Source: Original vote records from FiveThirtyEight.") +
+  guides(color = FALSE) +
+  theme_tufte() +
+  theme(axis.text.x = element_text(size = 20),
+        axis.ticks = element_blank(),
+        axis.text.y = element_text(size = 12),
+        plot.title = element_text(size = 30, color = "Red"),
+        plot.subtitle = element_text(size = 20),
+        panel.grid.major = element_line(color = "gray")) +
+  
+  annotate(geom = "rect", xmin = -10, xmax = 10,
+           ymin = 12, ymax = 34, fill = "green", alpha = .2) +
+  annotate(geom = "text", x = 11, y = 17.5,
+             label = "States with representative\nsupport alignment.", hjust = 0, size = 10, fontface = "bold") +
+  
+  annotate(geom = "rect", xmin = 24, xmax = 40,
+           ymin = 44, ymax = 51, fill = "red", alpha = .2) +
+  
+  annotate(geom = "text", x = 26, y = 40.5,
+             label = "Outliers relative to \nzero-adjusted mean.", size = 8, hjust = 0, color = "blue", fontface = "bold.italic") +
+  
+  geom_vline(xintercept = 4, color = "grey30", size = 1.5) +
+  
+  annotate(geom = "text", x = 5, y = 3.5,
+             label = "Mean difference: +4\n(sd = 16)", size = 7.5, hjust = 0, color = "blue", fontface = "bold.italic") 
+  
+```
+
+```{r difference_map}
+difference_map_prep <- difference
+difference_map_prep$region <- tolower(difference_map_prep$state)
+difference_map <- left_join(us_states, difference_map_prep)
+ggplot(difference_map,
+       aes(x = long, y = lat, group = group, fill = trump_senate_difference)) +
+  
+  geom_polygon(color = "black", size = .3) +
+  coord_map(projection = "albers", lat0 = 39, lat1 = 45) +
+  
+  scale_fill_gradient2(low = muted("#2E74C0"), mid = ("white"),
+                       high = muted("#CB454A"), breaks = c(-20, -10, 0, 10, 20, 35)) +
+  
+  theme_map() +
+  theme(legend.position = "bottom",
+        plot.title = element_text(size = 30, color = "Brown"),
+        plot.subtitle = element_text(size = 20) ) +
+  
+  labs(title = "Trump's Support in the Senate vs. Popular Electorate Support",
+       subtitle = "Support for Trump's agenda from senators in states closer to white\nalign more closely with how their consitituents voted for Trump",
+         fill = "Percentage point difference")
+```
+
+```{r statebin}
+difference_statebin <- difference
+difference_statebin$state <- as.character(difference_statebin$state) 
+difference_statebin$state_abv <- as.character(difference_statebin$state_abv)
+statebins_continuous(difference_statebin, 
+          state_col = "state", 
+          text_color = "black", 
+          value_col = "trump_senate_difference",
+          brewer_pal= "PuOr", 
+          font_size = 8, 
+          legend_title = "Percentage point difference", 
+          plot_title = "",
+          title_position = "top")
+```
+
+
+```{r table, fig.width = 200, fig.height= 4}
+table <- difference %>% 
+  select(state, net_senate_support, net_trump_2016_vote, trump_senate_difference) %>% 
+  ungroup() 
+gt(table) %>% 
+  tab_header(title = md("**Trump's Support in the Senate vs. Popular Electorate Support**"),
+             subtitle = "Jan. 3, 2017 - Mar. 25, 2020") %>% 
+  
+  tab_spanner(label = "", 
+              columns = vars(state, net_trump_2016_vote, net_senate_support, trump_senate_difference))  %>% 
+  
+  cols_align(align= "center",
+             columns = vars(net_trump_2016_vote, net_senate_support, trump_senate_difference)) %>% 
+  cols_label(state = "State",
+                            net_trump_2016_vote = "Trump 2016 Margin",
+                            net_senate_support = "Net Senate Agenda Support",
+                            trump_senate_difference = "Difference") %>% 
+  
+  fmt_number(columns = vars(net_trump_2016_vote, net_senate_support,trump_senate_difference),
+                            decimals = 1) %>% 
+  
+  data_color(
+    columns = vars(trump_senate_difference),
+    colors = scales::col_numeric(
+      palette = c("orange", "yellow", "green", "green", "yellow", "orange", "red"),
+      domain = NULL),
+    alpha = .5) %>% 
+  
+  tab_options(
+    table.width = 500,
+    table.font.size = 14,
+    column_labels.font.size = 16, 
+    column_labels.font.weight = "bold",
+    table.border.top.style = "none",
+    row.padding = 4) # fixes sizing issues
+```
