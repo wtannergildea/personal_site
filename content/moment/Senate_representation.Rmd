@@ -10,6 +10,9 @@ tags:
   - 'Trump'
 ---
 
+These stories are true and reflect the immense suffering of specific people, in specific times and places. But what's lost amidst these stories is the larger narrative of progress humanity as a whole continues to make against the scourges of disease, poverty, and death. 
+
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, 
                       warning = FALSE, 
