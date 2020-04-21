@@ -10,8 +10,7 @@ tags:
   - 'Trump'
 ---
 
-These stories are true and reflect the immense suffering of specific people, in specific times and places. But what's lost amidst these stories is the larger narrative of progress humanity as a whole continues to make against the scourges of disease, poverty, and death. 
-
+How often do your Senators vote for Trump's legislative agenda in the upper chamber? And how closely do they mirror your state's popular support for Trump in the 2016 presidential election?
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, 
@@ -19,7 +18,7 @@ knitr::opts_chunk$set(echo = FALSE,
                       message = FALSE,
                       fig.width = 15,
                       fig.asp = 0.618,
-                      out.width = "70%",
+                      out.width = "100%",
                       fig.align = "center")
 library(tidyverse)
 library(readxl)
@@ -127,9 +126,9 @@ ggplot(average_state_support,
   scale_color_manual(values = party_colors) +
   
   labs(title = "Senate Support For Trump's Legislative Agenda",
-       subtitle = "Percent of votes cast in alignment with Trump, average across each state's two senators",
+       subtitle = "Percent of votes cast in alignment with Trump, average across each state's two* senators",
        x = "", y = "",
-       caption = "Source: FiveThirtyEight") +
+       caption = "*Between 2017 and 2020, a number of states were represented by more than two unique senators (retirements, death in office, elections). A total of 115 unique senators have served in the 115th & 116th Congress.  Source: FiveThirtyEight") +
   guides(color = FALSE) +
   theme_tufte() +
   theme(axis.text.x = element_text(size = 20),
@@ -208,6 +207,7 @@ ggplot(difference_map,
          fill = "Percentage point difference")
 ```
 
+The figure below represents the same percentage point difference data as presented in the choropleth above. However, it also includes the states of Hawaii & Alaska (and I wanted to try using the novel "Shapebin" visualization). The more beige the state, the closer the alignment.
 ```{r statebin}
 difference_statebin <- difference
 difference_statebin$state <- as.character(difference_statebin$state) 
@@ -223,6 +223,9 @@ statebins_continuous(difference_statebin,
           title_position = "top")
 ```
 
+
+
+For some of the intermediate data I used to conduct this analysis and construct my visualizations, feel free to reference the state-specific table below. For a related dashboard focused on individual senators and some of the original datasets, please visit [FiveThirtyEight](https://projects.fivethirtyeight.com/congress-trump-score/?ex_cid=rrpromo).
 
 ```{r table, fig.width = 200, fig.height= 4}
 table <- difference %>% 
@@ -258,5 +261,6 @@ gt(table) %>%
     column_labels.font.size = 16, 
     column_labels.font.weight = "bold",
     table.border.top.style = "none",
-    row.padding = 4) # fixes sizing issues
+    row.padding = 2) # fixes sizing issues
 ```
+
