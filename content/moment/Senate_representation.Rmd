@@ -1,11 +1,14 @@
 ---
-title: How well do your Senators represent your state's support for Trump's legislative
-  agenda?
+title: "How well do your Senators represent your state's support for Trump's legislative
+  agenda?"
 author: "Tanner Gildea"
-date: "4/20/2020"
-output:
-  html_document: default
-  pdf_document: default
+date: "2020-04-21"
+output: html_document
+tags:
+  - "Tanner Gildea"
+  - '2020'
+  - '2016'
+  - 'Trump'
 ---
 
 ```{r setup, include=FALSE}
