@@ -10,7 +10,7 @@ tags:
   - 'Trump'
 ---
 
-How often do your Senators vote for Trump's legislative agenda in the upper chamber? And how closely do they mirror your state's popular support for Trump in the 2016 presidential election?
+How often do your senators vote for Trump's legislative agenda in the upper chamber? And how closely do they mirror your state's popular support for Trump in the 2016 presidential election?
 
 First, a quick refresher on the 2016 presidential election between Trump and Clinton. The figure below represents Trump's percentage point margin over Clinton in each state. 
 
@@ -115,6 +115,7 @@ ggplot(trump_2016,
 
 I'm looking at you, Michigan, Pennsylvania, Wisconsin. 
 
+---
 
 Next, let's look at each state's senate delegation's support for Trump's legislative agenda. 
 
@@ -123,6 +124,7 @@ How do we calculate this? Using data from [FiveThirtyEight](https://projects.fiv
 Then, I grouped the senators' voting records by state delegation and created a support percentage from the total number of votes cast in Trump's favor. This metric accounts for changes in Senate representation and variance in the number of votes cast by each senator. 
 
 The figure below presents this Senate support metric for each state.
+
 ```{r vline_senate_votes}
 # average senate agreement with trump
 ggplot(average_state_support,
@@ -151,7 +153,9 @@ ggplot(average_state_support,
         panel.grid.major = element_line(color = "gray"))
 ```
 
+
 Not too many swing senate delegations, you'll notice.
+
 
 Now that we have Trump's margin of victory in 2016 and the average support percentage from each state's Senate delegation, we can observe how closely the two metrics align. To do so, I created a new "Representative Support Alignmentment" metric, visualized in the figure below. 
 
@@ -213,6 +217,7 @@ The consituents of states that have very positive or negative scores are less we
 
 That said, significantly unaligned states (defined as 1.5 standard deviations above or below zero) all bend more conservative: South Carolina, Mississippi, Iowa, Texas, Georgia, and North Carolina. Voters in these states who opposed Trump in 2016 are hardly represented by their senators in relation to Trump's agenda. Voters in these states who supported Trump in 2016 should be very happy with their Senate representation.
 
+---
 
 Here's another way of looking at it: let's visualize this metric across the continental United States below. 
 States in white are well-represented. Bluer states are more liberally represented, while redder states are more conservatively represented. 
