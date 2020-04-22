@@ -1,5 +1,5 @@
 ---
-title: "Do your senators represent your state's relative support for Trump's agenda?"
+title: "Do your senators represent your state's level of support for Trump's agenda?"
 author: "Tanner Gildea"
 date: "2020-04-20"
 output: html_document
@@ -213,7 +213,7 @@ The mean Representative Support Alignment metric is +4, which means that on aver
 
 You'll notice that only a minority of states have a Representative Support Alignment metric near zero. States near zero have senate delegations that support or oppose Trump's legislative agenda at comparable rates to how their populations supported or opposed Trump in the 2016 election. 
 
-In theory, how liberal or conservative a state is should not determine how representative its senate delegation is. The states of Nevada, North Dakota, Alabama, Ohio, Maryland, California, and Kentucky run the ideological gamut, yet all have scores near zero. Trump's legislative agenda is well supported or opposed by their senate delegations given their own specific constituents.
+In theory, each state’s senate delegation should be representative of the state's voters regardless of how liberal or conservative the state. The states of Nevada, North Dakota, Alabama, Ohio, Maryland, California, and Kentucky run the ideological gamut, yet all have scores near zero. Trump's legislative agenda is well supported or opposed by their senate delegations given their own specific constituents.
 
 The consituents of states that have very positive or negative scores are less well represented in terms of Trump's legislative agenda. As you see above, there are significant discrepancies on both sides of the aisle. 
 
