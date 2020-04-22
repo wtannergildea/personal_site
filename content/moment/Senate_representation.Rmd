@@ -209,7 +209,7 @@ ggplot(difference,
   
 ```
 
-The mean Representative Support Alignment metric is +4, which means that on average, state delegations have supported Trump's legislative agenda slightly more than their voters supported Trump in 2016. 
+The mean Representative Support Alignment metric is +4, which means that on average, state delegations have supported Trump's legislative agenda in the upper chamber slightly more than their voters supported Trump in 2016. 
 
 You'll notice that only a minority of states have a Representative Support Alignment metric near zero. States near zero have senate delegations that support or oppose Trump's legislative agenda at comparable rates to how their populations supported or opposed Trump in the 2016 election. 
 
