@@ -271,6 +271,8 @@ The same is true for their senators. However, senators ARE able to vote on speci
 
 From this analysis, it is clear that some senate delegations do a great job of representing their voting consituents in relation to Trump's agenda. Other delegations say yes or no to the president more often than their constituents might like. And in the case of the six states that fall 1.5 standard deviations from zero (South Carolina, Mississippi, Iowa, Texas, Georgia, and North Carolina), all six delegations support Trump's agenda significantly MORE than their voters supported Trump.
 
+How does this analysis extend to the U.S. House of Representatives? Something to explore in the future...
+
 ---
 
 For some of the intermediate data I used to conduct this analysis and construct my visualizations, feel free to reference the state-specific table below. For a related dashboard focused on individual senators and some of the original datasets, please visit [FiveThirtyEight](https://projects.fivethirtyeight.com/congress-trump-score/?ex_cid=rrpromo). Enjoy!
