@@ -18,19 +18,20 @@ tags:
 <p>I’m looking at you, Michigan, Pennsylvania, Wisconsin.</p>
 <hr />
 <p>Next, let’s look at each state’s senate delegation’s support for Trump’s legislative agenda.</p>
-<p>How do we calculate this? Using data from <a href="https://projects.fivethirtyeight.com/congress-trump-score/?ex_cid=rrpromo">FiveThirtyEight</a>, I accessed the voting record for each senator, and whether Trump supported or opposed the vote. This information is current for the 115th and 116th Congresses, up through the Senate’s March 25, 2020 vote on H.R. 748 (the $2 trillion economic stimulus package in response to the coronavirus pandemic. Trump supported the bill).</p>
-<p>Then, I grouped the senators’ voting records by state delegation and created a support percentage from the total number of votes cast in Trump’s favor. This metric accounts for changes in Senate representation and variance in the number of votes cast by each senator.</p>
-<p>The figure below presents this Senate support metric for each state.</p>
+<p>How do we calculate this? Using data from <a href="https://projects.fivethirtyeight.com/congress-trump-score/?ex_cid=rrpromo">FiveThirtyEight</a>, I accessed the voting record for each senator. FiveThirtyEight has also tracked whether Trump supported or opposed passage of the vote in question. This information is current for the 115th and 116th Congresses, up through the Senate’s March 25, 2020 vote on H.R. 748 (the $2 trillion economic stimulus package in response to the coronavirus pandemic. Trump supported the bill).</p>
+<p>Then, I grouped the senators’ voting records by state delegation and created a support percentage from the total number of votes cast in Trump’s favor. This percentage accounts for changes in Senate representation and variance in the number of votes cast by each senator.</p>
+<p>The figure below presents the percentage of votes cast with Trump support from each state delegation.</p>
 <p><img src="/moment/Senate_representation_files/figure-html/vline_senate_votes-1.png" width="100%" style="display: block; margin: auto;" /></p>
 <p>Not too many swing senate delegations, you’ll notice.</p>
 <p>Now that we have Trump’s margin of victory in 2016 and the average support percentage from each state’s Senate delegation, we can observe how closely the two metrics align. To do so, I created a new “Representative Support Alignmentment” metric, visualized in the figure below.</p>
 <p>To better understand this measurement, let’s take the state of Washington as an example. Trump lost the state in 2016 to Clinton by a 15.5 point margin (-15.5), and Washington’s senators vote with Trump’s agenda 24.5% of the time. The senators’ support margin is therefore -25.5 (24.5% minus 50%). The difference between Trump’s margin over Hillary (-15.5) and the senators’ support margin (-25.5) is -10.</p>
 <p>This difference is the Representative Support Alignment metric: the more negative, the more liberal the state’s senate delegation relative to the state’s popular support for Trump in 2016; the more positive, the more conservative.</p>
 <p><img src="/moment/Senate_representation_files/figure-html/vline_difference-1.png" width="100%" style="display: block; margin: auto;" /></p>
-<p>You’ll notice that only a minority of states have a Representative Support Alignment metric near zero. States near zero have senate delegations that support or oppose Trump’s legislative agenda at comporable rates to how their populations supported or opposed Trump in the 2016 election.</p>
+<p>The mean Representative Support Alignment metric is +4, which means that on average, state delegations have supported Trump’s legislative agenda slightly more than their voters supported Trump in 2016.</p>
+<p>You’ll notice that only a minority of states have a Representative Support Alignment metric near zero. States near zero have senate delegations that support or oppose Trump’s legislative agenda at comparable rates to how their populations supported or opposed Trump in the 2016 election.</p>
 <p>In theory, how liberal or conservative a state is should not impact how representative its senate delegation is. The states of Nevada, North Dakota, Alabama, Ohio, Maryland, California, and Kentucky run the ideological gamut, yet all have scores near zero. Trump’s legislative agenda is well supported or opposed by their senate delegations given their own specific constituents.</p>
 <p>The consituents of states that have very positive or negative scores are less well represented in terms of Trump’s legislative agenda. As you see above, there are significant discrepancies on both sides of the aisle.</p>
-<p>That said, significantly unaligned states (defined as 1.5 standard deviations above or below zero) all bend more conservative: South Carolina, Mississippi, Iowa, Texas, Georgia, and North Carolina. Voters in these states who opposed Trump in 2016 are hardly represented by their senators in relation to Trump’s agenda. Voters in these states who supported Trump in 2016 should be very happy with their Senate representation.</p>
+<p>That said, there are six significantly unaligned states (defined as 1.5 standard deviations above or below zero). Furthermore, all six bend more conservative: South Carolina, Mississippi, Iowa, Texas, Georgia, and North Carolina. Voters in these states who opposed Trump in 2016 are hardly represented by their senators in relation to Trump’s agenda. Voters in these states who supported Trump in 2016 should be very happy with their Senate representation.</p>
 <hr />
 <p>Here’s another way of looking at it: let’s visualize this metric across the continental United States below. States in white are well-represented. Bluer states are more liberally represented, while redder states are more conservatively represented.</p>
 <p><img src="/moment/Senate_representation_files/figure-html/difference_map-1.png" width="100%" style="display: block; margin: auto;" /></p>
@@ -38,14 +39,14 @@ tags:
 <p><img src="/moment/Senate_representation_files/figure-html/statebin-1.png" width="100%" style="display: block; margin: auto;" /></p>
 <p>Of course, voters are generally only presented with a binary choice when it comes to the president and their senators. The individual voter cannot vote for x% of the president’s proposed agenda - and they cannot predict what parts of the presidential candidate’s agenda will actually be legislated if elected . And even if they could, which parts would they support or oppose?</p>
 <p>The same is true for their senators. However, senators ARE able to vote on specific pieces of the president’s agenda, and they know to what degree their constituents supported or opposed the president in the aggregate.</p>
-<p>From this analysis, it is clear that some senate delegations do a great job of representing their voting consituents in relation to Trump’s agenda. Other delegations say yes or no to the president more often than their constituents might like. And in the case of South Carolina, Mississippi, Iowa, Texas, Georgia, and North Carolina, Senators support Trump’s agenda significantly more than their voters supported Trump.</p>
+<p>From this analysis, it is clear that some senate delegations do a great job of representing their voting consituents in relation to Trump’s agenda. Other delegations say yes or no to the president more often than their constituents might like. And in the case of the six states that fall 1.5 standard deviations from zero (South Carolina, Mississippi, Iowa, Texas, Georgia, and North Carolina), all six delegations support Trump’s agenda significantly MORE than their voters supported Trump.</p>
 <hr />
 <p>For some of the intermediate data I used to conduct this analysis and construct my visualizations, feel free to reference the state-specific table below. For a related dashboard focused on individual senators and some of the original datasets, please visit <a href="https://projects.fivethirtyeight.com/congress-trump-score/?ex_cid=rrpromo">FiveThirtyEight</a>. Enjoy!</p>
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#qibfummfym .gt_table {
+#cenickqsof .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -64,13 +65,13 @@ tags:
   /* table.border.top.color */
 }
 
-#qibfummfym .gt_heading {
+#cenickqsof .gt_heading {
   background-color: #FFFFFF;
   /* heading.background.color */
   border-bottom-color: #FFFFFF;
 }
 
-#qibfummfym .gt_title {
+#cenickqsof .gt_title {
   color: #000000;
   font-size: 125%;
   /* heading.title.font.size */
@@ -81,7 +82,7 @@ tags:
   border-bottom-width: 0;
 }
 
-#qibfummfym .gt_subtitle {
+#cenickqsof .gt_subtitle {
   color: #000000;
   font-size: 85%;
   /* heading.subtitle.font.size */
@@ -92,7 +93,7 @@ tags:
   border-top-width: 0;
 }
 
-#qibfummfym .gt_bottom_border {
+#cenickqsof .gt_bottom_border {
   border-bottom-style: solid;
   /* heading.border.bottom.style */
   border-bottom-width: 2px;
@@ -101,7 +102,7 @@ tags:
   /* heading.border.bottom.color */
 }
 
-#qibfummfym .gt_column_spanner {
+#cenickqsof .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #A8A8A8;
@@ -109,7 +110,7 @@ tags:
   padding-bottom: 4px;
 }
 
-#qibfummfym .gt_col_heading {
+#cenickqsof .gt_col_heading {
   color: #000000;
   background-color: #FFFFFF;
   /* column_labels.background.color */
@@ -122,11 +123,11 @@ tags:
   margin: 10px;
 }
 
-#qibfummfym .gt_sep_right {
+#cenickqsof .gt_sep_right {
   border-right: 5px solid #FFFFFF;
 }
 
-#qibfummfym .gt_group_heading {
+#cenickqsof .gt_group_heading {
   padding: 8px;
   color: #000000;
   background-color: #FFFFFF;
@@ -150,7 +151,7 @@ tags:
   vertical-align: middle;
 }
 
-#qibfummfym .gt_empty_group_heading {
+#cenickqsof .gt_empty_group_heading {
   padding: 0.5px;
   color: #000000;
   background-color: #FFFFFF;
@@ -174,37 +175,37 @@ tags:
   vertical-align: middle;
 }
 
-#qibfummfym .gt_striped {
+#cenickqsof .gt_striped {
   background-color: #f2f2f2;
 }
 
-#qibfummfym .gt_from_md > :first-child {
+#cenickqsof .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#qibfummfym .gt_from_md > :last-child {
+#cenickqsof .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#qibfummfym .gt_row {
+#cenickqsof .gt_row {
   padding: 2px;
   /* row.padding */
   margin: 10px;
   vertical-align: middle;
 }
 
-#qibfummfym .gt_stub {
+#cenickqsof .gt_stub {
   border-right-style: solid;
   border-right-width: 2px;
   border-right-color: #A8A8A8;
   padding-left: 12px;
 }
 
-#qibfummfym .gt_stub.gt_row {
+#cenickqsof .gt_stub.gt_row {
   background-color: #FFFFFF;
 }
 
-#qibfummfym .gt_summary_row {
+#cenickqsof .gt_summary_row {
   background-color: #FFFFFF;
   /* summary_row.background.color */
   padding: 6px;
@@ -213,13 +214,13 @@ tags:
   /* summary_row.text_transform */
 }
 
-#qibfummfym .gt_first_summary_row {
+#cenickqsof .gt_first_summary_row {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #A8A8A8;
 }
 
-#qibfummfym .gt_table_body {
+#cenickqsof .gt_table_body {
   border-top-style: solid;
   /* field.border.top.style */
   border-top-width: 2px;
@@ -234,55 +235,55 @@ tags:
   /* field.border.bottom.color */
 }
 
-#qibfummfym .gt_footnote {
+#cenickqsof .gt_footnote {
   font-size: 90%;
   /* footnote.font.size */
   padding: 4px;
   /* footnote.padding */
 }
 
-#qibfummfym .gt_sourcenote {
+#cenickqsof .gt_sourcenote {
   font-size: 90%;
   /* sourcenote.font.size */
   padding: 4px;
   /* sourcenote.padding */
 }
 
-#qibfummfym .gt_center {
+#cenickqsof .gt_center {
   text-align: center;
 }
 
-#qibfummfym .gt_left {
+#cenickqsof .gt_left {
   text-align: left;
 }
 
-#qibfummfym .gt_right {
+#cenickqsof .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#qibfummfym .gt_font_normal {
+#cenickqsof .gt_font_normal {
   font-weight: normal;
 }
 
-#qibfummfym .gt_font_bold {
+#cenickqsof .gt_font_bold {
   font-weight: bold;
 }
 
-#qibfummfym .gt_font_italic {
+#cenickqsof .gt_font_italic {
   font-style: italic;
 }
 
-#qibfummfym .gt_super {
+#cenickqsof .gt_super {
   font-size: 65%;
 }
 
-#qibfummfym .gt_footnote_glyph {
+#cenickqsof .gt_footnote_glyph {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="qibfummfym" style="overflow-x:auto;"><!--gt table start-->
+<div id="cenickqsof" style="overflow-x:auto;"><!--gt table start-->
 <table class='gt_table'>
 <thead>
 <tr>
