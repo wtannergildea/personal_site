@@ -1,5 +1,5 @@
 ---
-title: "Do your senators represent your state's support for Trump's agenda?"
+title: "Do your senators represent your state's relative support for Trump's agenda?"
 author: "Tanner Gildea"
 date: "2020-04-20"
 output: html_document
@@ -157,7 +157,7 @@ ggplot(average_state_support,
 Not too many swing senate delegations, you'll notice.
 
 
-Now that we have Trump's margin of victory in 2016 and the average support percentage from each state's Senate delegation, we can observe how closely the two metrics align. To do so, I created a new "Representative Support Alignmentment" metric, visualized in the figure below. 
+Now that we have Trump's margin of victory in 2016 and the average support percentage from each state's senate delegation, we can observe how closely the two metrics align. To do so, I created a new "Representative Support Alignmentment" metric, visualized in the figure below. 
 
 To better understand this measurement, let's take the state of Washington as an example. Trump lost the state in 2016 to Clinton by a 15.5 point margin (-15.5), and Washington's senators vote with Trump's agenda 24.5% of the time. The senators' support margin is therefore -25.5 (24.5% minus 50%). The difference between Trump's margin over Hillary (-15.5) and the senators' support margin (-25.5) is -10. 
 
