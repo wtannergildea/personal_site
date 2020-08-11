@@ -9,7 +9,9 @@ title: About
 <br/><br/>
 My name is Tanner Gildea and I am originally from the suburbs south of Boston, MA.
 
-Most recently, I worked as an organizer on the [Mayor Pete Buttigieg](https://peteforamerica.com) presidential campaign in New Hampshire and Virginia. Working on the campaign was the honor & privilege of a lifetime, and I am eager to pursue other opportunities in the progressive political arena.
+I'm currently on the state data team for the [Democratic Party of Wisconsin](https://wisdems.org) and [Biden for President](https://joebiden.com) campaign.
+
+Previously, I worked as an organizer on the [Mayor Pete Buttigieg](https://peteforamerica.com) presidential campaign in New Hampshire and Virginia. Working on the campaign was the honor & privilege of a lifetime.
 
 Before that, I graduated from Harvard with a degree in Social Studies. I primarily studied political science and social theory and wrote an honors thesis on the foreign policy rhetoric of American presidents. During my time at school, I was involved with the [Harvard College Democrats](http://harvarddems.org), [Harvard Model Congress](https://www.harvardmodelcongress.org), and the [Institute of Politics](https://iop.harvard.edu). I also spent a summer conducting qualitative and quantitative research in the [Office of the New York Attorney General](https://ag.ny.gov).
 
