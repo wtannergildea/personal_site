@@ -31,8 +31,8 @@ pygmentsuseclasses         = true
   [[menu.main]]
     name                   = "Data Projects"
     weight                 = -110
-    identifier             = "moment"
-    url                    = "moment/" 
+    identifier             = "projects"
+    url                    = "projects/" 
     
   [[menu.main]]
     name                   = "About"
