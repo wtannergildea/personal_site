@@ -8,6 +8,7 @@ tags:
   - '2020'
   - '2016'
   - 'Trump'
+  - "election"
 ---
 
 How often do your senators vote for Trump's legislative agenda in the upper chamber? And how closely do they mirror your state's popular support for Trump in the 2016 presidential election?

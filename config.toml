@@ -46,7 +46,7 @@ pygmentsuseclasses         = true
   faviconfile              = "img/headshot_gildea.jpeg"               # from themes/ allinone/ static/
   avatar                   = "img/headshot_gildea.jpeg"             # path to image in static dir e.g img/avatar.png 
   author                   = "Tanner Gildea"
-  description              = ["Now: data analytics for good", "Then: organizer & student"]           # appears in the site header when set to a non-empty string
+  description              = ["Now: data science for good", "Then: organizer & student"]           # appears in the site header when set to a non-empty string
   welcome_head             = ""
   welcome_word             = ""
 

@@ -6,6 +6,9 @@ output: html_document
 tags:
   - '2020'
   - "Tanner Gildea"
+  - "election"
+  - "biden"
+  - "buttigieg"
 ---
 
 
