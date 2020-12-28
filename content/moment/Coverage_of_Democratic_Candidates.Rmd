@@ -9,6 +9,7 @@ tags:
   - "election"
   - "biden"
   - "buttigieg"
+  - "mayor pete"
 ---
 
 
