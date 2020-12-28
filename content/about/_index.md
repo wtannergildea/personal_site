@@ -1,5 +1,5 @@
 ---
-date: "2019-07-10"
+date: "2020-12-26"
 draft: false
 title: About
 ---
@@ -7,11 +7,11 @@ title: About
 <img style="float: left; margin-right:20px" src="/about/_index_files/img_2991.jpeg" alt="grad headshot" width="50%" hspace="20"/>
 
 <br/><br/>
-My name is Tanner Gildea and I am originally from the suburbs south of Boston, MA.
+My name is Tanner Gildea and I am currently searching for data science / analytics opportunities in public service and the progressive political space.
 
-I'm currently on the state data team for the [Democratic Party of Wisconsin](https://wisdems.org) and [Biden for President](https://joebiden.com) campaign.
+I recently off-boarded from the state analytics team for the [Democratic Party of Wisconsin](https://wisdems.org) and [Biden for President](https://joebiden.com) campaign. In the November 2020 election, our small but mighty data team helped secure President Biden's [tipping point victory](https://projects.fivethirtyeight.com/2020-swing-states/) in the Badger State. 
 
-Previously, I worked as an organizer on the [Mayor Pete Buttigieg](https://peteforamerica.com) presidential campaign in New Hampshire and Virginia. Working on the campaign was the honor & privilege of a lifetime.
+Previously, I worked as an organizer on the [Mayor Pete Buttigieg](https://peteforamerica.com) presidential campaign in New Hampshire and Virginia. Working on the 2020 campaign trail was the honor & privilege of a lifetime.
 
 Before that, I graduated from Harvard with a degree in Social Studies. I primarily studied political science and social theory and wrote an honors thesis on the foreign policy rhetoric of American presidents. During my time at school, I was involved with the [Harvard College Democrats](http://harvarddems.org), [Harvard Model Congress](https://www.harvardmodelcongress.org), and the [Institute of Politics](https://iop.harvard.edu). I also spent a summer conducting qualitative and quantitative research in the [Office of the New York Attorney General](https://ag.ny.gov).
 
