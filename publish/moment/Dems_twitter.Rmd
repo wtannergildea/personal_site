@@ -1,5 +1,5 @@
 ---
-title: The tweets of the early 2020 Democratic primary
+title: The Tweets of the 2020 Democratic Primary
 author: Tanner Gildea
 date: '2019-07-10'
 tags:

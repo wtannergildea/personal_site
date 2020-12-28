@@ -4,6 +4,6 @@ draft: false
 title: Data Projects
 ---
 
-Data analysis, politically relevant and irrelevant. 
+Some data analyses, politically relevant or irrelevant. 
 
 
