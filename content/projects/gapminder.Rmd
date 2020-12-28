@@ -1,5 +1,5 @@
 ---
-title: "The World Gets Better Every Year"
+title: "The world gets better every year"
 author: "Tanner Gildea"
 date: "2019-03-05"
 output: html_document
