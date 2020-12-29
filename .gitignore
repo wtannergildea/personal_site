@@ -4,3 +4,10 @@
 .Rproj.user
 
 *.csv
+
+cb*
+*.xlsx
+*.zip
+
+*us_reshaped.json
+
