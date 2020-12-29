@@ -5,12 +5,13 @@ date: "2020-12-28"
 output: html_document
 tags:
   - "healthcare"
-  - "NYTimes"
+  - "NY Times"
   - "Covid-19"
   - "Tanner Gildea"
 ---
 
 ```{r setup, include=FALSE}
+knitr::opts_chunk$set(error = TRUE)
 library(tidyverse)
 library(rgdal)
 library(maptools)
@@ -21,7 +22,7 @@ library(plotly)
 library(rjson)
 library(ggridges)
 library(readr)
-
+library(ggthemes)
 
 
 # download and unzip shape files
@@ -102,15 +103,27 @@ daily_states <- daily_states %>%
          new_deaths_prop = round(100*new_deaths / pop,3)) %>%
   filter(date > '2020-03-01') %>%
   filter(!state %in% c("Northern Mariana Islands","Guam","Virgin Islands"))
+
+
+####
+# get state region data
+state_regions <- read_csv(url("https://raw.githubusercontent.com/cphalpert/census-regions/master/us%20census%20bureau%20regions%20and%20divisions.csv")) %>%
+  select(State,Region)
+
 ```
 
 ## Ridge plot
 
-```{r ridgeplot cases, echo=FALSE, fig.height = 18.3, fig.align='center'}
+```{r ridgeplot cases, echo=FALSE, fig.height = 20, fig.align='center'}
 ## ridge plot of daily new cases per state             
-ggplot(daily_states, 
-       aes(x = date, 
-           y = factor(state, levels = rev(unique(state))), 
+daily_states %>% 
+  mutate(cum_cases = max(cases)) %>%
+  arrange(desc(cum_cases)) %>%
+  ungroup() %>%
+  mutate(state = fct_reorder(state, cum_cases, max)) %>%
+  
+ggplot(aes(x = date, 
+           y = state, 
            ordered = TRUE, 
            height = new_cases,
            fill = state)) +
@@ -118,7 +131,7 @@ ggplot(daily_states,
   geom_density_ridges2(stat = "identity", 
                       alpha = .6, 
                       scale = 10,
-                      size = .3) +
+                      size = .2) +
   
   theme_ridges() +
   
@@ -133,8 +146,8 @@ ggplot(daily_states,
         axis.text.x = element_text(face = "bold"),
         panel.grid.major.x = element_blank(),
         text=element_text(family="Georgia"),
-        plot.title = element_text(size=22, face = "bold"),
-        plot.margin = margin(0,6,0,1,"mm"),
+        plot.title = element_text(size=22, face = "bold", hjust = 0),
+        plot.margin = margin(2,6,1,1,"mm"),
         plot.caption = element_text(face = "italic")) +
   
   coord_fixed(ratio = 20)
@@ -145,10 +158,15 @@ ggplot(daily_states,
 ## Proportional ridge plot
 
 
-```{r ridgeplot proportion cases, echo=FALSE, fig.height = 18.2, fig.align='center'}
+```{r ridgeplot proportion cases, echo=FALSE, fig.height = 18.5, fig.align='center'}
 ## ridge plot of daily new cases per state             
-ggplot(daily_states, 
-       aes(x = date, 
+daily_states %>%
+  mutate(prop_rank = sum(new_cases_prop)) %>%
+  arrange(desc(prop_rank)) %>%
+  ungroup() %>%
+  mutate(state = fct_reorder(state, prop_rank, max)) %>%
+
+ggplot(aes(x = date, 
            y = factor(state, levels = rev(unique(state))), 
            ordered = TRUE, 
            height = new_cases_prop,
@@ -156,8 +174,8 @@ ggplot(daily_states,
   
   geom_density_ridges2(stat = "identity", 
                       alpha = .6, 
-                      scale = 7,
-                      size = .3) +
+                      scale = 6,
+                      size = .2) +
   
   theme_ridges() +
   
@@ -180,3 +198,87 @@ ggplot(daily_states,
   coord_fixed(ratio = 20)
   
 ```
+
+```{r mask wearing, echo = FALSE, include=FALSE}
+# library(covidcast)
+# 
+# cc_data <- suppressMessages(
+#   covidcast_signal(data_source = "fb-survey", signal = "smoothed_wearing_mask",
+#                    start_day = "2020-04-06", end_day = "2020-12-18",
+#                    geo_type = "state"))
+# 
+# st_crosswalk <- tibble(state = state.name) %>%
+#   bind_cols(tibble(abb = state.abb)) %>% 
+#   bind_rows(tibble(state = "District of Columbia", abb = "DC")) %>%
+#   mutate(abb = str_to_lower(abb))
+# 
+# cc_data <- left_join(cc_data, st_crosswalk, by = c("geo_value" = "abb")) %>%
+#   group_by(state) %>%
+#   summarize(mean_mask_perc = round(mean(value),0))
+#   
+# prop_deaths <- daily_states %>%
+#   summarize(cum_deaths = max(deaths),
+#             pop = pop)
+# 
+# mask <- cc_data %>%
+#   left_join(prop_deaths, by = c("state" = "state")) %>%
+#   distinct() %>%
+#   mutate(prop_deaths = round(100*cum_deaths/pop,3)) 
+#   
+# ggplot(mask,aes(x=prop_deaths, y = mean_mask_perc)) +
+#   geom_point() +
+#   geom_smooth(method=lm, se= FALSE)
+#  scale_y_log10()
+```
+
+## Segment Chart
+```{r bar charts, echo = FALSE, warning = FALSE, message = FALSE, fig.align='center', fig.height= 14}
+covid_summary <- daily_states %>%
+  select(state, fips, cases, deaths, perc_pop_covid, perc_pop_death) %>%
+  summarize(total_cases = max(cases),
+            total_deaths = max(deaths),
+            perc_pop_covid = max(perc_pop_covid)/100,
+            perc_pop_death = max(perc_pop_death)/100) %>%
+  left_join(state_regions, by = c("state" = "State")) %>%
+  filter(!is.na(Region)) %>%
+  arrange(perc_pop_covid) %>%
+  mutate(state = factor(state, levels = state))
+
+ggplotly(ggplot(covid_summary, aes(x = state, 
+                                   y = perc_pop_covid, 
+                                   color = Region, 
+                                   text = paste0("<b>State: </b>", state,"<br>",
+                                                 "<b>% of pop. diagnosed: </b>", round(perc_pop_covid*100,2),"%"))) +
+  
+  geom_segment(aes(xend = state, yend=0)) +
+  
+  geom_point(size = 4, color = "black") +
+  
+# geom_text(aes(label = perc_pop_covid, nudge_x = -1)) +
+  
+  scale_y_continuous(labels= scales::percent) +
+  coord_flip() +
+  labs(x = NULL,
+       y = NULL,
+       title = "Percent of state population diagnosed with Covid to date",
+       caption = "Data from The New York Times and U.S. Census Bureau.") +
+  facet_wrap(~Region, ncol = 1, scales = "free_y") +
+  theme_tufte() +
+  theme(axis.text.y = element_text(size=12),
+        axis.text.x = element_text(face = "bold"),
+        text=element_text(family="Georgia"),
+        plot.caption = element_text(face = "italic"),
+        plot.title = element_text(size=16, face = "bold"),
+        legend.position = "none",
+        strip.text.x = element_text(size = 14, face = "bold"),
+        panel.grid.major.x = element_line(colour = "grey", size = 0.5)),
+
+tooltip = "text") %>%
+  
+  #ggplotly options
+  config(displayModeBar = FALSE) %>%
+  layout(hoverlabel = list(bgcolor = "white",
+                           font = list(family = "Georgia")))
+```
+
+
