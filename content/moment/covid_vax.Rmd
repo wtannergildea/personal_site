@@ -296,7 +296,8 @@ ggplotly(ggplot(covid_summary, aes(x = state,
                                     '<br>',
                                     '<sup>',
                                     'Hover over figure for precise percentages',
-                                    '</sup>')))
+                                    '</sup>'),
+                      x = 1.5))
 ```
 
 ## Vax Maps
@@ -393,7 +394,7 @@ ggplot(map_data, aes(x = long,
 ```
 
 
-```{r bar plot distribution, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center', fig.height= 14}
+```{r bar plot distribution, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center', fig.height= 14, out.width= "100%"}
 # compare vaccine allocated, distributed, and given across states
 bar_stats <- master_summary %>%
   select(state, doses_allocated, doses_received, shots_given) %>%
