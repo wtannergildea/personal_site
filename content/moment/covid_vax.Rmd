@@ -23,6 +23,8 @@ library(rjson)
 library(ggridges)
 library(readr)
 library(ggthemes)
+library(rvest)
+library(httr)
 
 
 # download and unzip shape files
@@ -234,11 +236,12 @@ ggplot(aes(x = date,
 ## Segment Chart
 ```{r bar charts, echo = FALSE, warning = FALSE, message = FALSE, fig.align='center', fig.height= 14}
 covid_summary <- daily_states %>%
-  select(state, fips, cases, deaths, perc_pop_covid, perc_pop_death) %>%
+  select(state, fips, cases, deaths, perc_pop_covid, perc_pop_death, pop) %>%
   summarize(total_cases = max(cases),
             total_deaths = max(deaths),
             perc_pop_covid = max(perc_pop_covid)/100,
-            perc_pop_death = max(perc_pop_death)/100) %>%
+            perc_pop_death = max(perc_pop_death)/100,
+            pop = max(pop)) %>%
   left_join(state_regions, by = c("state" = "State")) %>%
   filter(!is.na(Region)) %>%
   arrange(perc_pop_covid) %>%
@@ -247,8 +250,10 @@ covid_summary <- daily_states %>%
 ggplotly(ggplot(covid_summary, aes(x = state, 
                                    y = perc_pop_covid, 
                                    color = Region, 
+                                   # for plotly display box later on
                                    text = paste0("<b>State: </b>", state,"<br>",
-                                                 "<b>% of pop. diagnosed: </b>", round(perc_pop_covid*100,2),"%"))) +
+                                                 "<b>% of pop. diagnosed: </b>", round(perc_pop_covid*100,2),"% <br>",
+                                                 "<b>total # of cases: </b>", total_cases))) +
   
   geom_segment(aes(xend = state, yend=0)) +
   
@@ -257,13 +262,18 @@ ggplotly(ggplot(covid_summary, aes(x = state,
 # geom_text(aes(label = perc_pop_covid, nudge_x = -1)) +
   
   scale_y_continuous(labels= scales::percent) +
+  
   coord_flip() +
+  
   labs(x = NULL,
        y = NULL,
        title = "Percent of state population diagnosed with Covid to date",
        caption = "Data from The New York Times and U.S. Census Bureau.") +
+  
   facet_wrap(~Region, ncol = 1, scales = "free_y") +
+  
   theme_tufte() +
+  
   theme(axis.text.y = element_text(size=12),
         axis.text.x = element_text(face = "bold"),
         text=element_text(family="Georgia"),
@@ -281,4 +291,97 @@ tooltip = "text") %>%
                            font = list(family = "Georgia")))
 ```
 
+## Vax Maps
+assume herd immunity at [70% protection](https://www.mayoclinic.org/diseases-conditions/coronavirus/in-depth/herd-immunity-and-coronavirus/art-20486808)
+```{r web scrape vax, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center'}
+# scrape vax data from NY Times website https://www.nytimes.com/interactive/2020/us/covid-19-vaccine-doses.html
+vax_html_raw <- content(GET('https://www.nytimes.com/interactive/2020/us/covid-19-vaccine-doses.html'))
 
+# turn into manageable table
+vax <- vax_html_raw %>%
+  html_node('table') %>%
+  html_table() %>%
+  rename(state = 1) %>%
+  rename(doses_allocated = `Doses allocated`,
+         doses_received = `Doses confirmed received`,
+         shots_given = `Shots given`) %>%
+ mutate(doses_allocated = parse_number(doses_allocated),
+        doses_received = parse_number(doses_received),
+        shots_given = parse_number(shots_given))
+
+# join with covid_summary table and add more summary stats
+master_summary <- covid_summary %>%
+  left_join(vax, by = "state") %>%
+  mutate(perc_vax = shots_given/pop) %>%
+  mutate(perc_protection = perc_vax + perc_pop_covid) %>%
+  mutate(perc_herd_immunity = perc_protection/0.7)
+
+# import shapefile and fortify for ggplot (source: https://www.marmoe.xyz/2018/09/04/shapefiles-in-r-with-ggplot2-rgdal/)
+map_shp <- broom::tidy(us_reshaped)
+us_reshaped$id <- row.names(us_reshaped)
+map_shp <- left_join(map_shp, us_reshaped@data)
+
+# add covid and vax info
+map_data <- left_join(map_shp, master_summary, by = c("NAME" = "state"))
+
+# make map
+ggplot(map_data, aes(x = long, 
+                     y = lat, 
+                     group = group, 
+                     fill = perc_vax)) +
+  
+  geom_polygon(color = "white",
+               size = .2) +
+  
+  theme_map() +
+  
+  labs(x = NULL, 
+       y = NULL,
+       title = "Percent of U.S.population vaccinated against Covid-19",
+       subtitle = NULL,
+       caption = "Data from The New York Times and U.S. Census Bureau.",
+       fill = NULL) +
+  
+  scale_fill_gradient(low = "grey", high = "light blue", labels = scales::percent) +
+  
+  theme_map() +
+ # coord_map(projection = "albers", lat0 = 39, lat1 = 45)    # curves map to annoy flat-earthers
+
+  
+  theme(
+        legend.position = "right",
+        plot.caption = element_text(face = "italic"),
+        plot.title = element_text(size=16, face = "bold"),
+        text=element_text(family="Georgia"))
+
+```
+
+```{r herd immunity map, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center'}
+# make map
+ggplot(map_data, aes(x = long, 
+                     y = lat, 
+                     group = group, 
+                     fill = perc_herd_immunity)) +
+  
+  geom_polygon(color = "white",
+               size = .2) +
+  
+  theme_map() +
+  
+  labs(x = NULL, 
+       y = NULL,
+       title = "Percent of the way to 70% herd immunity threshold",
+       subtitle = paste0("Estimated from confirmed vaccinations and infections. \nAssume lag in reported vaccinations, and significant undercount in confirmed infections."),
+       caption = "Data from The New York Times and U.S. Census Bureau.",
+       fill = NULL) +
+  
+  scale_fill_gradient(low = "grey", high = "PaleGreen", labels = scales::percent) +
+  
+  theme_map() +
+  
+  theme(legend.position = "right",
+        plot.caption = element_text(face = "italic"),
+        plot.title = element_text(size=16, face = "bold"),
+        text=element_text(family="Georgia"))
+
+```
