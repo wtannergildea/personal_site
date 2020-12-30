@@ -11,7 +11,7 @@ tags:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(error = TRUE)
+knitr::opts_chunk$set(out.width = "120%")
 library(tidyverse)
 library(rgdal)
 library(maptools)
@@ -113,9 +113,11 @@ state_regions <- read_csv(url("https://raw.githubusercontent.com/cphalpert/censu
   select(State,Region)
 
 ```
-last updated: `r Sys.Date()`
-test
-## Ridge plot
+Last updated: `r format(as.Date(Sys.Date(),"%Y-%m-%d"), "%B %d, %Y")`  
+
+  
+
+## Ridge plot  
 
 ```{r ridgeplot cases, echo=FALSE, fig.height = 20, fig.align='center'}
 ## ridge plot of daily new cases per state             
@@ -235,7 +237,7 @@ ggplot(aes(x = date,
 ```
 
 ## Segment Chart
-```{r bar charts, echo = FALSE, warning = FALSE, message = FALSE, fig.align='center', fig.height= 14}
+```{r bar charts, echo = FALSE, warning = FALSE, message = FALSE, fig.align='center', fig.height= 14, out.width= "100%"}
 covid_summary <- daily_states %>%
   select(state, fips, cases, deaths, perc_pop_covid, perc_pop_death, pop) %>%
   summarize(total_cases = max(cases),
@@ -369,7 +371,7 @@ ggplot(map_data, aes(x = long,
        y = NULL,
        title = "Percent of the way to 70% herd immunity threshold",
        subtitle = paste0("Estimated from confirmed vaccinations and infections. \nAssume lag in reported vaccinations,and significant undercount in confirmed infections."),
-       caption = "Data from The New York Times and U.S. Census Bureau.",
+       caption = "Data from The New York Times; U.S. Census Bureau; U.S. Department of Health and Human Services (Pfizer and Moderna doses allocated); state surveys and announcements (doses confirmed received and shots given).",
        fill = NULL) +
   
   scale_fill_gradient(low = "grey", high = "PaleGreen", labels = scales::percent) +
@@ -384,7 +386,7 @@ ggplot(map_data, aes(x = long,
 ```
 
 
-```{r bar plot distribution, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center'}
+```{r bar plot distribution, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center', fig.height= 10}
 # compare vaccine allocated, distributed, and given across states
 bar_stats <- master_summary %>%
   select(state, doses_allocated, doses_received, shots_given) %>%
@@ -407,7 +409,7 @@ ggplot(bar_stats, aes(x= state, y = value, fill = metric)) +
   labs(x = NULL,
        y = NULL,
        title = "Vaccine allocation and distribution",
-       caption = "Data from The New York Times.") +
+       caption = "Data from The New York Times; U.S. Department of Health and Human Services (Pfizer and Moderna doses allocated); state surveys and announcements (doses confirmed received and shots given).") +
   
   coord_flip() +
   
