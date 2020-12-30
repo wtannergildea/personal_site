@@ -113,7 +113,8 @@ state_regions <- read_csv(url("https://raw.githubusercontent.com/cphalpert/censu
   select(State,Region)
 
 ```
-last updated: `r print(Sys.Date)`
+last updated: `r Sys.Date()`
+test
 ## Ridge plot
 
 ```{r ridgeplot cases, echo=FALSE, fig.height = 20, fig.align='center'}
@@ -383,7 +384,7 @@ ggplot(map_data, aes(x = long,
 ```
 
 
-```{r bar plot distribution}
+```{r bar plot distribution, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center'}
 # compare vaccine allocated, distributed, and given across states
 bar_stats <- master_summary %>%
   select(state, doses_allocated, doses_received, shots_given) %>%
