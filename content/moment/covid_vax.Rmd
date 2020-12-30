@@ -339,7 +339,7 @@ ggplot(map_data, aes(x = long,
   
   labs(x = NULL, 
        y = NULL,
-       title = "Percent of U.S.population vaccinated against Covid-19",
+       title = "Percent of U.S. population vaccinated against Covid-19",
        subtitle = NULL,
        caption = "Data from The New York Times and U.S. Census Bureau.",
        fill = NULL) +
@@ -371,7 +371,7 @@ ggplot(map_data, aes(x = long,
        y = NULL,
        title = "Percent of the way to 70% herd immunity threshold",
        subtitle = paste0("Estimated from confirmed vaccinations and infections. \nAssume lag in reported vaccinations,and significant undercount in confirmed infections."),
-       caption = "Data from The New York Times; U.S. Census Bureau; U.S. Department of Health and Human Services (Pfizer and Moderna doses allocated); state surveys and announcements (doses confirmed received and shots given).",
+       caption = "Data from U.S. Department of Health and Human Services (Pfizer and Moderna doses allocated); state surveys and announcements (doses confirmed received and shots given).",
        fill = NULL) +
   
   scale_fill_gradient(low = "grey", high = "PaleGreen", labels = scales::percent) +
@@ -400,11 +400,11 @@ bar_stats <- master_summary %>%
   mutate(state = factor(state, levels = unique(state)))
 
 
-ggplot(bar_stats, aes(x= state, y = value, fill = metric)) +
+ggplot(bar_stats, aes(x= state, y = value, fill = factor(metric, levels = unique(metric)))) +
   
   geom_col(position = "dodge") +
   
-  facet_wrap(~Region, ncol = 2, scales = "free_y") +
+  facet_wrap(~Region, ncol = 1, scales = "free_y") +
   
   labs(x = NULL,
        y = NULL,
