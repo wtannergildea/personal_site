@@ -254,9 +254,12 @@ ggplotly(ggplot(covid_summary, aes(x = state,
                                    y = perc_pop_covid, 
                                    color = Region, 
                                    # for plotly display box later on
-                                   text = paste0("<b>State: </b>", state,"<br>",
-                                                 "<b>% of pop. diagnosed: </b>", round(perc_pop_covid*100,2),"% <br>",
-                                                 "<b>total # of cases: </b>", total_cases))) +
+                                   text = paste0("<b>",state, "</b> <br>",
+                                                 "<b>% of pop. diagnosed: </b> <br>",
+                                                 round(perc_pop_covid*100,2),"% <br>",
+                                                 "<br>",
+                                                 "<b>total # of cases: </b><br>", 
+                                                 total_cases))) +
   
   geom_segment(aes(xend = state, yend=0)) +
   
@@ -268,7 +271,6 @@ ggplotly(ggplot(covid_summary, aes(x = state,
   
   labs(x = NULL,
        y = NULL,
-       title = "Percent of state population diagnosed with Covid to date",
        caption = "Data from The New York Times and U.S. Census Bureau.") +
   
   facet_wrap(~Region, ncol = 1, scales = "free_y") +
@@ -289,7 +291,12 @@ ggplotly(ggplot(covid_summary, aes(x = state,
   #ggplotly options
   plotly::config(displayModeBar = FALSE) %>%
   layout(hoverlabel = list(bgcolor = "white",
-                           font = list(family = "Georgia")))
+                           font = list(family = "Georgia")),
+         title = list(text = paste0('Percent of state population diagnosed with Covid to date',
+                                    '<br>',
+                                    '<sup>',
+                                    'Hover over figure for precise percentages',
+                                    '</sup>')))
 ```
 
 ## Vax Maps
@@ -316,7 +323,7 @@ master_summary <- covid_summary %>%
   mutate(perc_vax = shots_given/pop) %>%
   mutate(perc_protection = perc_vax + perc_pop_covid) %>%
   mutate(perc_herd_immunity = perc_protection/0.7) %>%
-  mutate(perc_vax_given = shots_given/doses_received)
+  mutate(perc_vax_given = round(100*shots_given/doses_received,2))
 
 # import shapefile and fortify for ggplot (source: https://www.marmoe.xyz/2018/09/04/shapefiles-in-r-with-ggplot2-rgdal/)
 map_shp <- broom::tidy(us_reshaped)
@@ -371,7 +378,7 @@ ggplot(map_data, aes(x = long,
        y = NULL,
        title = "Percent of the way to 70% herd immunity threshold",
        subtitle = paste0("Estimated from confirmed vaccinations and infections. \nAssume lag in reported vaccinations,and significant undercount in confirmed infections."),
-       caption = "Data from U.S. Department of Health and Human Services (Pfizer and Moderna doses allocated); state surveys and announcements (doses confirmed received and shots given).",
+       caption = "Data from The New York Times.",
        fill = NULL) +
   
   scale_fill_gradient(low = "grey", high = "PaleGreen", labels = scales::percent) +
@@ -386,10 +393,13 @@ ggplot(map_data, aes(x = long,
 ```
 
 
-```{r bar plot distribution, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center', fig.height= 10}
+```{r bar plot distribution, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center', fig.height= 14}
 # compare vaccine allocated, distributed, and given across states
 bar_stats <- master_summary %>%
   select(state, doses_allocated, doses_received, shots_given) %>%
+  rename('Doses allocated' = doses_allocated,
+         'Doses received' = doses_received,
+         'Shots given' = shots_given) %>%
   mutate(state = factor(state, levels = state)) %>%
   pivot_longer(!state, "metric", "value") 
   
@@ -397,10 +407,18 @@ bar_stats <- master_summary %>%
   select(state,Region, perc_vax_given) %>%
   right_join(bar_stats, by = "state") %>%
   arrange(value) %>%
-  mutate(state = factor(state, levels = unique(state)))
+  mutate(state = factor(state, levels = unique(state))) %>%
+  filter(!state == "District of Columbia") 
 
-
-ggplot(bar_stats, aes(x= state, y = value, fill = factor(metric, levels = unique(metric)))) +
+ggplotly(ggplot(bar_stats, aes(x= state, 
+                               y = value, 
+                               fill = factor(metric, levels = unique(metric)),
+                               text = paste0("<b>", state, "</b> <br>",
+                                             "<b>% received shots given: </b> <br>", 
+                                             perc_vax_given, "% <br>",
+                                             "<br>",
+                                                 "<b>", metric,":</b><br>",
+                                                 value))) +
   
   geom_col(position = "dodge") +
   
@@ -408,8 +426,10 @@ ggplot(bar_stats, aes(x= state, y = value, fill = factor(metric, levels = unique
   
   labs(x = NULL,
        y = NULL,
-       title = "Vaccine allocation and distribution",
-       caption = "Data from The New York Times; U.S. Department of Health and Human Services (Pfizer and Moderna doses allocated); state surveys and announcements (doses confirmed received and shots given).") +
+       caption = "Data from The New York Times.",
+       fill = "Click to toggle:") +
+    
+  scale_y_continuous(labels = scales::comma) +
   
   coord_flip() +
   
@@ -422,8 +442,19 @@ ggplot(bar_stats, aes(x= state, y = value, fill = factor(metric, levels = unique
         plot.title = element_text(size=16, face = "bold"),
         legend.position = "bottom",
         strip.text.x = element_text(size = 14, face = "bold"),
-        panel.grid.major.x = element_line(colour = "grey", size = 0.5))
+        panel.grid.major.x = element_line(colour = "grey", size = 0.5)),
+  
+tooltip = "text") %>%
 
+  #ggplotly options
+  plotly::config(displayModeBar = FALSE) %>%
+  layout(hoverlabel = list(bgcolor = "white",
+                           font = list(family = "Georgia")),
+         title = list(text = paste0('Vaccine allocation and distribution',
+                                    '<br>',
+                                    '<sup>',
+                                    'Hover over figure for % of received shots given',
+                                    '</sup>')))
 
 
 ```
