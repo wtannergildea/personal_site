@@ -25,6 +25,8 @@ library(readr)
 library(ggthemes)
 library(rvest)
 library(httr)
+library(sf)
+library(psych)
 
 
 # download and unzip shape files
@@ -57,6 +59,7 @@ proj4string(hawaii) <- proj4string(us_aea)
 # between texas and florida via similar methods to the ones we just used
 us_aea <- us_aea[!us_aea$STATEFP %in% c("02", "15", "72"),]
 us_reshaped <- rbind(us_aea, alaska, hawaii)
+
 
 #convert shapefile to geoJSON for plotly/leaflet
 geojson_file <- "us_reshaped.json"
@@ -112,13 +115,198 @@ daily_states <- daily_states %>%
 state_regions <- read_csv(url("https://raw.githubusercontent.com/cphalpert/census-regions/master/us%20census%20bureau%20regions%20and%20divisions.csv")) %>%
   select(State,Region)
 
+### make summary table
+covid_summary <- daily_states %>%
+  select(state, fips, cases, deaths, perc_pop_covid, perc_pop_death, pop) %>%
+  summarize(total_cases = max(cases),
+            total_deaths = max(deaths),
+            perc_pop_covid = max(perc_pop_covid)/100,
+            perc_pop_death = max(perc_pop_death)/100,
+            pop = max(pop)) %>%
+  left_join(state_regions, by = c("state" = "State")) %>%
+  filter(!is.na(Region)) %>%
+  arrange(perc_pop_covid) %>%
+  mutate(state = factor(state, levels = state))
 ```
 Last updated: `r format(as.Date(Sys.Date(),"%Y-%m-%d"), "%B %d, %Y")`  
 
+## Vax Maps
+
+```{r web scrape vax, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center'}
+# scrape vax data from NY Times website https://www.nytimes.com/interactive/2020/us/covid-19-vaccine-doses.html
+vax_html_raw <- content(GET('https://www.nytimes.com/interactive/2020/us/covid-19-vaccine-doses.html'))
+
+# turn into manageable table
+vax <- vax_html_raw %>%
+  html_node('table') %>%
+  html_table() %>%
+  rename(state = 1) %>%
+  rename(doses_allocated = `Doses allocated`,
+         doses_received = `Doses confirmed received`,
+         shots_given = `Shots given`) %>%
+ mutate(doses_allocated = parse_number(doses_allocated),
+        doses_received = parse_number(doses_received),
+        shots_given = parse_number(shots_given))
+
+# join with covid_summary table and add more summary stats
+master_summary <- covid_summary %>%
+  left_join(vax, by = "state") %>%
+  mutate(perc_vax = shots_given/pop) %>%
+  mutate(perc_protection = perc_vax + perc_pop_covid) %>%
+  mutate(perc_herd_immunity = perc_protection/0.7) %>%
+  mutate(perc_vax_given = round(100*shots_given/doses_received,1))
+
+# import shapefile and fortify for ggplot (source: https://www.marmoe.xyz/2018/09/04/shapefiles-in-r-with-ggplot2-rgdal/)
+map_shp <- broom::tidy(us_reshaped)
+us_reshaped$id <- row.names(us_reshaped)
+map_shp <- left_join(map_shp, us_reshaped@data)
+
+# add covid and vax info
+map_data <- left_join(map_shp, master_summary, by = c("NAME" = "state"))
+
+# compile state centroids 
+state_centers <- as.data.frame(rgeos::gCentroid(us_reshaped, byid=TRUE))
+state_abbv <- map_data %>%
+  select(STUSPS) %>%
+  rename(abbv = STUSPS) %>%
+  distinct() 
+state_centers <- cbind(state_centers,state_abbv) %>%
+  filter(!abbv == "DC")
+
+
+
+# make map
+ggplot(map_data, aes(x = long, 
+                     y = lat, 
+                     group = group, 
+                     fill = perc_vax)) +
   
+  geom_polygon(color = "white",
+               size = .2) +
+  
+    geom_text(data=state_centers, aes(x, y, group = NULL, fill = NULL, label = abbv),
+                    color = "black", size=2) +
+  
+  theme_map() +
+  
+  labs(x = NULL, 
+       y = NULL,
+       title = "Percent of U.S. population vaccinated against Covid-19",
+       subtitle = NULL,
+       caption = "Data from The New York Times and U.S. Census Bureau.",
+       fill = NULL) +
+  
+  scale_fill_gradient(low = "grey", high = "light blue", labels = scales::percent) +
+  
+  theme_map() +
 
-## Ridge plot  
+  theme(legend.position = "right",
+        plot.caption = element_text(face = "italic"),
+        plot.title = element_text(size=16, face = "bold"),
+        text=element_text(family="Georgia"))
 
+``` 
+
+## Herd immunity progress map
+assume herd immunity at [70% protection](https://www.mayoclinic.org/diseases-conditions/coronavirus/in-depth/herd-immunity-and-coronavirus/art-20486808)
+```{r herd immunity map, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center'}
+# make map
+
+
+ggplot(map_data, aes(x = long, 
+                     y = lat, 
+                     group = group, 
+                     fill = perc_herd_immunity)) +
+  
+  geom_polygon(color = "white",
+               size = .2) +
+  
+  geom_text(data=state_centers, aes(x, y, group = NULL, fill = NULL, label = abbv),
+                    color = "black", size=2) +
+  
+  theme_map() +
+  
+  labs(x = NULL, 
+       y = NULL,
+       title = "Percent of the way to 70% herd immunity threshold",
+       subtitle = paste0("Estimated from confirmed vaccinations and infections. \nAssume lag in reported vaccinations,and significant undercount in confirmed infections."),
+       caption = "Data from The New York Times.",
+       fill = NULL) +
+  
+  scale_fill_gradient(low = "grey", high = "PaleGreen", labels = scales::percent) +
+  
+  theme_map() +
+  
+  theme(legend.position = "right",
+        plot.caption = element_text(face = "italic"),
+        plot.title = element_text(size=16, face = "bold"),
+        text=element_text(family="Georgia"))
+
+```
+
+## Vax distribution in states
+```{r bar plot distribution, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center', fig.height= 14, out.width= "100%"}
+# compare vaccine allocated, distributed, and given across states
+bar_stats <- master_summary %>%
+  select(state, doses_allocated, doses_received, shots_given) %>%
+  rename('Doses allocated' = doses_allocated,
+         'Doses received' = doses_received,
+         'Shots given' = shots_given) %>%
+  mutate(state = factor(state, levels = state)) %>%
+  pivot_longer(!state, "metric", "value") 
+  
+bar_stats <- master_summary %>%
+  select(state,Region, perc_vax_given) %>%
+  right_join(bar_stats, by = "state") %>%
+  arrange(value) %>%
+  mutate(state = factor(state, levels = unique(state))) %>%
+  filter(!state == "District of Columbia") 
+
+ggplotly(ggplot(bar_stats, aes(x= state, 
+                               y = value, 
+                               fill = factor(metric, levels = unique(metric)),
+                               text = paste0("<b>", state, "</b> <br>",
+                                             "<b>% received shots given: </b> <br>", 
+                                             perc_vax_given, "% <br>",
+                                             "<br>",
+                                                 "<b>", metric,":</b><br>",
+                                                 value))) +
+  
+  geom_col(position = "dodge") +
+  
+  facet_wrap(~Region, ncol = 2, scales = "free_y") +
+  
+  labs(x = NULL,
+       y = NULL,
+       caption = "Data from The New York Times.",
+       fill = "Click to toggle:",
+       title = "Vaccine allocation and distribution") +
+    
+  scale_y_continuous(labels = scales::comma) +
+  
+  coord_flip() +
+  
+  theme_tufte() +
+  
+  theme(axis.text.y = element_text(size=12),
+        text=element_text(family="Georgia"),
+        plot.caption = element_text(face = "italic"),
+        plot.title = element_text(size=18, face = "bold"),
+        legend.position = "bottom",
+        strip.text.x = element_text(size = 14, face = "bold"),
+        panel.grid.major.x = element_line(colour = "grey", size = 0.5),
+        axis.text.x = element_text(face = "bold", angle = 30)),
+  
+tooltip = "text") %>%
+
+  #ggplotly options
+  plotly::config(displayModeBar = FALSE) %>%
+  layout(hoverlabel = list(bgcolor = "white",
+                           font = list(family = "Georgia")))
+
+```
+
+## Ridge plots  
 ```{r ridgeplot cases, echo=FALSE, fig.height = 20, fig.align='center'}
 ## ridge plot of daily new cases per state             
 daily_states %>% 
@@ -151,11 +339,11 @@ ggplot(aes(x = date,
         axis.text.x = element_text(face = "bold"),
         panel.grid.major.x = element_blank(),
         text=element_text(family="Georgia"),
-        plot.title = element_text(size=22, face = "bold", hjust = 0),
-        plot.margin = margin(2,6,1,1,"mm"),
-        plot.caption = element_text(face = "italic")) +
+        plot.title = element_text(size=16, face = "bold", hjust = 0),
+        plot.margin = margin(2,6,2,1,"mm"),
+        plot.caption = element_text(face = "italic", size = 8)) 
   
-  coord_fixed(ratio = 20)
+#  coord_fixed(ratio = 20)
   
   
 ```
@@ -196,11 +384,11 @@ ggplot(aes(x = date,
         axis.text.x = element_text(face = "bold"),
         panel.grid.major.x = element_blank(),
         text=element_text(family="Georgia"),
-        plot.title = element_text(size=22, face = "bold"),
-        plot.margin = margin(0,6,0,1,"mm"),
-        plot.caption = element_text(face = "italic")) +
+        plot.title = element_text(size=16, face = "bold"),
+        plot.margin = margin(2,6,2,1,"mm"),
+        plot.caption = element_text(face = "italic", size = 8)) 
   
-  coord_fixed(ratio = 20)
+#  coord_fixed(ratio = 20)
   
 ```
 
@@ -236,19 +424,8 @@ ggplot(aes(x = date,
 #  scale_y_log10()
 ```
 
-## Segment Chart
+## Population with confirmed Covid-19 diagnosis to date
 ```{r bar charts, echo = FALSE, warning = FALSE, message = FALSE, fig.align='center', fig.height= 14, out.width= "100%"}
-covid_summary <- daily_states %>%
-  select(state, fips, cases, deaths, perc_pop_covid, perc_pop_death, pop) %>%
-  summarize(total_cases = max(cases),
-            total_deaths = max(deaths),
-            perc_pop_covid = max(perc_pop_covid)/100,
-            perc_pop_death = max(perc_pop_death)/100,
-            pop = max(pop)) %>%
-  left_join(state_regions, by = c("state" = "State")) %>%
-  filter(!is.na(Region)) %>%
-  arrange(perc_pop_covid) %>%
-  mutate(state = factor(state, levels = state))
 
 ggplotly(ggplot(covid_summary, aes(x = state, 
                                    y = perc_pop_covid, 
@@ -279,13 +456,13 @@ ggplotly(ggplot(covid_summary, aes(x = state,
   theme_tufte() +
   
   theme(axis.text.y = element_text(size=12),
-        axis.text.x = element_text(face = "bold"),
         text=element_text(family="Georgia"),
         plot.caption = element_text(face = "italic"),
         plot.title = element_text(size=16, face = "bold"),
         legend.position = "none",
         strip.text.x = element_text(size = 14, face = "bold"),
-        panel.grid.major.x = element_line(colour = "grey", size = 0.5)),
+        panel.grid.major.x = element_line(colour = "grey", size = 0.5),
+        axis.text.x = element_text(face = "bold")),
 
   tooltip = "text") %>%
   
@@ -295,159 +472,3 @@ ggplotly(ggplot(covid_summary, aes(x = state,
                            font = list(family = "Georgia")))
 ```
 
-## Vax Maps
-assume herd immunity at [70% protection](https://www.mayoclinic.org/diseases-conditions/coronavirus/in-depth/herd-immunity-and-coronavirus/art-20486808)
-```{r web scrape vax, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center'}
-# scrape vax data from NY Times website https://www.nytimes.com/interactive/2020/us/covid-19-vaccine-doses.html
-vax_html_raw <- content(GET('https://www.nytimes.com/interactive/2020/us/covid-19-vaccine-doses.html'))
-
-# turn into manageable table
-vax <- vax_html_raw %>%
-  html_node('table') %>%
-  html_table() %>%
-  rename(state = 1) %>%
-  rename(doses_allocated = `Doses allocated`,
-         doses_received = `Doses confirmed received`,
-         shots_given = `Shots given`) %>%
- mutate(doses_allocated = parse_number(doses_allocated),
-        doses_received = parse_number(doses_received),
-        shots_given = parse_number(shots_given))
-
-# join with covid_summary table and add more summary stats
-master_summary <- covid_summary %>%
-  left_join(vax, by = "state") %>%
-  mutate(perc_vax = shots_given/pop) %>%
-  mutate(perc_protection = perc_vax + perc_pop_covid) %>%
-  mutate(perc_herd_immunity = perc_protection/0.7) %>%
-  mutate(perc_vax_given = round(100*shots_given/doses_received,1))
-
-# import shapefile and fortify for ggplot (source: https://www.marmoe.xyz/2018/09/04/shapefiles-in-r-with-ggplot2-rgdal/)
-map_shp <- broom::tidy(us_reshaped)
-us_reshaped$id <- row.names(us_reshaped)
-map_shp <- left_join(map_shp, us_reshaped@data)
-
-# add covid and vax info
-map_data <- left_join(map_shp, master_summary, by = c("NAME" = "state"))
-
-# make map
-ggplot(map_data, aes(x = long, 
-                     y = lat, 
-                     group = group, 
-                     fill = perc_vax)) +
-  
-  geom_polygon(color = "white",
-               size = .2) +
-  
-  theme_map() +
-  
-  labs(x = NULL, 
-       y = NULL,
-       title = "Percent of U.S. population vaccinated against Covid-19",
-       subtitle = NULL,
-       caption = "Data from The New York Times and U.S. Census Bureau.",
-       fill = NULL) +
-  
-  scale_fill_gradient(low = "grey", high = "light blue", labels = scales::percent) +
-  
-  theme_map() +
-
-  theme(legend.position = "right",
-        plot.caption = element_text(face = "italic"),
-        plot.title = element_text(size=16, face = "bold"),
-        text=element_text(family="Georgia"))
-
-```
-
-```{r herd immunity map, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center'}
-# make map
-ggplot(map_data, aes(x = long, 
-                     y = lat, 
-                     group = group, 
-                     fill = perc_herd_immunity)) +
-  
-  geom_polygon(color = "white",
-               size = .2) +
-  
-  theme_map() +
-  
-  labs(x = NULL, 
-       y = NULL,
-       title = "Percent of the way to 70% herd immunity threshold",
-       subtitle = paste0("Estimated from confirmed vaccinations and infections. \nAssume lag in reported vaccinations,and significant undercount in confirmed infections."),
-       caption = "Data from The New York Times.",
-       fill = NULL) +
-  
-  scale_fill_gradient(low = "grey", high = "PaleGreen", labels = scales::percent) +
-  
-  theme_map() +
-  
-  theme(legend.position = "right",
-        plot.caption = element_text(face = "italic"),
-        plot.title = element_text(size=16, face = "bold"),
-        text=element_text(family="Georgia"))
-
-```
-<br>
-<br>
-<br>
-
-```{r bar plot distribution, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center', fig.height= 14, out.width= "100%"}
-# compare vaccine allocated, distributed, and given across states
-bar_stats <- master_summary %>%
-  select(state, doses_allocated, doses_received, shots_given) %>%
-  rename('Doses allocated' = doses_allocated,
-         'Doses received' = doses_received,
-         'Shots given' = shots_given) %>%
-  mutate(state = factor(state, levels = state)) %>%
-  pivot_longer(!state, "metric", "value") 
-  
-bar_stats <- master_summary %>%
-  select(state,Region, perc_vax_given) %>%
-  right_join(bar_stats, by = "state") %>%
-  arrange(value) %>%
-  mutate(state = factor(state, levels = unique(state))) %>%
-  filter(!state == "District of Columbia") 
-
-ggplotly(ggplot(bar_stats, aes(x= state, 
-                               y = value, 
-                               fill = factor(metric, levels = unique(metric)),
-                               text = paste0("<b>", state, "</b> <br>",
-                                             "<b>% received shots given: </b> <br>", 
-                                             perc_vax_given, "% <br>",
-                                             "<br>",
-                                                 "<b>", metric,":</b><br>",
-                                                 value))) +
-  
-  geom_col(position = "dodge") +
-  
-  facet_wrap(~Region, ncol = 1, scales = "free_y") +
-  
-  labs(x = NULL,
-       y = NULL,
-       caption = "Data from The New York Times.",
-       fill = "Click to toggle:",
-       title = "Vaccine allocation and distribution") +
-    
-  scale_y_continuous(labels = scales::comma) +
-  
-  coord_flip() +
-  
-  theme_tufte() +
-  
-  theme(axis.text.y = element_text(size=12),
-        axis.text.x = element_text(face = "bold"),
-        text=element_text(family="Georgia"),
-        plot.caption = element_text(face = "italic"),
-        plot.title = element_text(size=16, face = "bold"),
-        legend.position = "bottom",
-        strip.text.x = element_text(size = 14, face = "bold"),
-        panel.grid.major.x = element_line(colour = "grey", size = 0.5)),
-  
-tooltip = "text") %>%
-
-  #ggplotly options
-  plotly::config(displayModeBar = FALSE) %>%
-  layout(hoverlabel = list(bgcolor = "white",
-                           font = list(family = "Georgia")))
-
-```
