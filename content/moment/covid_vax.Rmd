@@ -141,8 +141,8 @@ vax <- vax_html_raw %>%
   html_node('table') %>%
   html_table() %>%
   rename(state = 1) %>%
-  rename(doses_allocated = `Doses allocated`,
-         doses_received = `Doses confirmed received`,
+  rename(doses_allocated = `First doses allocated`,
+         doses_received = `Doses distributed`,
          shots_given = `Shots given`) %>%
  mutate(doses_allocated = parse_number(doses_allocated),
         doses_received = parse_number(doses_received),
@@ -220,6 +220,7 @@ ggplot(map_data, aes(x = long,
 
 ## Herd immunity progress map
 assume herd immunity at [70% protection](https://www.mayoclinic.org/diseases-conditions/coronavirus/in-depth/herd-immunity-and-coronavirus/art-20486808)
+
 ```{r herd immunity map, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center'}
 # topline % to immunity stat
 # total covid cases + total shots given / total us population / .7
@@ -245,7 +246,7 @@ ggplot(map_data, aes(x = long,
        y = NULL,
        title = paste0("~", us_perc_to_immunity, "% of the way to U.S. herd immunity threshold"),
        subtitle = paste0("Assuming 70% herd immunity threshold and protection against re-infection.\nEstimated from confirmed vaccinations and infections. \nExpect lag in reported vaccinations, and significant undercount in confirmed infections."),
-       caption = "Data from The New York Times; the CDC; U.S. Department of Health and Human Services; and state surveys and announcements.",
+       caption = "Data from The New York Times and the CDC.",
        fill = "% to herd immunity") +
   
   scale_fill_gradient(low = "grey", high = "PaleGreen", labels = scales::percent) +
@@ -257,7 +258,11 @@ ggplot(map_data, aes(x = long,
         plot.title = element_text(size=16, face = "bold"),
         text=element_text(family="Georgia"))
 
+# deaths to herd immunity
+deaths_to_herd <- format(round(sum(master_summary$total_deaths)/(sum(master_summary$perc_pop_covid)/100) - sum(master_summary$total_deaths),0),format = "d", big.mark = ",")
 ```
+To achieve herd immunity by Covid infection alone, as some fringe public health commentators and right-wing politicians have suggested the U.S. do, 
+### approximately `r deaths_to_herd` more Americans would die
 
 ## Vax distribution in states
 ```{r bar plot distribution, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center', fig.height= 14, out.width= "100%"}
