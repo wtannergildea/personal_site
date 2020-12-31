@@ -302,7 +302,7 @@ ggplotly(ggplot(bar_stats, aes(x= state,
        y = NULL,
        caption = "Data from The New York Times.",
        fill = "Click to toggle:",
-       title = "Vaccine allocation and distribution") +
+       title = NULL) +
     
   scale_y_continuous(labels = scales::comma) +
   
@@ -326,6 +326,55 @@ tooltip = "text") %>%
   layout(hoverlabel = list(bgcolor = "white",
                            font = list(family = "Georgia")))
 
+```
+  
+***
+## Population with confirmed Covid-19 diagnosis to date
+```{r bar charts, echo = FALSE, warning = FALSE, message = FALSE, fig.align='center', fig.height= 14, out.width= "100%"}
+
+ggplotly(ggplot(covid_summary, aes(x = state, 
+                                   y = perc_pop_covid, 
+                                   color = Region, 
+                                   # for plotly display box later on
+                                   text = paste0("<b>",state, "</b> <br>",
+                                                 "<b>% of pop. diagnosed: </b> <br>",
+                                                 round(perc_pop_covid*100,2),"% <br>",
+                                                 "<br>",
+                                                 "<b>total # of cases: </b><br>", 
+                                                 total_cases))) +
+  
+  geom_segment(aes(xend = state, yend=0)) +
+  
+  geom_point(size = 4, color = "black") +
+  
+  scale_y_continuous(labels= scales::percent) +
+  
+  coord_flip() +
+  
+  labs(x = NULL,
+       y = NULL,
+       caption = "Data from The New York Times and U.S. Census Bureau.",
+       title= NULL) +
+  
+  facet_wrap(~Region, ncol = 1, scales = "free_y") +
+  
+  theme_tufte() +
+  
+  theme(axis.text.y = element_text(size=12),
+        text=element_text(family="Georgia"),
+        plot.caption = element_text(face = "italic"),
+        plot.title = element_text(size=16, face = "bold"),
+        legend.position = "none",
+        strip.text.x = element_text(size = 14, face = "bold"),
+        panel.grid.major.x = element_line(colour = "grey", size = 0.5),
+        axis.text.x = element_text(face = "bold")),
+
+  tooltip = "text") %>%
+  
+  #ggplotly options
+  plotly::config(displayModeBar = FALSE) %>%
+  layout(hoverlabel = list(bgcolor = "white",
+                           font = list(family = "Georgia")))
 ```
   
 ***
@@ -446,52 +495,5 @@ ggplot(aes(x = date,
 #  scale_y_log10()
 ```
   
-***
-## Population with confirmed Covid-19 diagnosis to date
-```{r bar charts, echo = FALSE, warning = FALSE, message = FALSE, fig.align='center', fig.height= 14, out.width= "100%"}
-
-ggplotly(ggplot(covid_summary, aes(x = state, 
-                                   y = perc_pop_covid, 
-                                   color = Region, 
-                                   # for plotly display box later on
-                                   text = paste0("<b>",state, "</b> <br>",
-                                                 "<b>% of pop. diagnosed: </b> <br>",
-                                                 round(perc_pop_covid*100,2),"% <br>",
-                                                 "<br>",
-                                                 "<b>total # of cases: </b><br>", 
-                                                 total_cases))) +
-  
-  geom_segment(aes(xend = state, yend=0)) +
-  
-  geom_point(size = 4, color = "black") +
-  
-  scale_y_continuous(labels= scales::percent) +
-  
-  coord_flip() +
-  
-  labs(x = NULL,
-       y = NULL,
-       caption = "Data from The New York Times and U.S. Census Bureau.",
-       title= "Percent of state population diagnosed with Covid to date") +
-  
-  facet_wrap(~Region, ncol = 1, scales = "free_y") +
-  
-  theme_tufte() +
-  
-  theme(axis.text.y = element_text(size=12),
-        text=element_text(family="Georgia"),
-        plot.caption = element_text(face = "italic"),
-        plot.title = element_text(size=16, face = "bold"),
-        legend.position = "none",
-        strip.text.x = element_text(size = 14, face = "bold"),
-        panel.grid.major.x = element_line(colour = "grey", size = 0.5),
-        axis.text.x = element_text(face = "bold")),
-
-  tooltip = "text") %>%
-  
-  #ggplotly options
-  plotly::config(displayModeBar = FALSE) %>%
-  layout(hoverlabel = list(bgcolor = "white",
-                           font = list(family = "Georgia")))
-```
+**Questions or comments?** *Please reach out!*
 
