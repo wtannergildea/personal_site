@@ -245,7 +245,7 @@ ggplot(map_data, aes(x = long,
   labs(x = NULL, 
        y = NULL,
        title = paste0("~", us_perc_to_immunity, "% of the way to U.S. herd immunity threshold"),
-       subtitle = paste0("Estimated from confirmed vaccinations and infections.\nAssuming 70% herd immunity threshold and protection against re-infection.\nExpect lag in reported vaccinations, and significant undercount of U.S. infections.\nLast updated: ",
+       subtitle = paste0("Estimated by combining confirmed vaccinations and infections.\nAssuming 70% herd immunity threshold and protection against re-infection.\nExpect lag in reported vaccinations, and significant undercount of U.S. infections.\nLast updated: ",
          format(as.Date(Sys.Date(),"%Y-%m-%d"), "%B %d, %Y")),
        caption = "Data from The New York Times and the CDC.",
        fill = "% to herd immunity") +
