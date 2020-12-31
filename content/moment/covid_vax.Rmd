@@ -1,5 +1,5 @@
 ---
-title: "Covid-19 case and vaccination tracker [in progress]"
+title: "U.S. Covid-19 vaccinations, cases, and deaths"
 author: "Tanner Gildea"
 date: "2020-12-28"
 output: html_document
@@ -128,10 +128,10 @@ covid_summary <- daily_states %>%
   arrange(perc_pop_covid) %>%
   mutate(state = factor(state, levels = state))
 ```
-Last updated: `r format(as.Date(Sys.Date(),"%Y-%m-%d"), "%B %d, %Y")`  
+### **Last updated:** *`r format(as.Date(Sys.Date(),"%Y-%m-%d"), "%B %d, %Y")`*    
 
-## Vax Maps
 
+## U.S. Covid-19 Vaccination Progress
 ```{r web scrape vax, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center'}
 # scrape vax data from NY Times website https://www.nytimes.com/interactive/2020/us/covid-19-vaccine-doses.html
 vax_html_raw <- content(GET('https://www.nytimes.com/interactive/2020/us/covid-19-vaccine-doses.html'))
@@ -203,7 +203,7 @@ ggplot(map_data, aes(x = long,
   labs(x = NULL, 
        y = NULL,
        title = paste0("~", total_vax_perc,"% of U.S. population vaccinated against Covid-19"),
-       subtitle = paste0("Approximately ", cdc_vax_total," million Americans vaccinated since December 2019."),
+       subtitle = paste0("Approximately ", cdc_vax_total," million Americans vaccinated since December 2020."),
        caption = "Data from The New York Times; the CDC; U.S. Department of Health and Human Services; and state surveys and announcements.",
        fill = NULL) +
   
@@ -217,10 +217,9 @@ ggplot(map_data, aes(x = long,
         text=element_text(family="Georgia"))
 
 ``` 
-
-## Herd immunity progress map
-assume herd immunity at [70% protection](https://www.mayoclinic.org/diseases-conditions/coronavirus/in-depth/herd-immunity-and-coronavirus/art-20486808)
-
+  
+***
+## Estimated U.S. Percent to Goal of Achieving Herd Immunity  
 ```{r herd immunity map, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center'}
 # topline % to immunity stat
 # total covid cases + total shots given / total us population / .7
@@ -261,10 +260,13 @@ ggplot(map_data, aes(x = long,
 # deaths to herd immunity
 deaths_to_herd <- format(round(sum(master_summary$total_deaths)/(sum(master_summary$perc_pop_covid)/100) - sum(master_summary$total_deaths),0),format = "d", big.mark = ",")
 ```
-To achieve herd immunity by Covid infection alone, as some fringe public health commentators and right-wing politicians have suggested the U.S. do, 
-### approximately `r deaths_to_herd` more Americans would die
+  
+Public health experts have estimated that general herd immunity is achieved at [70% protection.](https://www.mayoclinic.org/diseases-conditions/coronavirus/in-depth/herd-immunity-and-coronavirus/art-20486808)  
 
-## Vax distribution in states
+To achieve herd immunity by Covid infection alone, as some [fringe public health commentators](https://www.politico.com/news/2020/12/16/trump-appointee-demanded-herd-immunity-strategy-446408) and [right-wing politicians](https://www.washingtonpost.com/politics/trump-coronavirus-scott-atlas-herd-immunity/2020/08/30/925e68fe-e93b-11ea-970a-64c73a1c2392_story.html) have previously suggested the U.S. do, **approximately `r deaths_to_herd` more Americans would die!**  
+  
+***
+## U.S. Covid-19 Vaccine Campaign Progress (or lack thereof)
 ```{r bar plot distribution, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center', fig.height= 14, out.width= "100%"}
 # compare vaccine allocated, distributed, and given across states
 bar_stats <- master_summary %>%
@@ -325,8 +327,9 @@ tooltip = "text") %>%
                            font = list(family = "Georgia")))
 
 ```
-
-## Ridge plots  
+  
+***
+## Time Series of Daily Covid-19 Cases Across U.S. States
 ```{r ridgeplot cases, echo=FALSE, fig.height = 20, fig.align='center'}
 ## ridge plot of daily new cases per state             
 daily_states %>% 
@@ -367,10 +370,9 @@ ggplot(aes(x = date,
   
   
 ```
-
-## Proportional ridge plot
-
-
+  
+***
+## Time Series of Daily Covid-19 Cases Proportional to U.S. State Populations
 ```{r ridgeplot proportion cases, echo=FALSE, fig.height = 18.5, fig.align='center'}
 ## ridge plot of daily new cases per state             
 daily_states %>%
@@ -443,7 +445,8 @@ ggplot(aes(x = date,
 #   geom_smooth(method=lm, se= FALSE)
 #  scale_y_log10()
 ```
-
+  
+***
 ## Population with confirmed Covid-19 diagnosis to date
 ```{r bar charts, echo = FALSE, warning = FALSE, message = FALSE, fig.align='center', fig.height= 14, out.width= "100%"}
 
