@@ -382,6 +382,9 @@ ggplotly(ggplot(covid_summary, aes(x = state,
 ***
 ## Time Series of Daily Covid-19 Cases Across U.S. States
 ```{r ridgeplot cases, echo=FALSE, fig.height = 20, fig.align='center'}
+# summary stats for total cases
+total_covid_cases <- format(sum(master_summary$total_cases), format = "d", big.mark = ",")
+
 ## ridge plot of daily new cases per state             
 daily_states %>% 
   mutate(cum_cases = max(cases)) %>%
@@ -404,7 +407,7 @@ ggplot(aes(x = date,
   
   labs(x = NULL, 
        y = NULL,
-       title = "New Daily Cases of Covid-19",
+       title = paste0("New daily cases of Covid-19 - ", total_covid_cases, " total"),
        caption = "Data from The New York Times and U.S. Census Bureau.") +
   
   scale_fill_cyclical(values = c("red","orange","yellow")) +
@@ -447,7 +450,7 @@ ggplot(aes(x = date,
   
   labs(x = NULL, 
        y = NULL,
-       title = "New Daily Cases of Covid-19",
+       title = "New daily cases of Covid-19 -",
        subtitle = "as proportion of each state's population",
        caption = "Data from The New York Times and U.S. Census Bureau.") +
   
