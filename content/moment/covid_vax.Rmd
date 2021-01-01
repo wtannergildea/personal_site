@@ -1,5 +1,5 @@
 ---
-title: "U.S. Covid-19 vaccinations, cases, and deaths"
+title: "U.S. Covid-19 vaccinations, cases, and deaths: live tracker"
 author: "Tanner Gildea"
 date: "2020-12-28"
 output: html_document
@@ -128,10 +128,10 @@ covid_summary <- daily_states %>%
   arrange(perc_pop_covid) %>%
   mutate(state = factor(state, levels = state))
 ```
-### **Last updated:** *`r format(as.Date(Sys.Date(),"%Y-%m-%d"), "%B %d, %Y")`*    
+**Last updated:** *`r format(as.Date(Sys.Date(),"%Y-%m-%d"), "%B %d, %Y")`*    
 
 
-## U.S. Covid-19 Vaccination Progress
+## U.S. Covid-19 Vaccine Campaign Progress (or lack thereof)
 ```{r web scrape vax, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center'}
 # scrape vax data from NY Times website https://www.nytimes.com/interactive/2020/us/covid-19-vaccine-doses.html
 vax_html_raw <- content(GET('https://www.nytimes.com/interactive/2020/us/covid-19-vaccine-doses.html'))
@@ -141,11 +141,9 @@ vax <- vax_html_raw %>%
   html_node('table') %>%
   html_table() %>%
   rename(state = 1) %>%
-  rename(doses_allocated = `First doses allocated`,
-         doses_received = `Doses distributed`,
+  rename(doses_received = `Doses distributed`,
          shots_given = `Shots given`) %>%
- mutate(doses_allocated = parse_number(doses_allocated),
-        doses_received = parse_number(doses_received),
+ mutate(doses_received = parse_number(doses_received),
         shots_given = parse_number(shots_given))
 
 # join with covid_summary table and add more summary stats
@@ -218,63 +216,13 @@ ggplot(map_data, aes(x = long,
         text=element_text(family="Georgia"))
 
 ``` 
-  
+     
 ***
-## Estimated U.S. Percent to Goal of Achieving Herd Immunity  
-```{r herd immunity map, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center'}
-# topline % to immunity stat
-# total covid cases + total shots given / total us population / .7
-us_perc_to_immunity <- round(100*(sum(master_summary$total_cases) + cdc_vax_total*1000000) / 
-  sum(master_summary$pop) / 
-  .7,1)
-
-# make map
-ggplot(map_data, aes(x = long, 
-                     y = lat, 
-                     group = group, 
-                     fill = perc_herd_immunity)) +
-  
-  geom_polygon(color = "white",
-               size = .2) +
-  
-  geom_text(data=state_centers, aes(x, y, group = NULL, fill = NULL, label = abbv),
-                    color = "black", size=2) +
-  
-  theme_map() +
-  
-  labs(x = NULL, 
-       y = NULL,
-       title = paste0("~", us_perc_to_immunity, "% of the way to U.S. herd immunity threshold"),
-       subtitle = paste0("Estimated by combining confirmed vaccinations and infections.\nAssuming 70% herd immunity threshold and protection against re-infection.\nExpect lag in reported vaccinations, and significant undercount of U.S. infections.\nLast updated: ",
-         format(as.Date(Sys.Date(),"%Y-%m-%d"), "%B %d, %Y")),
-       caption = "Data from The New York Times and the CDC.",
-       fill = "% to herd immunity") +
-  
-  scale_fill_gradient(low = "grey", high = "PaleGreen", labels = scales::percent) +
-  
-  theme_map() +
-  
-  theme(legend.position = "right",
-        plot.caption = element_text(face = "italic"),
-        plot.title = element_text(size=16, face = "bold"),
-        text=element_text(family="Georgia"))
-
-# deaths to herd immunity
-deaths_to_herd <- format(round(sum(master_summary$total_deaths)/(sum(master_summary$perc_pop_covid)/100) - sum(master_summary$total_deaths),0),format = "d", big.mark = ",")
-```
-  
-Public health experts have estimated that general herd immunity is achieved at [70% protection.](https://www.mayoclinic.org/diseases-conditions/coronavirus/in-depth/herd-immunity-and-coronavirus/art-20486808)  
-
-To achieve herd immunity by Covid infection alone, as some [fringe public health commentators](https://www.politico.com/news/2020/12/16/trump-appointee-demanded-herd-immunity-strategy-446408) and [right-wing politicians](https://www.washingtonpost.com/politics/trump-coronavirus-scott-atlas-herd-immunity/2020/08/30/925e68fe-e93b-11ea-970a-64c73a1c2392_story.html) have previously suggested the U.S. do, **approximately `r deaths_to_herd` more Americans would die!**  
-  
-***
-## U.S. Covid-19 Vaccine Campaign Progress (or lack thereof)
-```{r bar plot distribution, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center', fig.height= 14, out.width= "100%"}
+```{r bar plot distribution, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center', fig.height= 10, out.width= "100%"}
 # compare vaccine allocated, distributed, and given across states
 bar_stats <- master_summary %>%
-  select(state, doses_allocated, doses_received, shots_given) %>%
-  rename('Doses allocated' = doses_allocated,
-         'Doses received' = doses_received,
+  select(state, doses_received, shots_given) %>%
+  rename('Doses received' = doses_received,
          'Shots given' = shots_given) %>%
   mutate(state = factor(state, levels = state)) %>%
   pivot_longer(!state, "metric", "value") 
@@ -328,7 +276,63 @@ tooltip = "text") %>%
   layout(hoverlabel = list(bgcolor = "white",
                            font = list(family = "Georgia")))
 
+``` 
+  
+The U.S. Covid-19 vaccination campaign began in earnest in December, 2020 after the dual emergency use authorizations of the [Pfizer-BioNTech](https://www.fda.gov/news-events/press-announcements/fda-takes-key-action-fight-against-covid-19-issuing-emergency-use-authorization-first-covid-19) and [Moderna](https://www.fda.gov/news-events/press-announcements/fda-takes-additional-action-fight-against-covid-19-issuing-emergency-use-authorization-second-covid#:~:text=The%20emergency%20use%20authorization%20allows,years%20of%20age%20and%20older.) mRNA vaccine candidates. The vaccines contain "a small piece of the Covid-19 virus’s mRNA that instructs cells in the body to make the virus’s distinctive 'spike' protein. After a person receives this vaccine, their body produces copies of the spike protein, which does not cause disease, but triggers the immune system to learn to react defensively, producing an immune response against SARS-CoV-2."
+
+Though the vaccines were [developed and approved in record time](https://learningenglish.voanews.com/a/how-covid-19-vaccines-developed-in-record-time/5703115.html), the vaccine distribution campaign is off to a [slow and concerning start](https://www.nbcnews.com/politics/white-house/biden-talk-covid-harris-gets-vaccine-n1252464). The federal government's [Operation Warp Speed](https://www.hhs.gov/coronavirus/explaining-operation-warp-speed/index.html) fell far short of its [initial goal to deliver 20 million vaccinations](https://www.npr.org/sections/coronavirus-live-updates/2020/12/31/952208601/u-s-likely-will-miss-goal-of-vaccinating-20-million-by-the-new-year) by the end of December, and drastic improvements in distribution will be necessary to hit the new Biden administration's goal of [100 million vaccine doses in his first 100 days](https://www.theguardian.com/us-news/2020/dec/08/joe-biden-coronavirus-vaccine-health-team).  
+  
+***
+## Estimated U.S. Percent to Goal of Achieving Herd Immunity  
+```{r herd immunity map, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center'}
+# topline % to immunity stat
+# total covid cases + total shots given / total us population / .7
+us_perc_to_immunity <- round(100*(sum(master_summary$total_cases) + cdc_vax_total*1000000) / 
+  sum(master_summary$pop) / 
+  .7,1)
+
+# make map
+ggplot(map_data, aes(x = long, 
+                     y = lat, 
+                     group = group, 
+                     fill = perc_herd_immunity)) +
+  
+  geom_polygon(color = "white",
+               size = .2) +
+  
+  geom_text(data=state_centers, aes(x, y, group = NULL, fill = NULL, label = abbv),
+                    color = "black", size=2) +
+  
+  theme_map() +
+  
+  labs(x = NULL, 
+       y = NULL,
+       title = paste0("~", us_perc_to_immunity, "% of the way to U.S. herd immunity threshold"),
+       subtitle = paste0("Estimated by combining confirmed vaccinations and infections.\nAssuming 70% herd immunity threshold and protection against re-infection.\nExpect lag in reported vaccinations, and significant undercount of U.S. infections.\nLast updated: ",
+         format(as.Date(Sys.Date(),"%Y-%m-%d"), "%B %d, %Y")),
+       caption = "Data from The New York Times and the CDC.",
+       fill = "% to herd immunity") +
+  
+  scale_fill_gradient(low = "grey", high = "PaleGreen", labels = scales::percent) +
+  
+  theme_map() +
+  
+  theme(legend.position = "right",
+        plot.caption = element_text(face = "italic"),
+        plot.title = element_text(size=16, face = "bold"),
+        text=element_text(family="Georgia"))
+
+# deaths to herd immunity
+deaths_to_herd <- format(round(sum(master_summary$total_deaths)/(sum(master_summary$perc_pop_covid)/100) - sum(master_summary$total_deaths),0),format = "d", big.mark = ",")
 ```
+  
+The majority of public health experts have estimated general herd immunity is achieved somewhere around [70% protection](https://www.mayoclinic.org/diseases-conditions/coronavirus/in-depth/herd-immunity-and-coronavirus/art-20486808), though some experts have recently estimated that [higher protection rates](https://www.reuters.com/article/health-coronavirus-usa/fauci-says-herd-immunity-could-require-nearly-90-to-get-coronavirus-vaccine-idINL1N2J411V) are necessary. 
+
+The percent to herd immunity calculations presented in the figure above assume this 70% protection rate and some form of [protection against reinfection](https://www.cancer.gov/news-events/cancer-currents-blog/2020/coronavirus-antibodies-protect-against-future-infection#:~:text=Using%20real%2Dworld%20data%20from,being%20reinfected%20with%20the%20virus%20.) from Covid-19 antibodies. While the true herd immunity protection threshold may be higher than 70%, the true number of U.S. Covid-19 cases may also be [substantially underestimated](https://publichealth.berkeley.edu/news-media/research-highlights/us-covid-19-cases-may-be-substantially-underestimated/). 
+
+Such uncertainty could lead to herd immunity being achieved either more quickly or more slowly than projected above. Thus, this figure is meant to illustrate a rough approximation of the country's progress towards herd immunity, rather than a definitive projection.   
+
+What is more certain is that to achieve herd immunity by Covid-19 infection alone, as some [fringe public health commentators](https://www.politico.com/news/2020/12/16/trump-appointee-demanded-herd-immunity-strategy-446408) and [right-wing politicians](https://www.washingtonpost.com/politics/trump-coronavirus-scott-atlas-herd-immunity/2020/08/30/925e68fe-e93b-11ea-970a-64c73a1c2392_story.html) have previously suggested the U.S. do, **approximately `r deaths_to_herd` more Americans would die!**  
   
 ***
 ## Population with confirmed Covid-19 diagnosis to date
@@ -347,7 +351,7 @@ ggplotly(ggplot(covid_summary, aes(x = state,
   
   geom_segment(aes(xend = state, yend=0)) +
   
-  geom_point(size = 4, color = "black") +
+  geom_point(size = 3, color = "black") +
   
   scale_y_continuous(labels= scales::percent) +
   
