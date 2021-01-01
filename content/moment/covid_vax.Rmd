@@ -129,7 +129,7 @@ covid_summary <- daily_states %>%
   mutate(state = factor(state, levels = state))
 ```
 **Last updated:** *`r format(as.Date(Sys.Date(),"%Y-%m-%d"), "%B %d, %Y")`*    
-
+Best viewed on desktop.
 
 ## U.S. Covid-19 Vaccine Campaign Progress (or lack thereof)
 ```{r web scrape vax, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center'}
@@ -411,7 +411,7 @@ ggplot(aes(x = date,
   
   labs(x = NULL, 
        y = NULL,
-       title = paste0("New daily cases of Covid-19 - ", total_covid_cases, " total"),
+       title = paste0("New daily cases of Covid-19: ", total_covid_cases, " total"),
        caption = "Data from The New York Times and U.S. Census Bureau.") +
   
   scale_fill_cyclical(values = c("red","orange","yellow")) +
