@@ -506,10 +506,10 @@ ggplot(aes(x = date,
   
 **Questions or comments?** *Please reach out!*
 
-**Created in R**
-
 **Data Sources:**
-- [NY Times Covid-19 github repo](https://github.com/nytimes/covid-19-data)
-- [NY Times vaccine distribution data](https://www.nytimes.com/interactive/2020/us/covid-19-vaccine-doses.html)
-- [CDC vaccine distribution data](https://covid.cdc.gov/covid-data-tracker/#vaccinations)
+- [NY Times Covid-19 github repo](https://github.com/nytimes/covid-19-data)  
+- [NY Times vaccine distribution data](https://www.nytimes.com/interactive/2020/us/covid-19-vaccine-doses.html)  
+- [CDC vaccine distribution data](https://covid.cdc.gov/covid-data-tracker/#vaccinations)  
+
+*Created in R.*
 
