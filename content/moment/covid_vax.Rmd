@@ -84,6 +84,8 @@ state_pop <- readxl::read_xlsx("state_pop.xlsx", skip = 2) %>%
          state = 'Geographic Area') %>%
   mutate(state = str_remove_all(state, '\\.'))
 
+file.remove("state_pop.xlsx")
+
 # daily case counts from NYT
 daily_states <- read_csv(url("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv")) %>%
   group_by(state) %>%
@@ -128,9 +130,9 @@ covid_summary <- daily_states %>%
   arrange(perc_pop_covid) %>%
   mutate(state = factor(state, levels = state))
 ```
-**Last updated:** *`r format(as.Date(Sys.Date(),"%Y-%m-%d"), "%B %d, %Y")`*    
-Best viewed on desktop.
-
+**Last updated:** *`r format(as.Date(Sys.Date(),"%Y-%m-%d"), "%B %d, %Y")`*      
+Best viewed on desktop.  
+  
 ## U.S. Covid-19 Vaccine Campaign Progress (or lack thereof)
 ```{r web scrape vax, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center'}
 # scrape vax data from NY Times website https://www.nytimes.com/interactive/2020/us/covid-19-vaccine-doses.html
@@ -504,12 +506,22 @@ ggplot(aes(x = date,
 #  scale_y_log10()
 ```
   
-**Questions or comments?** *Please reach out!*
 
+Daily update `r format(as.Date(Sys.Date(),"%Y-%m-%d"), "%m-%d-%Y")`  
+
+~ `r total_vax_perc`% of the U.S. population has been vaccinated against Covid-19. That's ~`r cdc_vax_total` million total vaccinations.  
+  
+There have been `r total_covid_cases` confirmed cases of Covid-19.  
+  
+The U.S. is ~`r us_perc_to_immunity`% of the way to herd immunity.  
+
+**Questions or comments?** *Please reach out!*  
+
+  
 **Data Sources:**  
 - [NY Times Covid-19 github repo](https://github.com/nytimes/covid-19-data)  
 - [NY Times vaccine distribution data](https://www.nytimes.com/interactive/2020/us/covid-19-vaccine-doses.html)  
 - [CDC vaccine distribution data](https://covid.cdc.gov/covid-data-tracker/#vaccinations)  
 
 *Created in R.*
-
+ 
