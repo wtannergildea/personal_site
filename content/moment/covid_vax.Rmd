@@ -217,6 +217,8 @@ ggplot(map_data, aes(x = long,
         plot.title = element_text(size=16, face = "bold"),
         text=element_text(family="Georgia"))
 
+ggsave(filename = "vax_map.png", device = "png", width = 7, height = 5)
+
 ``` 
      
 ***
@@ -323,6 +325,8 @@ ggplot(map_data, aes(x = long,
         plot.caption = element_text(face = "italic"),
         plot.title = element_text(size=16, face = "bold"),
         text=element_text(family="Georgia"))
+
+ggsave(filename = "herd_map.png", device = "png", width = 7, height = 5)
 
 # deaths to herd immunity
 deaths_to_herd <- format(round(sum(master_summary$total_deaths)/(sum(master_summary$perc_pop_covid)/100) - sum(master_summary$total_deaths),0),format = "d", big.mark = ",")
@@ -507,14 +511,6 @@ ggplot(aes(x = date,
 ```
   
 
-Daily update `r format(as.Date(Sys.Date(),"%Y-%m-%d"), "%m/%d/%Y")`:    
-
-~ `r total_vax_perc`% of the U.S. population has been vaccinated against Covid-19. That's ~`r cdc_vax_total` million total vaccinations.  
-  
-There have been `r total_covid_cases` confirmed cases of Covid-19.  
-  
-The U.S. is ~`r us_perc_to_immunity`% of the way to herd immunity.  
-
 **Questions or comments?** *Please reach out!*  
 
   
@@ -526,7 +522,7 @@ The U.S. is ~`r us_perc_to_immunity`% of the way to herd immunity.
 *Created in R.*
 
 ```{r twitter, include=FALSE}
-library(rtweet)
+library(twitteR)
 
 # connect to app
 twitter_app_name <- "US_covid_vax"
@@ -534,13 +530,8 @@ twitter_api_key <- "STBer0BAcSL5LFnZ625Ek2nOF"
 twitter_api_secret <- "u2boBBvcPFUnWbluC9YCxdCSTvq3F5szyJBkqjMW2XF1PTjYhJ"
 twitter_bearer_token <- "AAAAAAAAAAAAAAAAAAAAAIUMLQEAAAAAe0G%2FxEMgbhwZ1ve99ZSq8Vs5SbY%3DAJBfaRfnIGa0MlcJZapmweod5wnEBrbgHybtyE7PDWBkNRyCFN"
 
-twitter_token <- create_token(
-  app = twitter_app_name,
-  consumer_key = twitter_api_key,
-  consumer_secret = twitter_api_secret,
-  access_token = "1345057778822504448-exYE3x4CTA33PabgXpQFUEyHYWwU59",
-  access_secret = "GUGstuQfV1GpPXwysI5snwJh3gon6Va6LKghAr8XNe5We")
-  
+setup_twitter_oauth(twitter_api_key, twitter_api_secret, "1345057778822504448-exYE3x4CTA33PabgXpQFUEyHYWwU59", "GUGstuQfV1GpPXwysI5snwJh3gon6Va6LKghAr8XNe5We")
+
 # post a tweet from R
 daily_tweet <- paste0("Daily update ", format(as.Date(Sys.Date(),"%Y-%m-%d"), "%m/%d/%Y"), ":\n",
                       "\n",
@@ -553,10 +544,18 @@ daily_tweet <- paste0("Daily update ", format(as.Date(Sys.Date(),"%Y-%m-%d"), "%
                       "Live tracker: https://bit.ly/covid_vax_tracker"
                       )
 
+# tweet! and change image each day
+tweet_image <- 
+  if(sample(1:2,1)==1){
+    "herd_map.png"
+  } else {
+    "vax_map.png"
+  }
 
-post_tweet(daily_tweet)
 
-
+updateStatus(text = daily_tweet,
+             mediaPath = tweet_image,
+             bypassCharLimit = TRUE)
 
 ```
  
