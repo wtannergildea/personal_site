@@ -507,7 +507,7 @@ ggplot(aes(x = date,
 ```
   
 
-Daily update `r format(as.Date(Sys.Date(),"%Y-%m-%d"), "%m-%d-%Y")`  
+Daily update `r format(as.Date(Sys.Date(),"%Y-%m-%d"), "%m/%d/%Y")`:    
 
 ~ `r total_vax_perc`% of the U.S. population has been vaccinated against Covid-19. That's ~`r cdc_vax_total` million total vaccinations.  
   
@@ -524,4 +524,39 @@ The U.S. is ~`r us_perc_to_immunity`% of the way to herd immunity.
 - [CDC vaccine distribution data](https://covid.cdc.gov/covid-data-tracker/#vaccinations)  
 
 *Created in R.*
+
+```{r twitter, include=FALSE}
+library(rtweet)
+
+# connect to app
+twitter_app_name <- "US_covid_vax"
+twitter_api_key <- "STBer0BAcSL5LFnZ625Ek2nOF"
+twitter_api_secret <- "u2boBBvcPFUnWbluC9YCxdCSTvq3F5szyJBkqjMW2XF1PTjYhJ"
+twitter_bearer_token <- "AAAAAAAAAAAAAAAAAAAAAIUMLQEAAAAAe0G%2FxEMgbhwZ1ve99ZSq8Vs5SbY%3DAJBfaRfnIGa0MlcJZapmweod5wnEBrbgHybtyE7PDWBkNRyCFN"
+
+twitter_token <- create_token(
+  app = twitter_app_name,
+  consumer_key = twitter_api_key,
+  consumer_secret = twitter_api_secret,
+  access_token = "1345057778822504448-exYE3x4CTA33PabgXpQFUEyHYWwU59",
+  access_secret = "GUGstuQfV1GpPXwysI5snwJh3gon6Va6LKghAr8XNe5We")
+  
+# post a tweet from R
+daily_tweet <- paste0("Daily update ", format(as.Date(Sys.Date(),"%Y-%m-%d"), "%m/%d/%Y"), ":\n",
+                      "\n",
+                      "~", total_vax_perc, "% of the U.S. population has been vaccinated against Covid-19. That's ~", cdc_vax_total, " million total vaccinations.\n",
+                      "\n",
+                      "There have been ", total_covid_cases, " confirmed cases of Covid-19.\n",
+                      "\n",
+                      "The U.S. is ~", us_perc_to_immunity, "% of the way to herd immunity.\n",
+                      "\n",
+                      "Live tracker: https://bit.ly/covid_vax_tracker"
+                      )
+
+
+post_tweet(daily_tweet)
+
+
+
+```
  
