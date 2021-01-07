@@ -175,7 +175,7 @@ state_centers <- cbind(state_centers,state_abbv) %>%
 
 # topline values for map titles
 nyt_html_raw <- content(GET("https://www.nytimes.com/interactive/2020/us/covid-19-vaccine-doses.html")) %>%
-  html_node('#interactive-heading') %>%
+  html_node('p.g-body') %>%
   html_text()
 
 cdc_vax_total <- as.numeric(unlist(regmatches(nyt_html_raw,
@@ -295,6 +295,15 @@ us_perc_to_immunity <- round(100*(sum(master_summary$total_cases) + cdc_vax_tota
   sum(master_summary$pop) / 
   .7,1)
 
+# days since dec 14 / % percent to herd * 100 = total days 
+# herd immunity date = total days + dec 14
+
+days_since_dec_14 <- as.numeric(Sys.Date() - as.Date('2020-12-14'))
+
+total_days <- round(days_since_dec_14 * 70 / as.numeric(total_vax_perc),0)
+
+vax_day <- format(as.Date('2020-12-14') + total_days, "%B %d, %Y")
+
 # make map
 ggplot(map_data, aes(x = long, 
                      y = lat, 
@@ -331,6 +340,8 @@ ggsave(filename = "herd_map.png", device = "png", width = 7, height = 5)
 # deaths to herd immunity
 deaths_to_herd <- format(round(sum(master_summary$total_deaths)/(sum(master_summary$perc_pop_covid)/100) - sum(master_summary$total_deaths),0),format = "d", big.mark = ",")
 ```
+  
+At the current vaccination rate, the U.S. is not projected to achieve herd immunity until `r vax_day`.  
   
 The majority of public health experts have estimated general herd immunity is achieved somewhere around [70% protection](https://www.mayoclinic.org/diseases-conditions/coronavirus/in-depth/herd-immunity-and-coronavirus/art-20486808), though some experts have recently estimated that [higher protection rates](https://www.reuters.com/article/health-coronavirus-usa/fauci-says-herd-immunity-could-require-nearly-90-to-get-coronavirus-vaccine-idINL1N2J411V) are necessary. 
 
