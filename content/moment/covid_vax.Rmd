@@ -546,7 +546,7 @@ setup_twitter_oauth(twitter_api_key, twitter_api_secret, "1345057778822504448-ex
 # post a tweet from R
 daily_tweet <- paste0("Daily update ", format(as.Date(Sys.Date(),"%Y-%m-%d"), "%m/%d/%Y"), ":\n",
                       "\n",
-                      "~", total_vax_perc, "% of the U.S. population has been vaccinated against Covid-19. That's ~", cdc_vax_total, " million total vaccinations.\n",
+                      total_vax_perc, "% of the U.S. population has been vaccinated against Covid-19. That's ", cdc_vax_total, " million total vaccinations.\n",
                       "\n",
                       "There have been ", total_covid_cases, " confirmed cases of Covid-19.\n",
                       "\n",
