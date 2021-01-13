@@ -564,9 +564,9 @@ tweet_image <-
   }
 
 
-updateStatus(text = daily_tweet,
-             mediaPath = tweet_image,
-             bypassCharLimit = TRUE)
+# updateStatus(text = daily_tweet,
+#              mediaPath = tweet_image,
+#              bypassCharLimit = TRUE)
 
 ```
  
