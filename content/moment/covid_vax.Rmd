@@ -1,5 +1,5 @@
 ---
-title: "U.S. Covid-19 vaccinations, cases, and deaths: live tracker"
+title: "U.S. Covid-19 vaccination live tracker"
 author: "Tanner Gildea"
 date: "2020-12-28"
 output: html_document
