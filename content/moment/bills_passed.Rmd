@@ -1,0 +1,497 @@
+---
+title: "The legislative network of the 116th Congress (2019-2020)"
+author: "Tanner Gildea"
+date: "2021-01-13"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(out.width = "100%")
+
+library(tidyverse)
+library(igraph)
+library(ggplot2)
+library(ggraph)
+library(rvest)
+library(httr)
+library(data.table)
+library(visNetwork)
+library(circlize)
+library(networkD3)
+
+# download bills passed by at least one chamber and those that became law in 116th Congress
+
+bills_signed <- read_csv("~/Desktop/my_projects/personal_site/content/moment/bills_signed.csv", 
+                                         skip = 2) %>%
+  mutate(status = "Signed into law")
+dem_passed_house <- read_csv("~/Desktop/my_projects/personal_site/content/moment/dem_passed_house.csv", 
+                             skip = 2)
+gop_passed_house <- read_csv("~/Desktop/my_projects/personal_site/content/moment/gop_passed_house.csv", 
+                              skip = 2)
+passed_house <- rbind(dem_passed_house, gop_passed_house) %>%
+  mutate(status = "Passed House")
+
+senate_passed <- read_csv("~/Desktop/my_projects/personal_site/content/moment/senate_passed.csv", 
+                          skip = 2) %>%
+  mutate(status = "Passed Senate")
+
+bills <- rbind(bills_signed, passed_house) %>%
+  rbind(senate_passed)
+
+bills <- bills %>% janitor::clean_names() %>%
+  select(1:3,5:6,11:12,15) %>%
+  mutate(cosponsor_url = paste0(url, "/cosponsors"))
+```
+
+```{r crawler, include=FALSE}
+# DON'T RUN THIS CODE
+### crawl/scrape bill sites with cosponsors ### 
+# crawl_function <- function(x) {
+#   html_content <- content(GET(x)) 
+#   
+#   leg_node <- html_content %>%
+#     html_node('h1.legDetail') %>%
+#     html_text() %>%
+#     as.data.frame() %>%
+#     rename(bill = 1)
+#   
+#   table_node <- html_content %>%
+#     html_node('table.item_table') 
+#   
+#   if(length(table_node)>0) {
+#     table_node <- table_node %>%
+#       html_table() %>%
+#       select(1)
+#   } else {
+#     cosponsor <- c('no sponsor')
+#     table_node <- data.frame(cosponsor)
+#   }
+#   
+#   left_join(leg_node, table_node, by = character())
+#   }
+
+# test <- crawl_function("https://www.congress.gov/bill/116th-congress/senate-bill/4996/cosponsors?r=4&s=1&searchResultViewType=expanded")
+# test2 <- crawl_function("https://www.congress.gov/bill/116th-congress/senate-bill/5086/cosponsors?r=1&s=1")
+# # no sponsors https://www.congress.gov/bill/116th-congress/senate-bill/5086/cosponsors?r=1&s=1
+# multi sponsors https://www.congress.gov/bill/116th-congress/senate-bill/4996/cosponsors?r=4&s=1&searchResultViewType=expanded
+
+# bills_signed <- bills %>% filter(status == "Signed into law")
+# senate_passed <- bills %>% filter(status == "Passed Senate")
+# house_passed <- bills %>% filter(status == "Passed House")
+# 
+# cosponsor_list_signed <- list()
+# 
+# for(i in 1:nrow(bills_signed)) {
+#   new_table <- crawl_function(bills_signed$cosponsor_url[i])
+#   cosponsor_list_signed[[length(cosponsor_list_signed) + 1]] <- new_table
+# }
+# 
+# cosponsor_list_senate <- list()
+# 
+# for(i in 1:nrow(senate_passed)) {
+#   new_table <- crawl_function(senate_passed$cosponsor_url[i])
+#   cosponsor_list_senate[[length(cosponsor_list_senate) + 1]] <- new_table
+# }
+# 
+# cosponsor_list_house <- list()
+# 
+# for(i in 1:nrow(house_passed)) {
+#   new_table <- crawl_function(house_passed$cosponsor_url[i])
+#   cosponsor_list_house[[length(cosponsor_list_house) + 1]] <- new_table
+# }
+# 
+# signed <- rbindlist(cosponsor_list_signed,use.names = FALSE)
+# senate <- rbindlist(cosponsor_list_senate,use.names = FALSE)
+# house <- rbindlist(cosponsor_list_house,use.names = FALSE)
+# 
+# cosponsors <- rbind(signed, senate, use.names=FALSE)
+# cosponsors <- rbind(cosponsors, house, use.names = FALSE)
+
+### save as data.frame output so only have to do this once ###
+# write.csv(cosponsors, "~/Desktop/my_projects/personal_site/content/moment/cosponsors.csv")
+```
+
+```{r manipulate data, echo = FALSE, warning = FALSE, message = FALSE}
+# manipulate cosponsors
+cosponsors <- read_csv("~/Desktop/my_projects/personal_site/content/moment/cosponsors.csv") %>%
+                         select(-1)
+cosponsors <- cosponsors %>% 
+  mutate(bill = sub(" -.*","", cosponsors$bill)) %>%
+  rename(cosponsor = Cosponsor)
+
+cosponsors$bill <- gsub("\\.", "", cosponsors$bill)
+cosponsors$cosponsor <- gsub("\\*", "", cosponsors$cosponsor)
+
+# clean bills for join
+bills$legislation_number <- gsub("\\.", "", bills$legislation_number)
+bills$legislation_number <- gsub(" ", "", bills$legislation_number)
+
+# join for summary table
+summary <- left_join(bills, cosponsors, by = c("legislation_number" = "bill")) %>% distinct() %>%
+  select(-2,-3,-9)
+
+# fix doug jones duplicate
+for(i in 1:nrow(summary)){
+  if(summary$cosponsor[i] == "Sen. Jones, Doug  [D-AL]"){
+    summary$cosponsor[i] <- "Sen. Jones, Doug [D-AL]"
+  }
+  if(summary$sponsor[i]== "Sen. Jones, Doug  [D-AL]"){
+    summary$sponsor[i] <- "Sen. Jones, Doug [D-AL]"
+  }
+}
+```
+## Overall Legislation
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+```{r sankey, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center', fig.height= 8}
+# make sankey of overall bills - too messy for legislative
+bill_flow_edges <- read_csv("bill_flow_116_edges.csv") 
+bill_flow_nodes <- read_csv("bill_flow_116_nodes.csv")
+
+bill_flow_edges <- bill_flow_edges %>%
+  left_join(bill_flow_nodes, by = c("source" = "label")) %>% 
+  rename(from = id)
+
+bill_flow_edges <- bill_flow_edges %>% 
+  left_join(bill_flow_nodes, by = c("destination" = "label")) %>% 
+  rename(to = id)
+
+bill_flow_edges <- select(bill_flow_edges, from, to, weight)
+
+# manipulate nodes and edges for d3 specification
+bill_flow_nodes_d3 <- mutate(bill_flow_nodes, id = id - 1)
+bill_flow_edges_d3 <- mutate(bill_flow_edges, from = from - 1, to = to - 1)
+
+# prepare colour scale
+sankey_color <-'d3.scaleOrdinal() .range(["#3395FF","#EBE965","#AAEB65","green","red","#65EBA6","orange"])'
+
+sankeyNetwork(Links = bill_flow_edges_d3, Nodes = bill_flow_nodes_d3, Source = "from", Target = "to",
+              NodeID = "label", Value = "weight", fontSize = 16,
+              sinksRight = T,
+              iterations = 1000,
+              nodeWidth = 30,
+              nodePadding = 100,
+              colourScale = sankey_color)
+```
+## Historical comparison
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+```{r historical, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center', fig.height= 8}
+
+
+
+```
+***
+## Senate
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+```{r senate graph, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center', fig.height= 8}
+###### SENATE NETWORK #######
+# prepare summary table for network analysis (https://www.jessesadler.com/post/network-analysis-with-r/)
+# let's start with just bills that became law from senate
+passed_summary <- summary %>%
+  filter(status == "Signed into law") %>%
+  filter(str_detect(legislation_number,"S"))
+# first create node list
+sponsors <- passed_summary %>%
+  distinct(sponsor) %>%
+  rename(label = sponsor)
+
+cosponsors <- passed_summary %>%
+  distinct(cosponsor) %>%
+  rename(label = cosponsor) %>%
+  filter(label!= "no sponsor")
+
+# join together to assign unique ids and create nodes df
+nodes <- full_join(sponsors, cosponsors, by = "label")
+nodes <- nodes %>% 
+  rowid_to_column("id")
+
+# add partisanship to nodes
+for(i in 1:nrow(nodes)){
+  if(str_detect(nodes$label[i], "R-")){
+    nodes$group[i] <- "Republican"
+  } else if (str_detect(nodes$label[i], "D-")){
+    nodes$group[i] <- "Democrat"
+  } 
+  else nodes$group[i] <- "Independent"
+}
+
+# add color to nodes
+for(i in 1:nrow(nodes)){
+  if(nodes$group[i] == "Republican"){
+    nodes$color[i] <- "red"
+  } else if (nodes$group[i] == "Democrat"){
+    nodes$color[i] <- "blue"
+  } 
+  else nodes$color[i] <- "green"
+}
+
+# add title to nodes
+for(i in 1:nrow(nodes)){
+  nodes$title[i] <- nodes$label[i]
+}
+# nodes <- nodes %>%
+#   mutate(label = gsub(",.*$", "", label),
+#          title = gsub(",.*$", "", title)) %>%
+#   mutate(label = sub('.*\\.', "", label),
+#          title = sub('.*\\.', "", title)) %>%
+#   mutate(label = trimws(label),
+#          title = trimws(title))
+
+# create edge list
+edges <- passed_summary %>%
+  filter(cosponsor!= "no sponsor") %>%
+  # mutate(sponsor = gsub(",.*$", "", sponsor),
+  #        cosponsor = gsub(",.*$", "", cosponsor)) %>%
+  # mutate(sponsor = sub('.*\\.', "", sponsor),
+  #        cosponsor = sub('.*\\.', "", cosponsor)) %>%
+  # mutate(sponsor = trimws(sponsor),
+  #        cosponsor = trimws(cosponsor))%>%
+  group_by(sponsor, cosponsor) %>%
+  summarise(weight = n()) %>%
+  ungroup()
+
+# join together to finish edges df
+edges <- edges %>%
+  left_join(nodes, by = c("sponsor" = "label")) %>%
+  rename(from = id)
+
+edges <- edges %>%
+  left_join(nodes, by = c("cosponsor" = "label")) %>%
+  rename(to = id)
+
+edges <- select(edges, from, to, weight)
+
+# now nodes and edges df are prepped
+bills_passed_igraph <- graph_from_data_frame(d = edges, vertices = nodes, directed = TRUE)
+
+# compute weighted betweenness 
+dist_weight = 1/E(bills_passed_igraph)$weight
+E(bills_passed_igraph)$betweenness <- edge_betweenness(bills_passed_igraph, weights = dist_weight)
+
+# and median betweenness
+median_betweenness = median(E(bills_passed_igraph)$betweenness)
+
+# # static graph
+# ggraph(bills_passed_igraph, layout = "with_kk") +
+#   geom_edge_link(aes(alpha = betweenness, filter = betweenness > median_betweenness)) +
+#   geom_node_point(aes(color = factor(party))) +
+#   geom_node_text(aes(label = label), repel = TRUE) 
+  
+
+# draft interactive
+vis_data <- toVisNetworkData(bills_passed_igraph)
+
+visNetwork(
+  nodes = vis_data$nodes, 
+  edges = vis_data$edges,
+  main = "Senate Legislative Network: 116th Congress"
+) %>%
+# Can set specific layout with visIgraphLayout()
+visIgraphLayout(layout = "layout_with_kk") %>%
+visGroups(groupname = "Democrat", shape = "icon",
+          icon = list(code = "f007", color = "blue", size = 100))%>% 
+  
+visGroups(groupname = "Republican", shape = "icon",
+            icon = list(code = "f007", color = "red", size = 100)) %>% 
+  
+visGroups(groupname = "Independent", shape = "icon",
+            icon = list(code = "f007", color = "green", size = 100))%>% 
+  
+visEdges(color = list(color = "grey", highlight = "purple"),
+         smooth = FALSE,
+         dashes = FALSE,
+         shadow = FALSE,
+         arrows = "from") %>%
+  addFontAwesome() %>% # required for icons
+
+visOptions(highlightNearest = list(enabled = T, hover = T),
+           selectedBy = "title") %>%
+  
+visInteraction(zoomView = FALSE,
+               navigationButtons = TRUE) %>%
+  
+visLayout(randomSeed = 123)
+
+```
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+## Senate Chord Diagram
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+```{r chord diagram,echo = FALSE, message=FALSE, warning=FALSE,fig.align='center', fig.height= 10}
+# senate chord diagram using circulize() package
+
+# create adjacency matrix
+#senate_adj_matrix <- as_adjacency_matrix(bills_passed_igraph, attr="weight", sparse = FALSE)
+senate_adj_matrix <- passed_summary %>%
+  select(sponsor,cosponsor) %>%
+  filter(cosponsor!= "no sponsor") %>%
+  mutate(sponsor = gsub(",.*$", "", sponsor),
+         cosponsor = gsub(",.*$", "", cosponsor)) %>%
+  mutate(sponsor = sub('.*\\.', "", sponsor),
+         cosponsor = sub('.*\\.', "", cosponsor)) %>%
+  mutate(sponsor = trimws(sponsor),
+         cosponsor = trimws(cosponsor)) %>%
+  arrange(cosponsor) %>%
+  graph_from_data_frame() %>%
+  as_adjacency_matrix(sparse = FALSE)
+
+circos.clear()
+chordDiagram(senate_adj_matrix,
+             annotationTrack = c("grid"),
+             order = sort(rownames(senate_adj_matrix))) 
+#             preAllocateTracks = list(track.height = max(strwidth(unlist(dimnames(senate_adj_matrix))))))
+#             scale = FALSE)
+#             annotationTrackHeight = c(.1,.01))
+# directional = 1,
+# direction.type = c("diffHeight", "arrows"),
+# link.arr.type = "big.arrow")
+circos.trackPlotRegion(track.index = 1, panel.fun = function(x, y) {
+  xlim = get.cell.meta.data("xlim")
+  ylim = get.cell.meta.data("ylim")
+  sector.name = get.cell.meta.data("sector.index")
+  circos.text(mean(xlim), ylim[1], sector.name, facing = "clockwise", niceFacing = TRUE, adj = c(-.5, 0), cex = .7)
+
+}, bg.border = NA)
+
+ggsave(filename = "chord_senate.png", device = "png", width = 7, height = 7)
+```
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+***
+## House Graph
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+```{r house graph, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center', fig.height= 10}
+###### House NETWORK #######
+# prepare summary table for network analysis (https://www.jessesadler.com/post/network-analysis-with-r/)
+# let's start with just bills that became law from senate
+house_summary <- summary %>%
+  filter(status == "Signed into law") %>%
+  filter(str_detect(legislation_number,"H"))
+# first create node list
+house_sponsors <- house_summary %>%
+  distinct(sponsor) %>%
+  rename(label = sponsor)
+
+house_cosponsors <- house_summary %>%
+  distinct(cosponsor) %>%
+  rename(label = cosponsor) %>%
+  filter(label!= "no sponsor")
+
+# join together to assign unique ids and create nodes df
+house_nodes <- full_join(house_sponsors, house_cosponsors, by = "label")
+house_nodes <- house_nodes %>% 
+  rowid_to_column("id")
+
+# add partisanship to nodes
+for(i in 1:nrow(house_nodes)){
+  if(str_detect(house_nodes$label[i], "R-")){
+    house_nodes$group[i] <- "Republican"
+  } else if (str_detect(house_nodes$label[i], "D-")){
+    house_nodes$group[i] <- "Democrat"
+  } 
+  else house_nodes$group[i] <- "Independent"
+}
+
+# add color to nodes
+for(i in 1:nrow(house_nodes)){
+  if(house_nodes$group[i] == "Republican"){
+    house_nodes$color[i] <- "red"
+  } else if (house_nodes$group[i] == "Democrat"){
+    house_nodes$color[i] <- "blue"
+  } 
+  else house_nodes$color[i] <- "green"
+}
+
+# add title to nodes
+for(i in 1:nrow(house_nodes)){
+  house_nodes$title[i] <- house_nodes$label[i]
+}
+# create edge list
+house_edges <- house_summary %>%
+  filter(cosponsor!= "no sponsor") %>%
+  group_by(sponsor, cosponsor) %>%
+  summarise(weight = n()) %>%
+  ungroup()
+
+# join together to finish edges df
+house_edges <- house_edges %>%
+  left_join(house_nodes, by = c("sponsor" = "label")) %>%
+  rename(from = id)
+
+house_edges <- house_edges %>%
+  left_join(house_nodes, by = c("cosponsor" = "label")) %>%
+  rename(to = id)
+
+house_edges <- select(house_edges, from, to, weight)
+
+# now nodes and edges df are prepped
+house_bills_passed_igraph <- graph_from_data_frame(d = house_edges, vertices = house_nodes, directed = TRUE)
+
+# compute weighted betweenness 
+house_dist_weight = 1/E(house_bills_passed_igraph)$weight
+E(house_bills_passed_igraph)$betweenness <- edge_betweenness(house_bills_passed_igraph, weights = house_dist_weight)
+
+# and median betweenness
+house_median_betweenness = median(E(house_bills_passed_igraph)$betweenness)
+
+# # static graph
+# ggraph(bills_passed_igraph, layout = "with_kk") +
+#   geom_edge_link(aes(alpha = betweenness, filter = betweenness > median_betweenness)) +
+#   geom_node_point(aes(color = factor(party))) +
+#   geom_node_text(aes(label = label), repel = TRUE) 
+
+
+# draft interactive
+house_vis_data <- toVisNetworkData(house_bills_passed_igraph)
+
+visNetwork(
+  nodes = house_vis_data$nodes, 
+  edges = house_vis_data$edges,
+  main = "House Legislative Network: 116th Congress"
+) %>%
+  # Can set specific layout with visIgraphLayout()
+  visIgraphLayout(layout = "layout_with_kk") %>%
+  visGroups(groupname = "Democrat", shape = "icon",
+            icon = list(code = "f007", color = "blue", size = 100))%>% 
+  
+  visGroups(groupname = "Republican", shape = "icon",
+            icon = list(code = "f007", color = "red", size = 100)) %>% 
+  
+  visGroups(groupname = "Independent", shape = "icon",
+            icon = list(code = "f007", color = "green", size = 100))%>% 
+  
+  visEdges(color = list(color = "grey", highlight = "purple"),
+           smooth = FALSE,
+           dashes = FALSE,
+           shadow = FALSE,
+           arrows = "from") %>%
+  addFontAwesome() %>% # required for icons
+  
+  visOptions(highlightNearest = list(enabled = T, hover = T),
+             selectedBy = "title") %>%
+  
+  visInteraction(zoomView = FALSE,
+                 navigationButtons = TRUE) %>%
+  
+  visLayout(randomSeed = 123)
+```
+
+**Questions or comments?** *Please reach out!*  
+
+  
+**Data Sources:**  
+- [congress.gov](https://www.congress.gov/)  
+
+*Created in R.*
+
+
+
