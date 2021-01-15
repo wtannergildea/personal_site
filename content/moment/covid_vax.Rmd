@@ -133,7 +133,7 @@ covid_summary <- daily_states %>%
 **Last updated:** *`r format(as.Date(Sys.Date(),"%Y-%m-%d"), "%B %d, %Y")`*      
 Best viewed on desktop.  
   
-## U.S. Covid-19 Vaccine Campaign Progress
+# U.S. Covid-19 Vaccine Campaign Progress  
 ```{r web scrape vax, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center'}
 # scrape vax data from NY Times website https://www.nytimes.com/interactive/2020/us/covid-19-vaccine-doses.html
 vax_html_raw <- content(GET('https://www.nytimes.com/interactive/2020/us/covid-19-vaccine-doses.html'))
@@ -221,7 +221,7 @@ ggsave(filename = "vax_map.png", device = "png", width = 7, height = 5)
 
 ``` 
   
-## Daily First Doses Given in U.S.
+### Daily First Doses Given in U.S.
 ```{r time series of vaccinations, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center'}
 # prep daily dose data by subtracting all past vax with CDC total from today
 days_since_dec_14 <- as.numeric(Sys.Date() - as.Date('2020-12-14'))
@@ -307,8 +307,12 @@ ggsave(filename = "daily_vax.png", device = "png", width = 10, height = 6)
 
 ```   
   
+  
+The U.S. Covid-19 vaccination campaign began in earnest in December, 2020 after the dual emergency use authorizations of the [Pfizer-BioNTech](https://www.fda.gov/news-events/press-announcements/fda-takes-key-action-fight-against-covid-19-issuing-emergency-use-authorization-first-covid-19) and [Moderna](https://www.fda.gov/news-events/press-announcements/fda-takes-additional-action-fight-against-covid-19-issuing-emergency-use-authorization-second-covid#:~:text=The%20emergency%20use%20authorization%20allows,years%20of%20age%20and%20older.) mRNA vaccine candidates. The vaccines contain "a small piece of the Covid-19 virus’s mRNA that instructs cells in the body to make the virus’s distinctive 'spike' protein. After a person receives this vaccine, their body produces copies of the spike protein, which does not cause disease, but triggers the immune system to learn to react defensively, producing an immune response against SARS-CoV-2."  
+
 ***
-## U.S. Allocation vs. Distribution
+# Covid-19 Vaccine Distribution
+### U.S. Allocation vs. Distribution
 ```{r bar plot distribution, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center'}
 # compare vaccine allocated, distributed, and given across states
 simple_bar <- vax %>%
@@ -371,7 +375,7 @@ ggsave(filename = "total_vax.png", device = "png", width = 7, height = 5)
 
 ``` 
   
-## State Allocation vs. Distribution
+### State Allocation vs. Distribution
 ```{r state bar plot distribution, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center', fig.height= 10, out.width= "100%"}
 # compare vaccine allocated, distributed, and given across states
 bar_stats <- master_summary %>%
@@ -432,12 +436,11 @@ tooltip = "text") %>%
 
 ``` 
   
-The U.S. Covid-19 vaccination campaign began in earnest in December, 2020 after the dual emergency use authorizations of the [Pfizer-BioNTech](https://www.fda.gov/news-events/press-announcements/fda-takes-key-action-fight-against-covid-19-issuing-emergency-use-authorization-first-covid-19) and [Moderna](https://www.fda.gov/news-events/press-announcements/fda-takes-additional-action-fight-against-covid-19-issuing-emergency-use-authorization-second-covid#:~:text=The%20emergency%20use%20authorization%20allows,years%20of%20age%20and%20older.) mRNA vaccine candidates. The vaccines contain "a small piece of the Covid-19 virus’s mRNA that instructs cells in the body to make the virus’s distinctive 'spike' protein. After a person receives this vaccine, their body produces copies of the spike protein, which does not cause disease, but triggers the immune system to learn to react defensively, producing an immune response against SARS-CoV-2."
-
+  
 Though the vaccines were [developed and approved in record time](https://learningenglish.voanews.com/a/how-covid-19-vaccines-developed-in-record-time/5703115.html), the vaccine distribution campaign is off to a [slow and concerning start](https://www.nbcnews.com/politics/white-house/biden-talk-covid-harris-gets-vaccine-n1252464). The federal government's [Operation Warp Speed](https://www.hhs.gov/coronavirus/explaining-operation-warp-speed/index.html) fell far short of its [initial goal to deliver 20 million vaccinations](https://www.npr.org/sections/coronavirus-live-updates/2020/12/31/952208601/u-s-likely-will-miss-goal-of-vaccinating-20-million-by-the-new-year) by the end of December, and drastic improvements in distribution will be necessary to hit the new Biden administration's goal of [100 million vaccine doses in his first 100 days](https://www.theguardian.com/us-news/2020/dec/08/joe-biden-coronavirus-vaccine-health-team).  
   
 ***
-## Estimated U.S. Percent to Goal of Achieving Herd Immunity  
+# Estimated U.S. Percent to Goal of Achieving Herd Immunity  
 ```{r herd immunity map, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center'}
 # topline % to immunity stat
 # total covid cases + total shots given / total us population / .7
@@ -491,7 +494,6 @@ ggsave(filename = "herd_map.png", device = "png", width = 7, height = 5)
 deaths_to_herd <- format(round(sum(master_summary$total_deaths)/(sum(master_summary$perc_pop_covid)/100) - sum(master_summary$total_deaths),0),format = "d", big.mark = ",")
 ```
   
-At the current vaccination rate, the U.S. is not projected to achieve herd immunity until `r vax_day`.  
   
 The majority of public health experts have estimated general herd immunity is achieved somewhere around [70% protection](https://www.mayoclinic.org/diseases-conditions/coronavirus/in-depth/herd-immunity-and-coronavirus/art-20486808), though some experts have recently estimated that [higher protection rates](https://www.reuters.com/article/health-coronavirus-usa/fauci-says-herd-immunity-could-require-nearly-90-to-get-coronavirus-vaccine-idINL1N2J411V) are necessary. 
 
@@ -499,10 +501,13 @@ The percent to herd immunity calculations presented in the figure above assume t
 
 Such uncertainty could lead to herd immunity being achieved either more quickly or more slowly than projected above. Thus, this figure is meant to illustrate a rough approximation of the country's progress towards herd immunity, rather than a definitive projection.   
 
+At the current vaccination rate, the U.S. is not projected to achieve herd immunity until `r vax_day`.  
+
 What is more certain is that to achieve herd immunity by Covid-19 infection alone, as some [fringe public health commentators](https://www.politico.com/news/2020/12/16/trump-appointee-demanded-herd-immunity-strategy-446408) and [right-wing politicians](https://www.washingtonpost.com/politics/trump-coronavirus-scott-atlas-herd-immunity/2020/08/30/925e68fe-e93b-11ea-970a-64c73a1c2392_story.html) have previously suggested the U.S. do, **approximately `r deaths_to_herd` more Americans would die!**  
   
 ***
-## Population with confirmed Covid-19 diagnosis to date
+# Covid-19 Case Data 
+### Population With Confirmed Covid-19 Diagnosis To Date
 ```{r bar charts, echo = FALSE, warning = FALSE, message = FALSE, fig.align='center', fig.height= 14, out.width= "100%"}
 
 ggplotly(ggplot(covid_summary, aes(x = state, 
@@ -551,7 +556,7 @@ ggplotly(ggplot(covid_summary, aes(x = state,
 ```
   
 ***
-## Time Series of Daily Covid-19 Cases Across U.S. States
+### Time Series of Daily Covid-19 Cases Across U.S. States
 ```{r ridgeplot cases, echo=FALSE, fig.height = 20, fig.align='center'}
 # summary stats for total cases
 total_covid_cases <- format(sum(master_summary$total_cases), format = "d", big.mark = ",")
@@ -597,7 +602,7 @@ ggplot(aes(x = date,
 ```
   
 ***
-## Time Series of Daily Covid-19 Cases Proportional to U.S. State Populations
+### Time Series of Daily Covid-19 Cases Proportional to State Populations
 ```{r ridgeplot proportion cases, echo=FALSE, fig.height = 18.5, fig.align='center'}
 ## ridge plot of daily new cases per state             
 daily_states %>%
