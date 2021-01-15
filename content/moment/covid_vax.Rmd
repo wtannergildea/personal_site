@@ -288,7 +288,7 @@ ggplot(aes(x = date, y = daily_vaccinations)) +
   annotate(geom="text", 
            x= daily_vax_doses$date[13], 
            y = 2.35, 
-           label= "CDC overreported correction", 
+           label= "CDC over-reported correction", 
            color = "black",
            size = 3,
            font = "Georgia") +
@@ -720,7 +720,7 @@ setup_twitter_oauth(twitter_api_key, twitter_api_secret, "1345057778822504448-ex
 # post a tweet from R
 daily_tweet <- paste0("Daily update ", format(as.Date(Sys.Date(),"%Y-%m-%d"), "%m/%d/%Y"), ":\n",
                       "\n",
-                      total_vax_perc, "% of the U.S. population has been vaccinated against Covid-19. That's ", cdc_vax_total_doses, " million total vaccinations.\n",
+                      total_vax_perc, "% of the U.S. population has been vaccinated against Covid-19. That's ", cdc_vax_total_first_doses, " million first doses.\n",
                       "\n",
                       "There have been ", total_covid_cases, " confirmed cases of Covid-19.\n",
                       "\n",
