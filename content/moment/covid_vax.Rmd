@@ -178,12 +178,18 @@ nyt_html_raw <- content(GET("https://www.nytimes.com/interactive/2020/us/covid-1
   html_node('p.g-body') %>%
   html_text()
 
-cdc_vax_total <- as.numeric(unlist(regmatches(nyt_html_raw,
+# first doses
+cdc_vax_total_doses<- as.numeric(unlist(regmatches(nyt_html_raw,
                              gregexpr("[[:digit:]]+\\.*[[:digit:]]*",nyt_html_raw))))
 
-cdc_vax_total <- round(cdc_vax_total[1],2)
-                      
-total_vax_perc <- format(round(100000000*cdc_vax_total/sum(master_summary$pop),2), scientific = F)
+
+cdc_vax_total_first_doses <- round(cdc_vax_total_doses[1],2)
+cdc_vax_total_second_doses <- round(cdc_vax_total_doses[3],2)
+# total doses 
+cdc_vax_total_doses <- cdc_vax_total_first_doses + cdc_vax_total_second_doses       
+       
+# total first doses vax     
+total_vax_perc <- format(round(100000000*cdc_vax_total_first_doses/sum(master_summary$pop),2), scientific = F)
 
 
 # make map
@@ -203,7 +209,7 @@ ggplot(map_data, aes(x = long,
   labs(x = NULL, 
        y = NULL,
        title = paste0("~", total_vax_perc,"% of U.S. population vaccinated against Covid-19"),
-       subtitle = paste0("Approximately ", cdc_vax_total," million Americans vaccinated since December 2020.\n",
+       subtitle = paste0("Approximately ", cdc_vax_total_first_doses," million Americans vaccinated since December 2020.\n",
                          "Last updated: ", format(as.Date(Sys.Date(),"%Y-%m-%d"), "%B %d, %Y")),
        caption = "Data from The New York Times; the CDC; U.S. Department of Health and Human Services; and state surveys and announcements.",
        fill = NULL) +
@@ -224,25 +230,25 @@ ggsave(filename = "vax_map.png", device = "png", width = 7, height = 5)
 ### Daily First Doses Given in U.S.
 ```{r time series of vaccinations, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center'}
 # prep daily dose data by subtracting all past vax with CDC total from today
-days_since_dec_14 <- as.numeric(Sys.Date() - as.Date('2020-12-14'))
-daily_vax_doses <- read_csv("vax_time_series.csv") 
-
-historic_vax_total <- sum(daily_vax_doses$daily_vaccinations)
-today_vax_doses <- round(cdc_vax_total - historic_vax_total,1) 
-
-# new_daily_row <- data.frame(format(Sys.Date(),"%m/%d/%Y"),today_vax_doses)
+  days_since_dec_14 <- as.numeric(Sys.Date() - as.Date('2020-12-14'))
+  daily_vax_doses <- read_csv("vax_time_series.csv") 
+ 
+  historic_vax_total <- sum(daily_vax_doses$daily_vaccinations)
+  today_vax_doses <- as.numeric(round(cdc_vax_total_doses - historic_vax_total,1)) 
+# 
+# new_daily_row <- data.frame(Sys.Date(),today_vax_doses)
 # names(new_daily_row) <- c("date","daily_vaccinations")
 # 
-# daily_vax_doses <- rbind(daily_vax_doses,new_daily_row) 
-
-daily_vax_doses <- daily_vax_doses %>%
-  mutate(date = lubridate::mdy(date))
+# daily_vax_doses <- rbind(daily_vax_doses,new_daily_row)
+# 
+# daily_vax_doses <- daily_vax_doses %>%
+#   mutate(date = lubridate::mdy(date))
 
 # get average rate accounting for 2020 reporting buildup on Jan 1 2021
 average_daily_rate <- round(sum(daily_vax_doses$daily_vaccinations)/days_since_dec_14, 2)
 
 # overwrite existing csv to include today's number, to be used tomorrow
-#write_csv(daily_vax_doses, "vax_time_series.csv")
+write_csv(daily_vax_doses, "vax_time_series.csv")
 
 # remove backlog for smooth function
 daily_vax_doses_no_backlog <- daily_vax_doses %>%
@@ -267,7 +273,7 @@ ggplot(aes(x = date, y = daily_vaccinations)) +
            x= daily_vax_doses$date[4], 
            y = 2.35, 
            label= "Includes backlog from Dec. 14 - Jan. 1, 2021", 
-           color = "red",
+           color = "black",
            size = 3,
            font = "Georgia") +
   
@@ -279,6 +285,19 @@ ggplot(aes(x = date, y = daily_vaccinations)) +
            size = 3,
            font = "Georgia") +
   
+  annotate(geom="text", 
+           x= daily_vax_doses$date[13], 
+           y = 2.35, 
+           label= "CDC overreported correction", 
+           color = "black",
+           size = 3,
+           font = "Georgia") +
+  
+  geom_segment(aes(x = daily_vax_doses$date[15],
+                   y = 2.35,
+                   xend = daily_vax_doses$date[15],
+                   yend = 0)) +
+  
   theme_tufte() +
   
   scale_x_date(date_breaks = "5 days",
@@ -288,8 +307,8 @@ ggplot(aes(x = date, y = daily_vaccinations)) +
   
   labs(x = NULL,
        y = "First doses (in millions)",
-       title = paste0("~", cdc_vax_total, " million first doses given in U.S."),
-       subtitle = paste0("Since vaccinations began, the U.S. has averaged ", average_daily_rate, " million first doses per day.\n",
+       title = paste0("~", cdc_vax_total_doses, " million total doses given in U.S."),
+       subtitle = paste0("Since vaccinations began, the U.S. has averaged ", average_daily_rate, " million total doses per day.\n",
                          "Last updated: ", format(as.Date(Sys.Date(),"%Y-%m-%d"), "%B %d, %Y")),
        caption = "Data from CDC.gov") +
   
@@ -322,7 +341,7 @@ simple_bar <- vax %>%
   mutate(perc = scales::percent(value/max(value),2))
 
 simple_bar$metric[1] <- "Vaccines distributed to states"
-simple_bar$metric[2] <- "Total first doses given"
+simple_bar$metric[2] <- "Total doses given"
   
 
 
@@ -380,8 +399,8 @@ ggsave(filename = "total_vax.png", device = "png", width = 7, height = 5)
 # compare vaccine allocated, distributed, and given across states
 bar_stats <- master_summary %>%
   select(state, doses_received, shots_given) %>%
-  rename('Doses received' = doses_received,
-         'Shots given' = shots_given) %>%
+  rename('Doses allocated to state' = doses_received,
+         'Total doses given' = shots_given) %>%
   mutate(state = factor(state, levels = state)) %>%
   pivot_longer(!state, "metric", "value") 
   
@@ -444,7 +463,7 @@ Though the vaccines were [developed and approved in record time](https://learnin
 ```{r herd immunity map, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center'}
 # topline % to immunity stat
 # total covid cases + total shots given / total us population / .7
-us_perc_to_immunity <- round(100*(sum(master_summary$total_cases) + cdc_vax_total*1000000) / 
+us_perc_to_immunity <- round(100*(sum(master_summary$total_cases) + cdc_vax_total_doses*1000000) / 
   sum(master_summary$pop) / 
   .7,1)
 
@@ -701,7 +720,7 @@ setup_twitter_oauth(twitter_api_key, twitter_api_secret, "1345057778822504448-ex
 # post a tweet from R
 daily_tweet <- paste0("Daily update ", format(as.Date(Sys.Date(),"%Y-%m-%d"), "%m/%d/%Y"), ":\n",
                       "\n",
-                      total_vax_perc, "% of the U.S. population has been vaccinated against Covid-19. That's ", cdc_vax_total, " million total vaccinations.\n",
+                      total_vax_perc, "% of the U.S. population has been vaccinated against Covid-19. That's ", cdc_vax_total_doses, " million total vaccinations.\n",
                       "\n",
                       "There have been ", total_covid_cases, " confirmed cases of Covid-19.\n",
                       "\n",
