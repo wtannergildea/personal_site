@@ -27,7 +27,7 @@ library(rvest)
 library(httr)
 library(sf)
 library(psych)
-
+library(lubridate)
 
 # download and unzip shape files
 download.file("https://www2.census.gov/geo/tiger/GENZ2018/shp/cb_2018_us_state_20m.zip", destfile = "states.zip")
@@ -133,7 +133,7 @@ covid_summary <- daily_states %>%
 **Last updated:** *`r format(as.Date(Sys.Date(),"%Y-%m-%d"), "%B %d, %Y")`*      
 Best viewed on desktop.  
   
-## U.S. Covid-19 Vaccine Campaign Progress (or lack thereof)
+## U.S. Covid-19 Vaccine Campaign Progress
 ```{r web scrape vax, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center'}
 # scrape vax data from NY Times website https://www.nytimes.com/interactive/2020/us/covid-19-vaccine-doses.html
 vax_html_raw <- content(GET('https://www.nytimes.com/interactive/2020/us/covid-19-vaccine-doses.html'))
@@ -220,8 +220,95 @@ ggplot(map_data, aes(x = long,
 ggsave(filename = "vax_map.png", device = "png", width = 7, height = 5)
 
 ``` 
-     
+  
+## First Doses Given Daily in U.S.
+```{r time series of vaccinations, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center'}
+# prep daily dose data by subtracting all past vax with CDC total from today
+days_since_dec_14 <- as.numeric(Sys.Date() - as.Date('2020-12-14'))
+daily_vax_doses <- read_csv("vax_time_series.csv") 
+
+historic_vax_total <- sum(daily_vax_doses$daily_vaccinations)
+today_vax_doses <- round(cdc_vax_total - historic_vax_total,1) 
+
+# new_daily_row <- data.frame(format(Sys.Date(),"%m/%d/%Y"),today_vax_doses)
+# names(new_daily_row) <- c("date","daily_vaccinations")
+# 
+# daily_vax_doses <- rbind(daily_vax_doses,new_daily_row) 
+
+daily_vax_doses <- daily_vax_doses %>%
+  mutate(date = lubridate::mdy(date))
+
+# get average rate accounting for 2020 reporting buildup on Jan 1 2021
+average_daily_rate <- round(sum(daily_vax_doses$daily_vaccinations)/days_since_dec_14, 2)
+
+# overwrite existing csv to include today's number, to be used tomorrow
+#write_csv(daily_vax_doses, "vax_time_series.csv")
+
+# remove backlog for smooth function
+daily_vax_doses_no_backlog <- daily_vax_doses %>%
+  filter(date!='2021-01-01')
+
+# ready now to plot
+daily_vax_doses %>%
+ggplot(aes(x = date, y = daily_vaccinations)) +
+  
+  geom_col(fill = "#65DDEB", 
+           alpha = .6, 
+           size = 1) + 
+  
+  geom_smooth(data = daily_vax_doses_no_backlog, 
+              aes(x = date, y = daily_vaccinations), 
+              color = "#659AEB", 
+              size = 1.5, 
+              se=FALSE,
+              fullrange=FALSE) +
+  
+  annotate(geom="text", 
+           x= daily_vax_doses$date[4], 
+           y = 2.35, 
+           label= "Includes backlog from Dec. 14 - Jan. 1, 2021", 
+           color = "red",
+           size = 3,
+           font = "Georgia") +
+  
+  annotate(geom="text", 
+           x= daily_vax_doses$date[12], 
+           y = .93, 
+           label= "First day w/ one million doses", 
+           color = "black",
+           size = 2,
+           font = "Georgia") +
+  
+  theme_tufte() +
+  
+  scale_x_date(date_breaks = "5 days",
+              date_labels = ("%B %d")) +
+  
+  scale_y_continuous(n.breaks = 8) +
+  
+  labs(x = NULL,
+       y = "First doses (in millions)",
+       title = paste0("~", cdc_vax_total, " million first doses given in U.S."),
+       subtitle = paste0("Since vaccinations began, the U.S. has averaged ", average_daily_rate, " million first doses per day.\n",
+                         "Last updated: ", format(as.Date(Sys.Date(),"%Y-%m-%d"), "%B %d, %Y")),
+       caption = "Data from CDC.gov") +
+  
+  theme(plot.caption = element_text(size = 12, face = "italic"),
+        plot.title = element_text(size=16, face = "bold"),
+        plot.subtitle = element_text(size=12),
+        text=element_text(family="Georgia"),
+        axis.title.y = element_text(size = 12),
+        axis.text = element_text(size = 14, face = "bold"),
+        axis.text.x = element_text(angle = 40, vjust = 1, hjust = 1, size = 10),
+        panel.grid.major.y = element_line(colour = "grey", size = .5),
+        panel.grid.minor.y = element_line(colour = "grey90", size = 0.3))
+
+ggsave(filename = "daily_vax.png", device = "png", width = 10, height = 6)
+
+```   
+  
 ***
+## State Allocation vs. Distribution
 ```{r bar plot distribution, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center', fig.height= 10, out.width= "100%"}
 # compare vaccine allocated, distributed, and given across states
 bar_stats <- master_summary %>%
@@ -564,9 +651,9 @@ tweet_image <-
   }
 
 
-updateStatus(text = daily_tweet,
-             mediaPath = tweet_image,
-             bypassCharLimit = TRUE)
+# updateStatus(text = daily_tweet,
+#              mediaPath = tweet_image,
+#              bypassCharLimit = TRUE)
 
 ```
  
