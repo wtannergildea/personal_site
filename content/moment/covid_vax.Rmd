@@ -221,7 +221,7 @@ ggsave(filename = "vax_map.png", device = "png", width = 7, height = 5)
 
 ``` 
   
-## First Doses Given Daily in U.S.
+## Daily First Doses Given in U.S.
 ```{r time series of vaccinations, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center'}
 # prep daily dose data by subtracting all past vax with CDC total from today
 days_since_dec_14 <- as.numeric(Sys.Date() - as.Date('2020-12-14'))
@@ -276,7 +276,7 @@ ggplot(aes(x = date, y = daily_vaccinations)) +
            y = .93, 
            label= "First day w/ one million doses", 
            color = "black",
-           size = 2,
+           size = 3,
            font = "Georgia") +
   
   theme_tufte() +
@@ -308,8 +308,71 @@ ggsave(filename = "daily_vax.png", device = "png", width = 10, height = 6)
 ```   
   
 ***
+## U.S. Allocation vs. Distribution
+```{r bar plot distribution, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center'}
+# compare vaccine allocated, distributed, and given across states
+simple_bar <- vax %>%
+  filter(state == "U.S. Total*") %>%
+  pivot_longer(cols = c("doses_received","shots_given"), names_to = "metric") %>%
+  select(metric,value) %>%
+  mutate(perc = scales::percent(value/max(value),2))
+
+simple_bar$metric[1] <- "Vaccines distributed to states"
+simple_bar$metric[2] <- "Total first doses given"
+  
+
+
+ggplot(simple_bar, aes(x= rev(metric), 
+                               y = value, 
+                               fill = factor(metric, levels = unique(metric)))) +
+  
+  geom_col(position = "dodge") +
+  
+  geom_label(
+    label=simple_bar$perc[2],
+    x=simple_bar$metric[1],
+    y=simple_bar$value[2] + simple_bar$value[2]/5,
+    show.legend = FALSE,
+    fill = "white",
+    size = 8
+  ) +
+  
+  geom_segment(aes(x = 1.5,
+                   y = simple_bar$value[1],
+                   xend = 1.9,
+                   yend = simple_bar$value[2] + 2*simple_bar$value[2]/5),
+               arrow = arrow(type = "closed")) +
+
+  
+  labs(x = NULL,
+       y = NULL,
+       caption = paste0("Data from CDC.gov. Last updated: ", format(as.Date(Sys.Date(),"%Y-%m-%d"), "%B %d, %Y")),
+       title = NULL,
+       fill = NULL) +
+    
+  scale_y_continuous(labels = scales::comma) +
+  
+  theme_tufte() +
+  
+  theme(plot.caption = element_text(size = 12, face = "italic"),
+        plot.title = element_text(size=16, face = "bold"),
+        plot.subtitle = element_text(size=12),
+        text=element_text(family="Georgia"),
+        axis.title.y = element_text(size = 12),
+        axis.text = element_text(size = 14, face = "bold"),
+        axis.text.x = element_blank(),
+        axis.ticks = element_blank(),
+        panel.grid.major.y = element_line(colour = "grey", size = .5),
+        panel.grid.minor.y = element_line(colour = "grey90", size = 0.3),
+        legend.position = "top",
+        legend.text = element_text(size = 10))
+
+ggsave(filename = "total_vax.png", device = "png", width = 7, height = 5)
+
+``` 
+  
 ## State Allocation vs. Distribution
-```{r bar plot distribution, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center', fig.height= 10, out.width= "100%"}
+```{r state bar plot distribution, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center', fig.height= 10, out.width= "100%"}
 # compare vaccine allocated, distributed, and given across states
 bar_stats <- master_summary %>%
   select(state, doses_received, shots_given) %>%
