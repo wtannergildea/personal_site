@@ -509,9 +509,9 @@ reactable(senate_table,
 ```
   
 ***
-## House Legislative Analysis  
+## House Legislative Network Analysis  
 
-The same as above, but for the House of Representatives.  
+The same set of analyses as above, but for the House of Representatives.  
 
 ```{r house graph, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center', fig.height= 10}
 ###### House NETWORK #######
