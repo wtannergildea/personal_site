@@ -731,7 +731,7 @@ house_table <- house_nodes %>%
   rename(Congressperson = label) %>%
   mutate(betweenness = round(betweenness,0),
          closeness = round(closeness,4)) %>%
-  left_join(senator_stats, by = c("Congressperson" = "sponsor")) %>%
+  left_join(house_stats, by = c("Congressperson" = "sponsor")) %>%
   rename(`passed bills sponsored` = "bills_sponsored",
          `passed bills cosponsored` = "bills_cosponsored") %>%
   select(1,6,7,2:4) %>%
