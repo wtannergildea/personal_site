@@ -28,6 +28,7 @@ library(httr)
 library(sf)
 library(psych)
 library(lubridate)
+library(networkD3)
 
 # download and unzip shape files
 download.file("https://www2.census.gov/geo/tiger/GENZ2018/shp/cb_2018_us_state_20m.zip", destfile = "states.zip")
@@ -391,6 +392,48 @@ ggsave(filename = "total_vax.png", device = "png", width = 7, height = 5)
 
 ``` 
   
+### Flow of Vaccine Distribution
+```{r vax flow}
+# build nodes
+flow_nodes <- data.frame(c(1:4),c("Operation Warp Speed", "Vaccine distributed to states", "First doses administered", "Second doses administered"))
+names(flow_nodes) <- c("id","label")
+
+# build edges
+flow_edges <- data.frame(c("Operation Warp Speed", "Vaccine distributed to states", "First doses administered"), 
+                         c("Vaccine distributed to states", "First doses administered", "Second doses administered"),
+                         c(simple_bar$value[1], cdc_vax_total_first_doses*10^6, cdc_vax_total_second_doses*10^6))
+names(flow_edges) <- c("source","destination","weight")
+flow_edges <- flow_edges %>%
+  mutate(weight = round(weight,0))
+
+# prep for sankey
+flow_edges <- flow_edges %>%
+  left_join(flow_nodes, by = c("source" = "label")) %>% 
+  rename(from = id)
+
+flow_edges <- flow_edges %>% 
+  left_join(flow_nodes, by = c("destination" = "label")) %>% 
+  rename(to = id)
+
+flow_edges <- select(flow_edges, from, to, weight)
+
+# manipulate nodes and edges for d3 specification
+flow_nodes_d3 <- mutate(flow_nodes, id = id - 1)
+flow_edges_d3 <- mutate(flow_edges, from = from - 1, to = to - 1)
+
+# prepare colour scale
+sankey_color <-'d3.scaleOrdinal() .range(["#3395FF","#EBE965","#AAEB65", "green"])'
+
+sankeyNetwork(Links = flow_edges_d3, Nodes = flow_nodes_d3, Source = "from", Target = "to",
+              NodeID = "label", Value = "weight", fontSize = 16,
+              sinksRight = T,
+              iterations = 50,
+              nodeWidth = 30,
+              nodePadding = 30,
+              colourScale = sankey_color)
+```
+
+
 ### State Allocation vs. Distribution
 ```{r state bar plot distribution, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center', fig.height= 10, out.width= "100%"}
 # compare vaccine allocated, distributed, and given across states

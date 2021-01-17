@@ -1,7 +1,7 @@
 ---
-title: "[DRAFT] The legislative network of the 116th Congress (2019-2020)"
+title: "The legislative network of the 116th Congress (2019-2020)"
 author: "Tanner Gildea"
-date: "2020-01-13"
+date: "2021-01-17"
 output: html_document
 ---
 
@@ -18,6 +18,9 @@ library(data.table)
 library(visNetwork)
 library(circlize)
 library(networkD3)
+library(ggthemes)
+library(gt)
+library(reactable)
 
 # download bills passed by at least one chamber and those that became law in 116th Congress
 
@@ -140,10 +143,11 @@ for(i in 1:nrow(summary)){
   }
 }
 ```
-## Overall Legislation
+  
+The 116th Congress of the United States convened on January 3rd, 2019 and ended on January 3rd, 2021, giving way to the 117th Congress. With the 116th Congress concluded, the record of its legislative accomplishments is complete. 
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+Over 15,000 bills were introduced in the House and Senate, 1,800 bills passed at least one chamber of Congress, 344 bills became law, and President Trump vetoed 10 bills. Hover over the Sankey diagram's links below for more information.
+
 ```{r sankey, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center', fig.height= 8}
 # make sankey of overall bills - too messy for legislative
 bill_flow_edges <- read_csv("bill_flow_116_edges.csv") 
@@ -174,20 +178,66 @@ sankeyNetwork(Links = bill_flow_edges_d3, Nodes = bill_flow_nodes_d3, Source = "
               nodePadding = 100,
               colourScale = sankey_color)
 ```
-## Historical comparison
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-```{r historical, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center', fig.height= 8}
+***  
 
+Before moving onto a full network analysis of the 116th Congress, some historical comparison of the 116th Congress alongside previous sessions of Congress is presented below. 
 
+```{r historical, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center', fig.height= 7}
+# historical bar chart of number of bills passed per congress
+historical_bar <- read_csv("historical_congress_bills.csv") %>%
+  mutate(Congress = factor(Congress, levels = Congress))
+
+historical_bar_longer <- historical_bar %>%
+  pivot_longer(cols = 2:4, names_to = "metric", values_to = "values")
+
+ggplot(historical_bar_longer, aes(x = Congress, y = values, fill = `Control of Government`)) +
+  
+  geom_col(alpha = .9, 
+           size = 1) + 
+  
+  facet_wrap(~metric, 
+             ncol = 1, 
+             scales = "free_y") +
+
+  theme_tufte() +
+  
+  scale_x_discrete(limits = rev(levels(historical_bar_longer$Congress))) +
+  
+  scale_y_continuous(n.breaks = 3) +
+  
+  labs(x = "Session of Congress",
+       y = NULL,
+       title = "Historical legislative activity by Congress and the President") +
+
+  theme(plot.caption = element_text(size = 12, face = "italic"),
+        plot.title = element_text(size=14, face = "bold", hjust = .5 ),
+        plot.subtitle = element_text(size=12),
+        text=element_text(family="Georgia"),
+        axis.title.y = element_text(size = 12),
+        axis.text = element_text(size = 14),
+        axis.text.x = element_text(angle = 25, vjust = 1, hjust = 1, size = 8),
+        panel.grid.major.y = element_line(colour = "grey", size = .5),
+        panel.grid.minor.y = element_line(colour = "grey90", size = 0.3),
+        legend.position = "top",
+        strip.text.x = element_text(size = 14, colour = "black")) 
 
 ```
-***
-## Senate
+ 
+The number of bills considered on the floor of both chambers of Congress has remained somewhat steady, but the number of bills passed into law has decreased by more than half over the past 40 years. The presidential veto power has been used more sparingly in recent decades, and almost exclusively during times of divided government (what was Carter up to??).  
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+***  
+## Senate Legislative Network Analysis
+
+The Senate and House are groups of individual senators and representatives that, taken together, form the Congress of United States. Much like a social network like Instagram or the human nervous system, representatives in Congress are connected through various relationships, such as political party or home state.
+
+The primary role of senators and representatives is to legislate: to write and pass bills that ultimately become law. For those that need it, [click here for a quick refresher](https://www.youtube.com/watch?v=FFroMQlKiag) on the legislative process. But senators and representatives don't write and pass bills alone - they need to work with other elected officials to shepherd bills through committee, garner support for a floor vote, and pass their respective chambers. 
+
+These legislative relationships are best represented through the sponsor-cosponsorship relationship. For a bill to be submitted for consideration, at least one senator or representative must sponsor it. The sponsor of a bill can then recruit others to cosponsor the bill, indicating support and generating momentum. A bill can have any number of cosponsors, and generally many more representatives will ultimately vote for a bill than cosponsor it. 
+
+Network analysis allows for a quantitative analysis of this legislative network. In a network, nodes are connected to each other through ties of varying strengths. In this legislative network, the senators and representatives are nodes connected to each other through the bills they have sponsored and cosponsored. 
+
+
 ```{r senate graph, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center', fig.height= 8}
 ###### SENATE NETWORK #######
 # prepare summary table for network analysis (https://www.jessesadler.com/post/network-analysis-with-r/)
@@ -318,55 +368,150 @@ visInteraction(zoomView = FALSE,
 visLayout(randomSeed = 123)
 
 ```
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-## Senate Chord Diagram
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-```{r chord diagram,echo = FALSE, message=FALSE, warning=FALSE,fig.align='center'}
+  
+  
+  
+The Senate legislative network above visualizes the sponsor-cosponsor relationship between senators for every bill that became law in the 116th Congress. Senators at the center of the network worked together more closely with a higher number of other senators than those at the further edges of the network. Clicking a particular senator's node will highlight every senator they worked with to pass legislation in the 116th Congress.
+  
+***  
+  
+Below, the chord diagram represents the sponsor-cosponsor relationship between Republicans, Democrats and the two Independents in the Senate. 
+  
+```{r senate chord diagram,echo = FALSE, message=FALSE, warning=FALSE,fig.align='center'}
 # senate chord diagram using circulize() package
+senate_adj_matrix <- passed_summary %>%
+  select(sponsor, cosponsor) %>%
+  filter(cosponsor!= "no sponsor") 
+
+# add partisanship to sponsors
+for(i in 1:nrow(senate_adj_matrix)){
+  if(str_detect(senate_adj_matrix$sponsor[i], "R-")){
+    senate_adj_matrix$sponsor_party[i] <- "GOP Sponsor"
+  } else if (str_detect(senate_adj_matrix$sponsor[i], "D-")){
+    senate_adj_matrix$sponsor_party[i] <- "Dem Sponsor"
+  } 
+  else senate_adj_matrix$sponsor_party[i] <- "Ind. Sponsor"
+}
+
+# add partisanship to cosponsors
+for(i in 1:nrow(senate_adj_matrix)){
+  if(str_detect(senate_adj_matrix$cosponsor[i], "R-")){
+    senate_adj_matrix$cosponsor_party[i] <- "GOP Cosponsor"
+  } else if (str_detect(senate_adj_matrix$cosponsor[i], "D-")){
+    senate_adj_matrix$cosponsor_party[i] <- "Dem Cosponsor"
+  } 
+  else senate_adj_matrix$cosponsor_party[i] <- "Ind. Cosponsor"
+}
 
 # create adjacency matrix
 #senate_adj_matrix <- as_adjacency_matrix(bills_passed_igraph, attr="weight", sparse = FALSE)
-senate_adj_matrix <- passed_summary %>%
-  select(sponsor,cosponsor) %>%
-  filter(cosponsor!= "no sponsor") %>%
-  mutate(sponsor = gsub(",.*$", "", sponsor),
-         cosponsor = gsub(",.*$", "", cosponsor)) %>%
-  mutate(sponsor = sub('.*\\.', "", sponsor),
-         cosponsor = sub('.*\\.', "", cosponsor)) %>%
-  mutate(sponsor = trimws(sponsor),
-         cosponsor = trimws(cosponsor)) %>%
-  arrange(cosponsor) %>%
+senate_adj_matrix <- senate_adj_matrix %>%
+  select(sponsor_party,cosponsor_party) %>%
+  arrange(cosponsor_party) %>%
   graph_from_data_frame() %>%
   as_adjacency_matrix(sparse = FALSE)
 
 circos.clear()
-chordDiagram(senate_adj_matrix,
-             annotationTrack = c("grid"),
-             order = sort(rownames(senate_adj_matrix))) 
-#             preAllocateTracks = list(track.height = max(strwidth(unlist(dimnames(senate_adj_matrix))))))
-#             scale = FALSE)
-#             annotationTrackHeight = c(.1,.01))
-# directional = 1,
-# direction.type = c("diffHeight", "arrows"),
-# link.arr.type = "big.arrow")
-circos.trackPlotRegion(track.index = 1, panel.fun = function(x, y) {
-  xlim = get.cell.meta.data("xlim")
-  ylim = get.cell.meta.data("ylim")
-  sector.name = get.cell.meta.data("sector.index")
-  circos.text(mean(xlim), ylim[1], sector.name, facing = "clockwise", niceFacing = TRUE, adj = c(-.5, 0), cex = .7)
+# set gap
+circos.par(gap.after = 20, start.degree = -125)
+# set colors
+grid.col = c( "GOP Sponsor" = "red",  "Dem Sponsor" = "blue",  "Ind. Sponsor"= "green",
+              "GOP Cosponsor" = "red",  "Dem Cosponsor" = "blue",  "Ind. Cosponsor"= "green")
 
-}, bg.border = NA)
+link.col = c( "purple", "red", "green", "blue", "purple", "green")
+
+chordDiagram(t(senate_adj_matrix),
+             grid.col = grid.col,
+             col = link.col,
+             big.gap = 20,
+             annotationTrack = c("name","grid"),
+             annotationTrackHeight = c(.05,.05),
+             order = sort(rownames(senate_adj_matrix)),
+             directional = 1,
+             direction.type = c("diffHeight", "arrows"),
+             link.arr.type = "triangle",
+             diffHeight  = -0.05)
 
 ```
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+  
+Though a healthy majority of bills passed were originally sponsored by a Republican (the GOP had Senate control in the 116th Congress), a fair number of passed legislation was sponsored by Democrats. Given the current 60 vote threshold in the Senate to overcome the filibuster and pass legislation, it's not surprising a significant number of Democrats cosponsored Republican bills that became law, and vice-versa. This will look different in the majority-rule house further below.  
+  
+***  
+## Senate Summary Stats and Centrality Measurements   
 
+Is it possible to know which senators were most important to the legislative process in the 116th Congress? It depends on your definition of "important" - most bills passed? The price tag of bills? If a bill was related to certain critical policy areas, such as national security or defense? In network analysis, the concept of centrality attempts to determine the importance of nodes. As there are various definitions of importance, there are various measurements of centrality.
+
+Some standard centrality measurements include:
+-*degree*: how many direct ties a specific node has to other nodes
+-*strength*: the strength of the ties between a specific node and other nodes
+- *betweenness*: how often a specific node lies on the shortest path between other nodes, i.e. the influence of a specific node across the entire network 
+
+In the case of this legislative network:
+-*degree*: how many cosponsorships a specific senator recruited or extended 
+-*strength*: the strength of the ties between a specific senator and other senators
+- *betweenness*: the influence a specific senator across the entire legislative network  
+
+```{r senate stats table, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center'}
+# senate centrality
+senate_nodes <- nodes %>% select(1,2)
+senate_edges <- edges %>% select(1:3)
+
+senate_g <- graph_from_data_frame(senate_edges, directed = TRUE, vertices = senate_nodes)
+
+senate_nodes <- senate_nodes %>%
+  mutate(degree = igraph::degree(senate_g),
+         strength = igraph::strength(senate_g),
+         betweenness = igraph::betweenness(senate_g),
+         closeness = igraph::closeness(senate_g))
+
+# senate bills sponsored and cosponsored
+senator_stats_sponsor <- passed_summary %>%
+  select(sponsor,title) %>%
+  distinct() %>%
+  group_by(sponsor) %>%
+  summarize(bills_sponsored = n())
+
+senator_stats_cosponsor <- passed_summary %>%
+  select(cosponsor,title) %>%
+  distinct() %>%
+  group_by(cosponsor) %>%
+  summarize(bills_cosponsored = n())
+
+senator_stats <- full_join(senator_stats_sponsor,senator_stats_cosponsor, by = c("sponsor" = "cosponsor")) %>%
+  filter(sponsor != "no sponsor") 
+
+# make senate table
+senate_table <- senate_nodes %>%
+  select(2:6) %>%
+  rename(Senator = label) %>%
+  mutate(betweenness = round(betweenness,0),
+         closeness = round(closeness,4)) %>%
+  left_join(senator_stats, by = c("Senator" = "sponsor")) %>%
+  rename(`passed bills sponsored` = "bills_sponsored",
+         `passed bills cosponsored` = "bills_cosponsored") %>%
+  select(1,6,7,2:4) %>%
+  replace_na(list("passed bills sponsored" = 0,
+                  "passed bills cosponsored" = 0))
+
+reactable(senate_table,
+          defaultSorted = list("betweenness" = "desc"),
+          searchable = TRUE,
+          bordered = TRUE,
+          striped = TRUE,
+          highlight = TRUE,
+          compact = TRUE, 
+          resizable = TRUE,
+          columns = list(Senator = colDef(width = 250),
+                         betweenness = colDef(width = 140),
+                         degree = colDef(width = 100),
+                         strength = colDef(width = 100)))
+
+```
+  
 ***
-## House Graph
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+## House Legislative Analysis  
+
+The same as above, but for the House of Representatives.  
 
 ```{r house graph, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center', fig.height= 10}
 ###### House NETWORK #######
@@ -483,13 +628,302 @@ visNetwork(
   
   visLayout(randomSeed = 123)
 ```
+  
+   
+***  
+  
+In the majority-rule House, the number of bills that passed were sponsored by Democrats significantly more so than by Republicans (the Democrats regained control for the 116th Congress).  
+
+```{r house chord diagram,echo = FALSE, message=FALSE, warning=FALSE,fig.align='center'}
+# house chord diagram using circulize() package
+house_adj_matrix <- house_summary %>%
+  select(sponsor, cosponsor) %>%
+  filter(cosponsor!= "no sponsor") 
+
+# add partisanship to sponsors
+for(i in 1:nrow(house_adj_matrix)){
+  if(str_detect(house_adj_matrix$sponsor[i], "R-")){
+    house_adj_matrix$sponsor_party[i] <- "GOP Sponsor"
+  } else if (str_detect(house_adj_matrix$sponsor[i], "D-")){
+    house_adj_matrix$sponsor_party[i] <- "Dem Sponsor"
+  } 
+  else house_adj_matrix$sponsor_party[i] <- "Ind. Sponsor"
+}
+
+# add partisanship to cosponsors
+for(i in 1:nrow(house_adj_matrix)){
+  if(str_detect(house_adj_matrix$cosponsor[i], "R-")){
+    house_adj_matrix$cosponsor_party[i] <- "GOP Cosponsor"
+  } else if (str_detect(house_adj_matrix$cosponsor[i], "D-")){
+    house_adj_matrix$cosponsor_party[i] <- "Dem Cosponsor"
+  } 
+  else house_adj_matrix$cosponsor_party[i] <- "Ind. Cosponsor"
+}
+
+# create adjacency matrix
+house_adj_matrix <- house_adj_matrix %>%
+  select(sponsor_party,cosponsor_party) %>%
+  arrange(cosponsor_party) %>%
+  graph_from_data_frame() %>%
+  as_adjacency_matrix(sparse = FALSE)
+
+circos.clear()
+# set gap
+circos.par(gap.after = 30, start.degree = 92)
+# set colors
+grid.col = c( "GOP Sponsor" = "red",  "Dem Sponsor" = "blue",  "Ind. Sponsor"= "green",
+              "GOP Cosponsor" = "red",  "Dem Cosponsor" = "blue",  "Ind. Cosponsor"= "green")
+
+link.col = c( "blue", "purple", "green", "purple", "red", "green")
+
+chordDiagram(t(house_adj_matrix),
+             grid.col = grid.col,
+             col = link.col,
+             annotationTrack = c("name","grid"),
+             annotationTrackHeight = c(.05,.05),
+             order = sort(rownames(senate_adj_matrix)),
+             directional = 1,
+             direction.type = c("diffHeight", "arrows"),
+             link.arr.type = "triangle",
+             diffHeight  = -0.05)
+
+
+
+
+```
+  
+## House Summary Stats and Centality Measurements  
+  
+```{r house stats table, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center'}
+
+# house centrality
+house_nodes <- house_nodes %>% select(1,2)
+house_edges <- house_edges %>% select(1:3)
+
+house_g <- graph_from_data_frame(house_edges, directed = TRUE, vertices = house_nodes)
+
+house_nodes <- house_nodes %>%
+  mutate(degree = igraph::degree(house_g),
+         strength = igraph::strength(house_g),
+         betweenness = igraph::betweenness(house_g),
+         closeness = igraph::closeness(house_g))
+
+# house bills sponsored and cosponsored
+house_stats_sponsor <- house_summary %>%
+  select(sponsor,title) %>%
+  distinct() %>%
+  group_by(sponsor) %>%
+  summarize(bills_sponsored = n())
+
+house_stats_cosponsor <- house_summary %>%
+  select(cosponsor,title) %>%
+  distinct() %>%
+  group_by(cosponsor) %>%
+  summarize(bills_cosponsored = n())
+
+house_stats <- full_join(house_stats_sponsor,house_stats_cosponsor, by = c("sponsor" = "cosponsor")) %>%
+  filter(sponsor != "no sponsor") 
+
+# make house table
+house_table <- house_nodes %>%
+  select(2:6) %>%
+  rename(Congressperson = label) %>%
+  mutate(betweenness = round(betweenness,0),
+         closeness = round(closeness,4)) %>%
+  left_join(senator_stats, by = c("Congressperson" = "sponsor")) %>%
+  rename(`passed bills sponsored` = "bills_sponsored",
+         `passed bills cosponsored` = "bills_cosponsored") %>%
+  select(1,6,7,2:4) %>%
+  replace_na(list("passed bills sponsored" = 0,
+                  "passed bills cosponsored" = 0))
+
+
+reactable(house_table,
+          defaultSorted = list("betweenness" = "desc"),
+          searchable = TRUE,
+          bordered = TRUE,
+          striped = TRUE,
+          highlight = TRUE,
+          compact = TRUE, 
+          resizable = TRUE,
+          columns = list(Congressperson = colDef(width = 250),
+                          betweenness = colDef(width = 140),
+                         degree = colDef(width = 100),
+                         strength = colDef(width = 100)))
+
+
+```
+
+
+```{r similarity senate, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center'}
+# full_senate <- summary %>%
+#   filter(str_detect(legislation_number,"S"))
+# 
+# # first create node list
+# full_senate_sponsors <- full_senate %>%
+#   distinct(sponsor) %>%
+#   rename(label = sponsor)
+# 
+# full_senate_cosponsors <- full_senate %>%
+#   distinct(cosponsor) %>%
+#   rename(label = cosponsor) %>%
+#   filter(label!= "no sponsor")
+# 
+# # join together to assign unique ids and create nodes df
+# full_senate_nodes <- full_join(full_senate_sponsors, full_senate_cosponsors, by = "label")
+# full_senate_nodes <- full_senate_nodes %>% 
+#   rowid_to_column("id")
+# 
+# # create edge list
+# full_senate_edges <- full_senate %>%
+#   filter(cosponsor!= "no sponsor") %>%
+#   group_by(sponsor, cosponsor) %>%
+#   summarise(weight = n()) %>%
+#   ungroup()
+# 
+# # join together to finish edges df
+# full_senate_edges <- full_senate_edges %>%
+#   left_join(full_senate_nodes, by = c("sponsor" = "label")) %>%
+#   rename(from = id)
+# 
+# full_senate_edges <- full_senate_edges %>%
+#   left_join(full_senate_nodes, by = c("cosponsor" = "label")) %>%
+#   rename(to = id)
+# 
+# full_senate_edges <- select(edges, from, to, weight)
+# 
+# # create full senate graph
+# full_senate_g <- graph_from_data_frame(full_senate_edges, directed = TRUE, vertices = full_senate_nodes)
+# 
+# # add full senate centrality
+# full_senate_nodes <- full_senate_nodes %>%
+#   mutate(degree = igraph::degree(full_senate_g),
+#          strength = igraph::strength(full_senate_g),
+#          betweenness = igraph::betweenness(full_senate_g),
+#          closeness = igraph::closeness(full_senate_g))
+# 
+# # create senate adjacency matrix
+# senate_adj <- as_adjacency_matrix(full_senate_g, attr = "weight", names = TRUE, sparse = FALSE)
+# 
+# # create senate similarity matrix
+# cor_senate <- cor(senate_adj)
+# cor_senate <- cor_senate[,c(-102,-103)]
+# cor_senate <- cor_senate[c(-102,-103),]
+# diag(cor_senate) <- 0
+# 
+# # visualize similarity
+# # Flatten S to be a vector
+# flat_cor_senate <- as.vector(cor_senate)
+# 
+# # Plot a histogram of similarities
+# hist(flat_cor_senate, xlab = "Similarity", main = "Histogram of Senate similarity")
+# 
+# # visualize other correlations of senate centrality measurements
+# # degree vs strength
+# ggplot(senate_nodes, aes(x = degree, y = strength)) +
+#   # Add a point geom
+#   geom_point() +
+#   # Add a smooth geom with linear regression method
+#   geom_smooth(method = "lm", se = FALSE)
+# 
+# # Calculate correlation 
+# cor_sen_degree_strength <- cor(full_senate_nodes$degree, full_senate_nodes$strength)
+# 
+# # degree vs betweenness
+# ggplot(full_senate_nodes, aes(x = degree, y = betweenness)) +
+#   # Add a point geom
+#   geom_point() +
+#   # Add a smooth geom with linear regression method
+#   geom_smooth(method = "lm", se = FALSE)
+# 
+# # Calculate correlation 
+# cor_sen_degree_betweenness <- cor(full_senate_nodes$degree, full_senate_nodes$betweenness)
+# 
+# # strength vs betweenness
+# ggplot(full_senate_nodes, aes(x = strength, y = betweenness)) +
+#   # Add a point geom
+#   geom_point() +
+#   # Add a smooth geom with linear regression method
+#   geom_smooth(method = "lm", se = FALSE)
+# 
+# # Calculate correlation 
+# cor_sen_strength_betweenness <- cor(full_senate_nodes$strength, full_senate_nodes$betweenness)
+# 
+# # # Convert weighted similarity matrix to a graph
+# # sim_senate <- graph_from_adjacency_matrix(cor_senate, mode = "directed", weighted = TRUE)
+# # 
+# # # Convert sim_senate to a data.frame
+# # sim_senate_df <- igraph::as_data_frame(sim_senate, what = "edges")
+# # 
+# # # Convert sim_senate_df to a tibble
+# # sim_senate_tib <- as_tibble(sim_senate_df)
+# # 
+# # # join to senate nodes
+# # senate_nodes <- senate_nodes %>% mutate(id = as.character(id))
+# # sim_senate_joined <- sim_senate_tib %>% 
+# #   # Left join to nodes matching "from" to "id"
+# #   left_join(senate_nodes, by = c("from" = "id")) %>% 
+# #   # Left join to nodes matching "to" to "id", setting suffixes
+# #   left_join(senate_nodes, by = c("to" = "id"), suffix = c("_from", "_to")) %>%
+# #   rename(similarity = weight)
+# # 
+# # sim_senate_joined %>% 
+# #   filter(degree_from >= median(degree_from),
+# #          degree_to >= median(degree_to)) %>%
+# # arrange(desc(similarity))
+# # 
+# # sim_senate_filtered <- sim_senate_joined %>% 
+# #   # Filter on similarity greater than 0.6
+# #   filter(similarity > 0.8)
+# # 
+# # # Convert to an directed graph
+# # sim_senate_filtered_network <- graph_from_data_frame(sim_senate_filtered, directed = TRUE)
+# # 
+# # V(sim_senate_filtered_network)$name <- sim_senate_filtered$label_to
+# # # Plot with Kamada-Kawai layout
+# # ggraph(sim_senate_filtered_network, layout = "with_kk") + 
+# #   # Add an edge link geom, mapping transparency to similarity
+# #   geom_edge_link(aes(alpha = similarity)) +
+# #   geom_node_text(aes(label = name))
+```
+
+```{r clustered senate similarity network, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center'}
+# distance_sen_network <- 1 - cor_senate
+# 
+# d <- as.dist(distance_sen_network)
+# 
+# # run average-linkage clustering method and plot the dendrogram 
+# senate_dendogram <- stats::hclust(d, method = "average")
+# plot(senate_dendogram)
+# 
+# # Cut the dendrogram tree into 4 clusters
+# cls <- cutree(senate_dendogram, k = 4)
+# 
+# # add to senate nodes
+# full_senate_nodes_clustered <- full_senate_nodes %>%
+#   filter(id <= 101) %>%
+#   mutate(cluster = cls)
+# 
+# # create clustered graph
+# clustered_senate_graph <- graph_from_data_frame(full_senate_edges, directed = TRUE, vertices = full_senate_nodes_clustered)
+# 
+# # Update the plot
+# ggraph(clustered_senate_graph, layout = "with_kk") + 
+#   geom_edge_link(aes(alpha = weight), show.legend=FALSE) +  
+#   geom_node_point(aes(color = factor(cluster))) + 
+#   geom_node_text(aes(label = label)) +
+#   labs(color = "cluster") + 
+#   # Facet the nodes by cluster, with a free scale
+#   facet_nodes(~ cluster, scales="free") 
+
+```
+  
+***  
 
 **Questions or comments?** *Please reach out!*  
-
   
-**Data Sources:**  
-- [congress.gov](https://www.congress.gov/)  
-
+**Data Source:** [congress.gov](https://www.congress.gov/)  
+  
 *Created in R.*
 
 
