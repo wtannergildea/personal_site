@@ -449,7 +449,7 @@ Some standard centrality measurements include:
 In the case of this legislative network:  
 - **degree**: how many cosponsorships a specific senator recruited or extended  
 - **strength**: the strength of the ties between a specific senator and other senators   
-- **betweenness**: the influence a specific senator across the entire legislative network  
+- **betweenness**: the influence of a specific senator across the entire legislative network  
 
 ```{r senate stats table, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center'}
 # senate centrality
