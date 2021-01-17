@@ -442,14 +442,18 @@ Though a healthy majority of bills passed were originally sponsored by a Republi
 Is it possible to know which senators were most important to the legislative process in the 116th Congress? It depends on your definition of "important" - most bills passed? The price tag of bills? If a bill was related to certain critical policy areas, such as national security or defense? In network analysis, the concept of centrality attempts to determine the importance of nodes. As there are various definitions of importance, there are various measurements of centrality.
 
 Some standard centrality measurements include:
--*degree*: how many direct ties a specific node has to other nodes
--*strength*: the strength of the ties between a specific node and other nodes
-- *betweenness*: how often a specific node lies on the shortest path between other nodes, i.e. the influence of a specific node across the entire network 
+-**degree**: how many direct ties a specific node has to other nodes  
+
+-**strength**: the strength of the ties between a specific node and other nodes  
+
+- **betweenness**: how often a specific node lies on the shortest path between other nodes, i.e. the influence of a specific node across the entire network  
 
 In the case of this legislative network:
--*degree*: how many cosponsorships a specific senator recruited or extended 
--*strength*: the strength of the ties between a specific senator and other senators
-- *betweenness*: the influence a specific senator across the entire legislative network  
+-**degree**: how many cosponsorships a specific senator recruited or extended  
+
+-**strength**: the strength of the ties between a specific senator and other senators   
+
+- **betweenness**: the influence a specific senator across the entire legislative network  
 
 ```{r senate stats table, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center'}
 # senate centrality
@@ -629,7 +633,8 @@ visNetwork(
   visLayout(randomSeed = 123)
 ```
   
-   
+  
+  
 ***  
   
 In the majority-rule House, the number of bills that passed were sponsored by Democrats significantly more so than by Republicans (the Democrats regained control for the 116th Congress).  
