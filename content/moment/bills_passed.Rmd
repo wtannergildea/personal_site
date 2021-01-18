@@ -168,11 +168,11 @@ bill_flow_nodes_d3 <- mutate(bill_flow_nodes, id = id - 1)
 bill_flow_edges_d3 <- mutate(bill_flow_edges, from = from - 1, to = to - 1)
 
 # prepare colour scale
-sankey_color <-'d3.scaleOrdinal() .range(["#3395FF","#EBE965","#AAEB65","green","red","#65EBA6","orange"])'
+sankey_color <-'d3.scaleOrdinal() .range(["#3395FF","#EBE965","#AAEB65","green","red","#3395FF","orange"])'
 
 sankeyNetwork(Links = bill_flow_edges_d3, Nodes = bill_flow_nodes_d3, Source = "from", Target = "to",
               NodeID = "label", Value = "weight", fontSize = 16,
-              sinksRight = T,
+              sinksRight = F,
               iterations = 1000,
               nodeWidth = 30,
               nodePadding = 100,
@@ -183,7 +183,7 @@ sankeyNetwork(Links = bill_flow_edges_d3, Nodes = bill_flow_nodes_d3, Source = "
 
 Before moving onto a full network analysis of the 116th Congress, some historical comparison of the 116th Congress alongside previous sessions of Congress is presented below. 
 
-```{r historical, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center', fig.height= 7}
+```{r historical, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center', fig.height= 8}
 # historical bar chart of number of bills passed per congress
 historical_bar <- read_csv("historical_congress_bills.csv") %>%
   mutate(Congress = factor(Congress, levels = Congress))
@@ -198,7 +198,7 @@ ggplot(historical_bar_longer, aes(x = Congress, y = values, fill = `Control of G
   
   facet_wrap(~metric, 
              ncol = 1, 
-             scales = "free_y") +
+             scales = "free") +
 
   theme_tufte() +
   
@@ -224,7 +224,7 @@ ggplot(historical_bar_longer, aes(x = Congress, y = values, fill = `Control of G
 
 ```
  
-The number of bills considered on the floor of both chambers of Congress has remained somewhat steady, but the number of bills passed into law has decreased by more than half over the past 40 years. The presidential veto power has been used more sparingly in recent decades, and almost exclusively during times of divided government (what was Carter up to??).  
+The number of bills considered on the floor of both chambers of Congress has remained somewhat steady, but **the number of bills passed into law has decreased by more than half over the past 40 years.** The presidential veto power has been used more sparingly in recent decades, and almost exclusively during times of divided government - President Carter (1977-80) is a clear outlier in this respect.  
 
 ***  
 ## Senate Legislative Network Analysis
@@ -233,9 +233,12 @@ The Senate and House are groups of individual senators and representatives that,
 
 The primary role of senators and representatives is to legislate: to write and pass bills that ultimately become law. For those that need it, [click here for a quick refresher](https://www.youtube.com/watch?v=FFroMQlKiag) on the legislative process. But senators and representatives don't write and pass bills alone - they need to work with other elected officials to shepherd bills through committee, garner support for a floor vote, and pass their respective chambers. 
 
-These legislative relationships are best represented through the sponsor-cosponsorship relationship. For a bill to be submitted for consideration, at least one senator or representative must sponsor it. The sponsor of a bill can then recruit others to cosponsor the bill, indicating support and generating momentum. A bill can have any number of cosponsors, and generally many more representatives will ultimately vote for a bill than cosponsor it. 
+These legislative relationships are best represented through the **sponsor-cosponsor relationship**:    
+1. For a bill to be submitted for consideration, at least one senator or representative must sponsor it.   
+2. The sponsor of a bill can then recruit others to cosponsor the bill, indicating support and generating momentum.  
+3. A bill can have any number of cosponsors, and generally many more representatives will ultimately vote for a bill than cosponsor it.   
 
-Network analysis allows for a quantitative analysis of this legislative network. In a network, nodes are connected to each other through ties of varying strengths. In this legislative network, the senators and representatives are nodes connected to each other through the bills they have sponsored and cosponsored. 
+Network analysis allows for a quantitative analysis of this legislative network. In a network, **nodes** are connected to each other through **ties** of varying directions and strengths. In this legislative network, ***the senators and representatives are nodes connected to each other through the bills they have sponsored and cosponsored***. 
 
 
 ```{r senate graph, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center', fig.height= 8}
@@ -371,7 +374,7 @@ visLayout(randomSeed = 123)
   
   
   
-The Senate legislative network above visualizes the sponsor-cosponsor relationship between senators for every bill that became law in the 116th Congress. Senators at the center of the network worked together more closely with a higher number of other senators than those at the further edges of the network. Clicking a particular senator's node will highlight every senator they worked with to pass legislation in the 116th Congress.
+The Senate legislative network above visualizes the sponsor-cosponsor relationship between senators for every bill that became law in the 116th Congress. **Senators at the center of the network worked together more closely with a higher number of other senators than those at the further edges of the network.** Clicking a particular senator's node will highlight every senator they worked with to pass legislation in the 116th Congress.
   
 ***  
   
@@ -437,19 +440,19 @@ chordDiagram(t(senate_adj_matrix),
 Though a healthy majority of bills passed were originally sponsored by a Republican (the GOP had Senate control in the 116th Congress), a fair number of passed legislation was sponsored by Democrats. Given the current 60 vote threshold in the Senate to overcome the filibuster and pass legislation, it's not surprising a significant number of Democrats cosponsored Republican bills that became law, and vice-versa. This will look different in the majority-rule house further below.  
   
 ***  
-## Senate Summary Stats and Centrality Measurements   
+## The Influence of Individual Senators   
 
-Is it possible to know which senators were most important to the legislative process in the 116th Congress? It depends on your definition of "important" - most bills passed? The price tag of bills? If a bill was related to certain critical policy areas, such as national security or defense? In network analysis, the concept of centrality attempts to determine the importance of nodes. As there are various definitions of importance, there are various measurements of centrality.
+**Is it possible to know which senators were most important to the legislative process in the 116th Congress?** It depends on your definition of "important" - most bills passed? The price tag of bills? If a bill was related to certain critical policy areas, such as national security or defense? In network analysis, the concept of centrality attempts to determine the importance of nodes. *As there are various definitions of importance, there are various measurements of centrality.*
 
-Some standard centrality measurements include:  
-- **degree**: how many direct ties a specific node has to other nodes  
-- **strength**: the strength of the ties between a specific node and other nodes  
-- **betweenness**: how often a specific node lies on the shortest path between other nodes, i.e. the influence of a specific node across the entire network  
+**Some standard centrality measurements include:**  
+-  **degree**: how many direct ties a specific node has to other nodes  
+-  **strength**: the strength of the ties between a specific node and other nodes  
+-  **betweenness**: how often a specific node lies on the shortest path between other nodes, i.e. the influence of a specific node across the entire network  
 
-In the case of this legislative network:  
-- **degree**: how many cosponsorships a specific senator recruited or extended  
-- **strength**: the strength of the ties between a specific senator and other senators   
-- **betweenness**: the influence of a specific senator across the entire legislative network  
+**In the case of this legislative network:** 
+-  **degree**: how many cosponsorships a specific senator recruited or extended  
+-  **strength**: the strength of the ties between a specific senator and other senators   
+-  **betweenness**: the influence of a specific senator across the entire legislative network  
 
 ```{r senate stats table, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center'}
 # senate centrality
@@ -917,6 +920,33 @@ reactable(house_table,
 #   # Facet the nodes by cluster, with a free scale
 #   facet_nodes(~ cluster, scales="free") 
 
+```
+
+## Reference - All Bills Passed in 116th Congress  
+
+```{r all bills, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center'}
+all_bills <- bills %>%
+  filter(status == "Signed into law") %>%
+  select(1,4,5,6,7,2) %>%
+  distinct() %>%
+  arrange(title) %>%
+  rename(`Legislation #` = legislation_number,
+         Title = title,
+         Sponsor = sponsor,
+         `Cosponsors` = number_of_cosponsors,
+         Committees = committees,
+         `Bill URL` = url )
+
+reactable(all_bills,
+          searchable = TRUE,
+          bordered = TRUE,
+          striped = TRUE,
+          highlight = TRUE,
+          compact = TRUE, 
+          resizable = TRUE,
+          columns = list("Legislation #" = colDef(width = 100),
+                         Title = colDef(width = 300)))
+                         # Cosponsors = colDef(width = 60)))
 ```
   
 ***  
