@@ -144,7 +144,7 @@ for(i in 1:nrow(summary)){
 }
 ```
   
-The 116th Congress of the United States convened on January 3rd, 2019 and ended on January 3rd, 2021, giving way to the 117th Congress. With the 116th Congress concluded, the record of its legislative accomplishments is complete. 
+The 116th Congress of the United States convened on January 3rd, 2019 and ended on January 3rd, 2021, giving way to the 117th Congress. Before looking forward to the accomplishments of the next Congress, it's worth looking back at the record of the 116th Congress's legislative accomplishments and the elected officials that made Washington work. 
 
 Over 15,000 bills were introduced in the House and Senate, 1,800 bills passed at least one chamber of Congress, 344 bills became law, and President Trump vetoed 10 bills. Hover over the Sankey diagram's links below for more information.
 
@@ -698,6 +698,8 @@ chordDiagram(t(house_adj_matrix),
   
 ## House Summary Stats and Centality Measurements  
   
+Can you find your representative?  
+
 ```{r house stats table, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center'}
 
 # house centrality
