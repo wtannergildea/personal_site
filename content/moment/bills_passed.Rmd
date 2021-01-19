@@ -948,7 +948,11 @@ reactable(all_bills,
           resizable = TRUE,
           columns = list("Legislation #" = colDef(width = 100),
                          Title = colDef(width = 300)))
-                         # Cosponsors = colDef(width = 60)))
+  #                                       cell = function() {
+  #   # Render as a link
+  #   url <- all_bills$`Bill URL`
+  #   htmltools::tags$a(href = url, target = all_bills$title)
+  # })))
 ```
   
 ***  
