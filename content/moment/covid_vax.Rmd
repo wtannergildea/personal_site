@@ -239,13 +239,13 @@ ggsave(filename = "vax_map.png", device = "png", width = 7, height = 5)
   days_since_dec_14 <- as.numeric(Sys.Date() - as.Date('2020-12-14'))
   daily_vax_doses <- read_csv("vax_time_series.csv") 
  
-  historic_vax_total <- sum(daily_vax_doses$daily_vaccinations)
-  today_vax_doses <- as.numeric(round(cdc_vax_total_doses - historic_vax_total,1)) 
-
-new_daily_row <- data.frame(Sys.Date(),today_vax_doses)
-names(new_daily_row) <- c("date","daily_vaccinations")
-
-daily_vax_doses <- rbind(daily_vax_doses,new_daily_row)
+#   historic_vax_total <- sum(daily_vax_doses$daily_vaccinations)
+#   today_vax_doses <- as.numeric(round(cdc_vax_total_doses - historic_vax_total,1)) 
+# 
+# new_daily_row <- data.frame(Sys.Date(),today_vax_doses)
+# names(new_daily_row) <- c("date","daily_vaccinations")
+# 
+# daily_vax_doses <- rbind(daily_vax_doses,new_daily_row)
 
 # get average rate accounting for 2020 reporting buildup on Jan 1 2021
 average_daily_rate <- round(sum(daily_vax_doses$daily_vaccinations)/days_since_dec_14, 2)
@@ -402,7 +402,7 @@ ggsave(filename = "total_vax.png", device = "png", width = 7, height = 5)
 ``` 
   
 ### Flow of Vaccine Distribution
-```{r vax flow}
+```{r vax flow, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center'}
 # build nodes
 flow_nodes <- data.frame(c(1:4),c("Operation Warp Speed", "Vaccine distributed to states", "First doses administered", "Second doses administered"))
 names(flow_nodes) <- c("id","label")
