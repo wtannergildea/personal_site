@@ -435,7 +435,7 @@ sankey_color <-'d3.scaleOrdinal() .range(["#3395FF","#EBE965","#AAEB65", "green"
 
 sankeyNetwork(Links = flow_edges_d3, Nodes = flow_nodes_d3, Source = "from", Target = "to",
               NodeID = "label", Value = "weight", fontSize = 16,
-              sinksRight = T,
+              sinksRight = F,
               iterations = 50,
               nodeWidth = 30,
               nodePadding = 30,
