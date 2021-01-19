@@ -146,7 +146,7 @@ for(i in 1:nrow(summary)){
   
 The 116th Congress of the United States convened on January 3rd, 2019 and ended on January 3rd, 2021, giving way to the 117th Congress. Before looking forward to the accomplishments of the next Congress, it's worth looking back at the record of the 116th Congress's legislative accomplishments and the elected officials that made Washington work. 
 
-Over 15,000 bills were introduced in the House and Senate, 1,800 bills passed at least one chamber of Congress, 344 bills became law, and President Trump vetoed 10 bills. Hover over the Sankey diagram's links below for more information.
+Over 15,000 bills were introduced in the House and Senate, 1,800 bills passed at least one chamber of Congress, 344 bills became law, and President Trump vetoed 10 bills.
 
 ```{r sankey, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center', fig.height= 8}
 # make sankey of overall bills - too messy for legislative
@@ -181,7 +181,7 @@ sankeyNetwork(Links = bill_flow_edges_d3, Nodes = bill_flow_nodes_d3, Source = "
 
 ***  
 
-Before moving onto a full network analysis of the 116th Congress, some historical comparison of the 116th Congress alongside previous sessions of Congress is presented below. 
+Before moving onto a full network analysis of the 116th Congress, please find below some top-line metrics from the 116th Congress situated in comparative historical context.
 
 ```{r historical, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center', fig.height= 8}
 # historical bar chart of number of bills passed per congress
@@ -229,7 +229,7 @@ The number of bills considered on the floor of both chambers of Congress has rem
 ***  
 ## Senate Legislative Network Analysis
 
-The Senate and House are groups of individual senators and representatives that, taken together, form the Congress of United States. Much like a social network like Instagram or the human nervous system, representatives in Congress are connected through various relationships, such as political party or home state.
+**Now, for the main subject of this article: the legislative network of Congress.** The Senate and House are groups of individual senators and representatives that, taken together, form the Congress of United States. Much like a social network like Instagram or the human nervous system, representatives in Congress are connected through various relationships, such as political party or home state.
 
 The primary role of senators and representatives is to legislate: to write and pass bills that ultimately become law. For those that need it, [click here for a quick refresher](https://www.youtube.com/watch?v=FFroMQlKiag) on the legislative process. But senators and representatives don't write and pass bills alone - they need to work with other elected officials to shepherd bills through committee, garner support for a floor vote, and pass their respective chambers. 
 
@@ -374,7 +374,7 @@ visLayout(randomSeed = 123)
   
   
   
-The Senate legislative network above visualizes the sponsor-cosponsor relationship between senators for every bill that became law in the 116th Congress. **Senators at the center of the network worked together more closely with a higher number of other senators than those at the further edges of the network.** Clicking a particular senator's node will highlight every senator they worked with to pass legislation in the 116th Congress.
+The Senate legislative network above visualizes the sponsor-cosponsor relationship between senators for every bill that became law in the 116th Congress. The direction of the arrows illustrate the flow of cosponsorships from cosponsors to the original sponsor of a bill. **Senators at the center of the network worked together more closely with a higher number of other senators than those at the further edges of the network.** Clicking a particular senator's node will highlight every senator they worked with to pass legislation in the 116th Congress.
   
 ***  
   
@@ -437,7 +437,7 @@ chordDiagram(t(senate_adj_matrix),
 
 ```
   
-Though a healthy majority of bills passed were originally sponsored by a Republican (the GOP had Senate control in the 116th Congress), a fair number of passed legislation was sponsored by Democrats. Given the current 60 vote threshold in the Senate to overcome the filibuster and pass legislation, it's not surprising a significant number of Democrats cosponsored Republican bills that became law, and vice-versa. This will look different in the majority-rule house further below.  
+Similar to the full network visualization prior, the arrows indicate the flow of cosponsorships from cosponsors to original bill sponsors. Though a healthy majority of bills passed were originally sponsored by a Republican (the GOP had Senate control in the 116th Congress), a fair number of passed legislation was sponsored by Democrats. Given the current (60 vote threshold in the Senate to overcome the filibuster)[https://www.brookings.edu/policy2020/votervital/what-is-the-senate-filibuster-and-what-would-it-take-to-eliminate-it/] and pass legislation, it's not surprising a significant number of Democrats cosponsored Republican bills that became law, and vice-versa. This will look different in the majority-rule house further below.  
   
 ***  
 ## The Influence of Individual Senators   
