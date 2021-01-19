@@ -142,12 +142,17 @@ vax_html_raw <- content(GET('https://www.nytimes.com/interactive/2020/us/covid-1
 # turn into manageable table
 vax <- vax_html_raw %>%
   html_node('table') %>%
-  html_table() %>%
+  html_table() 
+
+names(vax) <- c(1,2,3,4,5,6)
+
+vax <- vax %>%
   rename(state = 1) %>%
-  rename(doses_received = `Doses distributed`,
-         shots_given = `Shots given`) %>%
+  rename(doses_received = 4,
+         shots_given = 5) %>%
  mutate(doses_received = parse_number(doses_received),
-        shots_given = parse_number(shots_given))
+        shots_given = parse_number(shots_given)) %>%
+  select(1,4,5)
 
 # join with covid_summary table and add more summary stats
 master_summary <- covid_summary %>%
@@ -245,8 +250,11 @@ daily_vax_doses <- rbind(daily_vax_doses,new_daily_row)
 # get average rate accounting for 2020 reporting buildup on Jan 1 2021
 average_daily_rate <- round(sum(daily_vax_doses$daily_vaccinations)/days_since_dec_14, 2)
 
+nrow<- nrow(daily_vax_doses)
+seven_day_average_rate <- round(sum(daily_vax_doses$daily_vaccinations[(nrow-6):nrow])/7,2)
+
 # overwrite existing csv to include today's number, to be used tomorrow
-write_csv(daily_vax_doses, "vax_time_series.csv")
+# write_csv(daily_vax_doses, "vax_time_series.csv")
 
 # remove backlog for smooth function
 daily_vax_doses_no_backlog <- daily_vax_doses %>%
@@ -307,6 +315,7 @@ ggplot(aes(x = date, y = daily_vaccinations)) +
        y = "First doses (in millions)",
        title = paste0("~", cdc_vax_total_doses, " million total doses given in U.S."),
        subtitle = paste0("Since vaccinations began, the U.S. has averaged ", average_daily_rate, " million total doses per day.\n",
+                         "Seven day rolling average: ", seven_day_average_rate, " million total doses per day.\n",
                          "Last updated: ", format(as.Date(Sys.Date(),"%Y-%m-%d"), "%B %d, %Y")),
        caption = "Data from CDC.gov") +
   
@@ -762,7 +771,7 @@ daily_tweet <- paste0("Daily update ", format(as.Date(Sys.Date(),"%Y-%m-%d"), "%
                       "\n",
                       total_vax_perc, "% of the U.S. population has been vaccinated against Covid-19. That's ", cdc_vax_total_first_doses, " million first doses.\n",
                       "\n",
-                      "There have been ", total_covid_cases, " confirmed cases of Covid-19.\n",
+                      "The seven day rolling average is ", seven_day_average_rate, " million doses per day.\n",
                       "\n",
                       "The U.S. is ~", us_perc_to_immunity, "% of the way to herd immunity.\n",
                       "\n",
@@ -770,13 +779,17 @@ daily_tweet <- paste0("Daily update ", format(as.Date(Sys.Date(),"%Y-%m-%d"), "%
                       )
 
 # tweet! and change image each day
-tweet_image <- 
-  if(sample(1:2,1)==1){
+tweet_image_func <- function(){
+  x <- sample(1:3)
+  if(x==1){
     "herd_map.png"
-  } else {
+  } else if (x==2) {
     "vax_map.png"
+  } else {
+    "daily_vax.png"
   }
-
+}
+tweet_image <- tweet_image_func()
 
 # updateStatus(text = daily_tweet,
 #              mediaPath = tweet_image,

@@ -233,9 +233,9 @@ The Senate and House are groups of individual senators and representatives that,
 
 The primary role of senators and representatives is to legislate: to write and pass bills that ultimately become law. For those that need it, [click here for a quick refresher](https://www.youtube.com/watch?v=FFroMQlKiag) on the legislative process. But senators and representatives don't write and pass bills alone - they need to work with other elected officials to shepherd bills through committee, garner support for a floor vote, and pass their respective chambers. 
 
-These legislative relationships are best represented through the **sponsor-cosponsor relationship**:    
-1. For a bill to be submitted for consideration, at least one senator or representative must sponsor it.   
-2. The sponsor of a bill can then recruit others to cosponsor the bill, indicating support and generating momentum.  
+These legislative relationships are best represented through the [**sponsor-cosponsor relationship**](https://www.legion.org/legislative/thomas/8974/part-4-sponsors-and-co-sponsors):    
+1. For a bill to be submitted for consideration, at least one senator or representative must sponsor it. The first name on the bill is the sponsor, and all additional names are known as "original" cosponsors.  
+2. The sponsor of a bill can then recruit others to cosponsor the bill after introduction, indicating support and generating momentum.  
 3. A bill can have any number of cosponsors, and generally many more representatives will ultimately vote for a bill than cosponsor it.   
 
 Network analysis allows for a quantitative analysis of this legislative network. In a network, **nodes** are connected to each other through **ties** of varying directions and strengths. In this legislative network, ***the senators and representatives are nodes connected to each other through the bills they have sponsored and cosponsored***. 
@@ -636,7 +636,7 @@ visNetwork(
   
 ***  
   
-In the majority-rule House, the number of bills that passed were sponsored by Democrats significantly more so than by Republicans (the Democrats regained control for the 116th Congress).  
+**In the majority-rule House**, the number of bills that passed were sponsored by Democrats significantly more so than by Republicans (the Democrats regained control for the 116th Congress).  
 
 ```{r house chord diagram,echo = FALSE, message=FALSE, warning=FALSE,fig.align='center'}
 # house chord diagram using circulize() package
