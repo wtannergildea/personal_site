@@ -148,16 +148,17 @@ names(vax) <- c(1,2,3,4,5,6)
 
 vax <- vax %>%
   rename(state = 1) %>%
-  rename(doses_received = 4,
+  rename(perc_vax = 2,
+    doses_received = 4,
          shots_given = 5) %>%
  mutate(doses_received = parse_number(doses_received),
-        shots_given = parse_number(shots_given)) %>%
-  select(1,4,5)
+        shots_given = parse_number(shots_given),
+        perc_vax = as.numeric(sub("%", "", perc_vax))/100) %>%
+  select(1,2,4,5)
 
 # join with covid_summary table and add more summary stats
 master_summary <- covid_summary %>%
   left_join(vax, by = "state") %>%
-  mutate(perc_vax = shots_given/pop) %>%
   mutate(perc_protection = perc_vax + perc_pop_covid) %>%
   mutate(perc_herd_immunity = perc_protection/0.7) %>%
   mutate(perc_vax_given = round(100*shots_given/doses_received,1))
