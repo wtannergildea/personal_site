@@ -240,13 +240,13 @@ ggsave(filename = "vax_map.png", device = "png", width = 7, height = 5)
   days_since_dec_14 <- as.numeric(Sys.Date() - as.Date('2020-12-14'))
   daily_vax_doses <- read_csv("vax_time_series.csv") 
  
-#  historic_vax_total <- sum(daily_vax_doses$daily_vaccinations)
-#  today_vax_doses <- as.numeric(round(cdc_vax_total_doses - historic_vax_total,1))
+historic_vax_total <- sum(daily_vax_doses$daily_vaccinations)
+today_vax_doses <- as.numeric(round(cdc_vax_total_doses - historic_vax_total,1))
 
-#new_daily_row <- data.frame(Sys.Date(),today_vax_doses)
-##names(new_daily_row) <- c("date","daily_vaccinations")
+new_daily_row <- data.frame(Sys.Date(),today_vax_doses)
+names(new_daily_row) <- c("date","daily_vaccinations")
 
-#daily_vax_doses <- rbind(daily_vax_doses,new_daily_row)
+daily_vax_doses <- rbind(daily_vax_doses,new_daily_row)
 
 # get average rate accounting for 2020 reporting buildup on Jan 1 2021
 average_daily_rate <- round(sum(daily_vax_doses$daily_vaccinations)/days_since_dec_14, 2)
@@ -255,7 +255,7 @@ nrow<- nrow(daily_vax_doses)
 seven_day_average_rate <- round(sum(daily_vax_doses$daily_vaccinations[(nrow-6):nrow])/7,2)
 
 # overwrite existing csv to include today's number, to be used tomorrow
- write_csv(daily_vax_doses, "vax_time_series.csv")
+# write_csv(daily_vax_doses, "vax_time_series.csv")
 
 # remove backlog for smooth function
 daily_vax_doses_no_backlog <- daily_vax_doses %>%
@@ -796,9 +796,13 @@ tweet_image_func <- function(){
 }
 tweet_image <- tweet_image_func()
 
-# updateStatus(text = daily_tweet,
-#              mediaPath = tweet_image,
-#              bypassCharLimit = TRUE)
+# SECTION TO UNCOMMENT ONCE WHEN KNITTING
+updateStatus(text = daily_tweet,
+             mediaPath = tweet_image,
+             bypassCharLimit = TRUE)
+
+# overwrite existing csv to include today's number, to be used tomorrow
+ write_csv(daily_vax_doses, "vax_time_series.csv")
 
 ```
  
