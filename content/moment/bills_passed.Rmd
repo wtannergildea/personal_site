@@ -437,7 +437,7 @@ chordDiagram(t(senate_adj_matrix),
 
 ```
   
-Similar to the full network visualization prior, the arrows indicate the flow of cosponsorships from cosponsors to original bill sponsors. Though a healthy majority of bills passed were originally sponsored by a Republican (the GOP had Senate control in the 116th Congress), a fair number of passed legislation was sponsored by Democrats. Given the current (60 vote threshold in the Senate to overcome the filibuster)[https://www.brookings.edu/policy2020/votervital/what-is-the-senate-filibuster-and-what-would-it-take-to-eliminate-it/] and pass legislation, it's not surprising a significant number of Democrats cosponsored Republican bills that became law, and vice-versa. This will look different in the majority-rule house further below.  
+Similar to the full network visualization prior, the arrows indicate the flow of cosponsorships from cosponsors to original bill sponsors. Though a healthy majority of bills passed were originally sponsored by a Republican (the GOP had Senate control in the 116th Congress), a fair number of passed legislation was sponsored by Democrats. Given the current [60 vote threshold in the Senate to overcome the filibuster](https://www.brookings.edu/policy2020/votervital/what-is-the-senate-filibuster-and-what-would-it-take-to-eliminate-it/) and pass legislation, it's not surprising a significant number of Democrats cosponsored Republican bills that became law, and vice-versa. This will look different in the majority-rule house further below.  
   
 ***  
 ## The Influence of Individual Senators   
