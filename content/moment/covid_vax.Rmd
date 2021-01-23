@@ -250,12 +250,12 @@ ggsave(filename = "vax_map.png", device = "png", width = 7, height = 5)
   daily_vax_doses <- read_csv("vax_time_series.csv") 
  
 historic_vax_total <- sum(daily_vax_doses$daily_vaccinations)
-# today_vax_doses <- as.numeric(round(cdc_vax_total_doses - historic_vax_total,1))
-# 
-# new_daily_row <- data.frame(Sys.Date(),today_vax_doses)
-# names(new_daily_row) <- c("date","daily_vaccinations")
-# 
-# daily_vax_doses <- rbind(daily_vax_doses,new_daily_row)
+today_vax_doses <- as.numeric(round(cdc_vax_total_doses - historic_vax_total,1))
+
+new_daily_row <- data.frame(Sys.Date(),today_vax_doses)
+names(new_daily_row) <- c("date","daily_vaccinations")
+
+daily_vax_doses <- rbind(daily_vax_doses,new_daily_row)
 
 # get average rate accounting for 2020 reporting buildup on Jan 1 2021
 average_daily_rate <- round(sum(daily_vax_doses$daily_vaccinations)/days_since_dec_14, 2)
@@ -373,12 +373,12 @@ ggplot(aes(x = date, y = total)) +
   
   # 100 mil doses day
   geom_col(aes(x = projected_vax_100$date[nrow(projected_vax_100)],
-               y = .95,
+               y = 1,
                fill = "100 million doses")) +
   
     # biden 100 days
   geom_col(aes(x = date('2021-04-30'),
-           y = .95,
+           y = 1,
            fill = "Biden's 100 days")) +
   
   # geom_smooth(data = daily_vax_doses_no_backlog, 
