@@ -29,6 +29,7 @@ library(sf)
 library(psych)
 library(lubridate)
 library(networkD3)
+library(reactable)
 
 # download and unzip shape files
 download.file("https://www2.census.gov/geo/tiger/GENZ2018/shp/cb_2018_us_state_20m.zip", destfile = "states.zip")
@@ -349,6 +350,8 @@ for(i in 1:nrow(projected_vax_100)){
   projected_vax_100$total[i] <- sum(projected_vax_100$daily_vaccinations[1:i])
 }
 
+first_area <- projected_vax_100 %>% filter(date <= Sys.Date())
+second_area <- projected_vax_100 %>% filter(date > max(first_area$date))
 
 projected_vax_100 %>%
 ggplot(aes(x = date, y = total)) +
@@ -359,8 +362,13 @@ ggplot(aes(x = date, y = total)) +
   
   geom_line() +
   
-  geom_area(alpha = .4,
-            fill = "#648D69") +
+  geom_area(data = first_area,
+            alpha = .4,
+            aes(fill = "Doses given")) +
+  
+    geom_area(data = second_area,
+            alpha = .4,
+            aes(fill = "Projected doses")) +
 
   
   # 100 mil doses day
@@ -388,13 +396,13 @@ ggplot(aes(x = date, y = total)) +
   
   scale_y_continuous(n.breaks = 8) +
   
-  scale_fill_manual(values=c("#10B626", "red")) +
+  scale_fill_manual(values=c("#10B626","red", "#648D69", "grey")) +
   
   labs(x = NULL,
        y = "Total doses (in millions)",
        fill = NULL,
        title = paste0("Biden's promise: 100 million shots in 100 days"),
-       subtitle = paste0("100 million doses date: ", format(projected_vax_100$date[nrow(projected_vax_100)],"%B %d, %Y"), "\n",
+       subtitle = paste0("Projected 100 million doses date: ", format(projected_vax_100$date[nrow(projected_vax_100)],"%B %d, %Y"), "\n",
                          "7 day rolling average: ", seven_day_average_rate, " million total doses per day"),
        caption = paste0("Last updated: ", format(as.Date(Sys.Date(),"%Y-%m-%d"), "%B %d, %Y"))) +
   
@@ -653,6 +661,34 @@ Such uncertainty could lead to herd immunity being achieved either more quickly 
 **At the current vaccination rate, the U.S. is not projected to achieve herd immunity until `r vax_day`.**    
 
 What is more certain is that to achieve herd immunity by Covid-19 infection alone, as some [fringe public health commentators](https://www.politico.com/news/2020/12/16/trump-appointee-demanded-herd-immunity-strategy-446408) and [right-wing politicians](https://www.washingtonpost.com/politics/trump-coronavirus-scott-atlas-herd-immunity/2020/08/30/925e68fe-e93b-11ea-970a-64c73a1c2392_story.html) have previously suggested the U.S. do, **approximately `r deaths_to_herd` more Americans would die!**  
+
+```{r reactable_summary, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center'}
+
+vax_table <- master_summary %>%
+  filter(state != "District of Columbia") %>%
+  arrange(state) %>%
+  select(1,9, 10, 13, 8, 12) %>%
+  mutate(perc_herd_immunity = round(perc_herd_immunity,2)) %>%
+  mutate(perc_vax = scales::percent(perc_vax, accuracy = .1),
+         perc_vax_given = scales::percent(perc_vax_given/100, accuracy = .1),
+         perc_herd_immunity = scales::percent(perc_herd_immunity, accuracy = 1)) %>%
+  rename(State = state,
+         `Doses Received` = doses_received,
+         `Shots Givens` = shots_given,
+         `% Vaccinated` = perc_vax,
+         `% Doses Used` = perc_vax_given,
+         `% to Herd Immunity` = perc_herd_immunity) 
+  
+reactable(vax_table,
+          defaultSorted = list("State" = "asc"),
+          searchable = TRUE,
+          bordered = TRUE,
+          striped = TRUE,
+          highlight = TRUE,
+          compact = TRUE, 
+          resizable = TRUE)
+
+```
   
 ***
 # Covid-19 Case Data 
