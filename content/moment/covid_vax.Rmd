@@ -250,12 +250,12 @@ ggsave(filename = "vax_map.png", device = "png", width = 7, height = 5)
   daily_vax_doses <- read_csv("vax_time_series.csv") 
  
 historic_vax_total <- sum(daily_vax_doses$daily_vaccinations)
-today_vax_doses <- as.numeric(round(cdc_vax_total_doses - historic_vax_total,1))
-
-new_daily_row <- data.frame(Sys.Date(),today_vax_doses)
-names(new_daily_row) <- c("date","daily_vaccinations")
-
-daily_vax_doses <- rbind(daily_vax_doses,new_daily_row)
+# today_vax_doses <- as.numeric(round(cdc_vax_total_doses - historic_vax_total,1))
+# 
+# new_daily_row <- data.frame(Sys.Date(),today_vax_doses)
+# names(new_daily_row) <- c("date","daily_vaccinations")
+# 
+# daily_vax_doses <- rbind(daily_vax_doses,new_daily_row)
 
 # get average rate accounting for 2020 reporting buildup on Jan 1 2021
 average_daily_rate <- round(sum(daily_vax_doses$daily_vaccinations)/days_since_dec_14, 2)
@@ -614,6 +614,42 @@ total_days <- round(days_since_dec_14 * 70 / as.numeric(total_vax_perc),0)
 
 vax_day <- format(as.Date('2020-12-14') + total_days, "%B %d, %Y")
 
+# new herd immmunity projection
+
+# seven day covid case average
+seven_day_average_covid_case_rate <- daily_states %>%
+  filter(date > Sys.Date() - 8) %>%
+  group_by(date) %>%
+  summarize(seven_day_state_cases = sum(new_cases)) %>%
+  ungroup() %>%
+  summarize(seven_day_mean_cases = round(mean(seven_day_state_cases),0)/1000000)
+
+seven_day_average_covid_case_rate <- seven_day_average_covid_case_rate$seven_day_mean_cases[1]
+
+# full projected
+full_herd_projection <- daily_vax_doses %>%
+  rename(protection_mil = 2)
+
+full_herd_projection$protection_mil[1] <- full_herd_projection$protection_mil[1] + sum(master_summary$total_cases)/1000000
+
+current_herd_total <- sum(full_herd_projection$protection_mil)
+
+while(current_herd_total <= 231) {
+  
+  add_row <- data.frame(date,seven_day_average_rate + seven_day_average_covid_case_rate)
+  
+  names(add_row) <- c("date","protection_mil")
+
+  full_herd_projection <- rbind(full_herd_projection,add_row)
+  
+  current_herd_total <- current_herd_total + seven_day_average_rate + seven_day_average_covid_case_rate
+  date <- date + 1
+}
+
+for(i in 1:nrow(full_herd_projection)){
+  full_herd_projection$total[i] <- sum(full_herd_projection$protection_mil[1:i])
+}
+
 # make map
 ggplot(map_data, aes(x = long, 
                      y = lat, 
@@ -630,8 +666,8 @@ ggplot(map_data, aes(x = long,
   
   labs(x = NULL, 
        y = NULL,
-       title = paste0("~", us_perc_to_immunity, "% of the way to U.S. herd immunity threshold"),
-       subtitle = paste0("Estimated by combining confirmed vaccinations and infections.\nAssuming 70% herd immunity threshold and protection against re-infection.\nExpect lag in reported vaccinations, and significant undercount of U.S. infections.\nLast updated: ",
+       title = paste0("~", us_perc_to_immunity, "% of the way to 70% U.S. herd immunity threshold"),
+       subtitle = paste0("Projected herd immunity date: ", vax_day,"\nLast updated: ",
          format(as.Date(Sys.Date(),"%Y-%m-%d"), "%B %d, %Y")),
        caption = "Data from The New York Times and the CDC.",
        fill = "% to herd immunity") +
@@ -649,6 +685,63 @@ ggsave(filename = "herd_map.png", device = "png", width = 7, height = 5)
 
 # deaths to herd immunity
 deaths_to_herd <- format(round(sum(master_summary$total_deaths)/(sum(master_summary$perc_pop_covid)/100) - sum(master_summary$total_deaths),0),format = "d", big.mark = ",")
+```
+
+```{r projected_herd_timeline, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center'}
+herd_first_area <- full_herd_projection %>% filter(date <= Sys.Date())
+herd_second_area <- full_herd_projection %>% filter(date > max(herd_first_area$date))
+
+full_herd_projection %>%
+ggplot(aes(x = date, y = total)) +
+  
+  geom_point(fill = "#65DDEB", 
+           alpha = 1, 
+           size = .5) + 
+  
+  geom_line() +
+  
+  geom_area(data = herd_first_area,
+            alpha = .4,
+            aes(fill = "People protected")) +
+  
+    geom_area(data = herd_second_area,
+            alpha = .4,
+            aes(fill = "Projected people protected")) +
+  
+    # herd day
+  geom_col(aes(x = max(full_herd_projection$date),
+           y = 1.33,
+           fill = "Herd Immunity Day!!")) +
+  
+  theme_tufte() +
+  
+  scale_x_date(date_breaks = "15 days",
+              date_labels = ("%B %d"),
+              limits = c(min(full_herd_projection$date), max(full_herd_projection$date)+1)) +
+  
+  scale_y_continuous(n.breaks = 5) +
+  
+  scale_fill_manual(values=c("#10B626","yellow", "grey")) +
+  
+  labs(x = NULL,
+       y = "People protected (in millions)",
+       fill = NULL,
+       title = paste0("When will we reach herd immunity?"),
+       subtitle = paste0("At 70% threshold, projected date: ", format(full_herd_projection$date[nrow(full_herd_projection)],"%B %d, %Y"), "\n"),
+       caption = paste0("Last updated: ", format(as.Date(Sys.Date(),"%Y-%m-%d"), "%B %d, %Y"))) +
+  
+  theme(plot.caption = element_text(size = 12, face = "italic"),
+        plot.title = element_text(size=16, face = "bold"),
+        plot.subtitle = element_text(size=12),
+        text=element_text(family="Georgia"),
+        axis.title.y = element_text(size = 12),
+        axis.text = element_text(size = 14, face = "bold"),
+        axis.text.x = element_text(angle = 40, vjust = 1, hjust = 1, size = 10),
+        panel.grid.major.y = element_line(colour = "grey", size = .5),
+        panel.grid.minor.y = element_line(colour = "grey90", size = 0.3))
+
+ggsave(filename = "projected_herd_date.png", device = "png", width = 10, height = 6)
+
 ```
   
   
