@@ -246,16 +246,16 @@ ggsave(filename = "vax_map.png", device = "png", width = 7, height = 5)
 ### Daily First Doses Given in U.S.
 ```{r time series of vaccinations, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center'}
 # prep daily dose data by subtracting all past vax with CDC total from today
-  days_since_dec_14 <- as.numeric(Sys.Date() - as.Date('2020-12-14'))
-  daily_vax_doses <- read_csv("vax_time_series.csv") 
+days_since_dec_14 <- as.numeric(Sys.Date() - as.Date('2020-12-14'))
+daily_vax_doses <- read_csv("vax_time_series.csv") 
  
 historic_vax_total <- sum(daily_vax_doses$daily_vaccinations)
-# today_vax_doses <- as.numeric(round(cdc_vax_total_doses - historic_vax_total,1))
-# 
-# new_daily_row <- data.frame(Sys.Date(),today_vax_doses)
-# names(new_daily_row) <- c("date","daily_vaccinations")
-# 
-# daily_vax_doses <- rbind(daily_vax_doses,new_daily_row)
+today_vax_doses <- as.numeric(round(cdc_vax_total_doses - historic_vax_total,1))
+
+new_daily_row <- data.frame(Sys.Date(),today_vax_doses)
+names(new_daily_row) <- c("date","daily_vaccinations")
+
+daily_vax_doses <- rbind(daily_vax_doses,new_daily_row)
 
 # get average rate accounting for 2020 reporting buildup on Jan 1 2021
 average_daily_rate <- round(sum(daily_vax_doses$daily_vaccinations)/days_since_dec_14, 2)
@@ -597,11 +597,11 @@ tooltip = "text") %>%
 Though the vaccines were [developed and approved in record time](https://learningenglish.voanews.com/a/how-covid-19-vaccines-developed-in-record-time/5703115.html), the vaccine distribution campaign is off to a [slow and concerning start](https://www.nbcnews.com/politics/white-house/biden-talk-covid-harris-gets-vaccine-n1252464). The federal government's [Operation Warp Speed](https://www.hhs.gov/coronavirus/explaining-operation-warp-speed/index.html) fell far short of its [initial goal to deliver 20 million vaccinations](https://www.npr.org/sections/coronavirus-live-updates/2020/12/31/952208601/u-s-likely-will-miss-goal-of-vaccinating-20-million-by-the-new-year) by the end of December, and drastic improvements in distribution will be necessary to hit the new Biden administration's goal of [100 million vaccine doses in his first 100 days](https://www.theguardian.com/us-news/2020/dec/08/joe-biden-coronavirus-vaccine-health-team).  
   
 ***
-# Estimated U.S. Percent to Goal of Achieving Herd Immunity  
+# When Will the U.S. Achieve Herd Immunity?  
 ```{r herd immunity map, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center'}
 
 
-# days since dec 14 / % percent to herd * 100 = total days 
+# days since dec 14 / % percent to herd * 100 = total days
 # herd immunity date = total days + dec 14
 
 days_since_dec_14 <- as.numeric(Sys.Date() - as.Date('2020-12-14'))
@@ -762,7 +762,38 @@ The majority of public health experts have estimated general herd immunity is ac
 
 The percent to herd immunity calculations presented in the figure above assume this 70% protection rate and some form of [protection against reinfection](https://www.cancer.gov/news-events/cancer-currents-blog/2020/coronavirus-antibodies-protect-against-future-infection#:~:text=Using%20real%2Dworld%20data%20from,being%20reinfected%20with%20the%20virus%20.) from Covid-19 antibodies. While the true herd immunity protection threshold may be higher than 70%, the true number of U.S. Covid-19 cases may also be [substantially underestimated](https://publichealth.berkeley.edu/news-media/research-highlights/us-covid-19-cases-may-be-substantially-underestimated/). 
 
-Such uncertainty could lead to herd immunity being achieved either more quickly or more slowly than projected above. Thus, this figure is meant to illustrate a rough approximation of the country's progress towards herd immunity, rather than a definitive projection.   
+$\text{herd immunity date} = D$
+
+$$\text{ where:}$$
+
+$$\sum_{n=a}^{i} C_n +  \sum_{n=b}^{i} \frac{V_n}{2}+ \sum_{n=i}^{D} (\frac{\hat V_n}{2} + \hat C_n) = .70*USpop$$
+$$\text{and:}$$
+
+$a = \text{date of first Covid-19 case}$
+
+$i = \text{today's date}$
+
+$C = \text{daily Covid-19 cases confirmed}$
+
+$b = \text{date of first vaccine dose given}$
+
+$V = \text{daily vax doses given}$
+
+$\bar v = \text{seven day rolling average of daily vax doses given}$
+
+$\hat V = \text{projected daily vax doses given} = \bar v$
+
+$\bar c = \text{seven day rolling average of daily Covid cases confirmed}$
+
+$\hat C = \text{projected daily Covid-19 cases} = \bar c$
+
+$USpop = 330,000,000$
+
+
+
+
+
+Such uncertainty could lead to herd immunity being achieved either more quickly or more slowly than projected above. Thus, these figures are meant to illustrate a rough approximation of the country's progress towards herd immunity, rather than a definitive projection.   
 
 **At the rolling seven-day average vaccination and case rates, the U.S. is projected to achieve herd immunity `r herd_date`.** All assumptions considered, this is likely a conservative date - assuming single-dose vaccines are introduced into distribution from Johnson & Johnson and/or AstraZeneca, and the rate of daily vaccinations continues to increase.   
 
