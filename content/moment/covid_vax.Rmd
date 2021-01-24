@@ -168,7 +168,7 @@ for(i in 1:nrow(vax)){
 # join with covid_summary table and add more summary stats
 master_summary <- covid_summary %>%
   left_join(vax, by = "state") %>%
-  mutate(perc_protection = perc_vax + perc_pop_covid) %>%
+  mutate(perc_protection = perc_vax/2 + perc_pop_covid) %>%
   mutate(perc_herd_immunity = perc_protection/0.7) %>%
   mutate(perc_vax_given = round(100*shots_given/doses_received,1))
 
@@ -599,11 +599,7 @@ Though the vaccines were [developed and approved in record time](https://learnin
 ***
 # Estimated U.S. Percent to Goal of Achieving Herd Immunity  
 ```{r herd immunity map, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center'}
-# topline % to immunity stat
-# total covid cases + total shots given / total us population / .7
-us_perc_to_immunity <- round(100*(sum(master_summary$total_cases) + cdc_vax_total_doses*1000000) / 
-  sum(master_summary$pop) / 
-  .7,1)
+
 
 # days since dec 14 / % percent to herd * 100 = total days 
 # herd immunity date = total days + dec 14
@@ -652,6 +648,16 @@ while(current_herd_total <= 231) {
 for(i in 1:nrow(full_herd_projection)){
   full_herd_projection$total[i] <- sum(full_herd_projection$protection_mil[1:i])
 }
+
+# topline % to immunity stat
+# total covid cases + total shots given / total us population / .7
+# us_perc_to_immunity <- round(100*(sum(master_summary$total_cases) + cdc_vax_total_doses*1000000) / 
+#   sum(master_summary$pop) / 
+#   .7,1)
+
+us_perc_to_immunity <- full_herd_projection %>% filter(date == Sys.Date())
+us_perc_to_immunity <- round(100*us_perc_to_immunity$total[1]/231,1)
+
 
 # make map
 ggplot(map_data, aes(x = long, 
@@ -703,7 +709,7 @@ ggplot(aes(x = date, y = total)) +
   
   geom_point(fill = "#65DDEB", 
            alpha = 1, 
-           size = .5) + 
+           size = .1) + 
   
   geom_line() +
   
