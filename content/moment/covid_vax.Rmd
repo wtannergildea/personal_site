@@ -628,7 +628,8 @@ seven_day_average_covid_case_rate <- seven_day_average_covid_case_rate$seven_day
 
 # full projected
 full_herd_projection <- daily_vax_doses %>%
-  rename(protection_mil = 2)
+  rename(protection_mil = 2) %>%
+  mutate(protection_mil = protection_mil/2)
 
 full_herd_projection$protection_mil[1] <- full_herd_projection$protection_mil[1] + sum(master_summary$total_cases)/1000000
 
@@ -638,13 +639,13 @@ date <- Sys.Date() + 1
 
 while(current_herd_total <= 231) {
   
-  add_row <- data.frame(date,seven_day_average_rate + seven_day_average_covid_case_rate)
+  add_row <- data.frame(date,seven_day_average_rate/2 + seven_day_average_covid_case_rate)
   
   names(add_row) <- c("date","protection_mil")
 
   full_herd_projection <- rbind(full_herd_projection,add_row)
   
-  current_herd_total <- current_herd_total + seven_day_average_rate + seven_day_average_covid_case_rate
+  current_herd_total <- current_herd_total + seven_day_average_rate/2 + seven_day_average_covid_case_rate
   date <- date + 1
 }
 
@@ -716,12 +717,12 @@ ggplot(aes(x = date, y = total)) +
   
     # herd day
   geom_col(aes(x = max(full_herd_projection$date),
-           y = 1.33,
+           y = .77,
            fill = "Herd Immunity Day!!")) +
   
   theme_tufte() +
   
-  scale_x_date(date_breaks = "15 days",
+  scale_x_date(date_breaks = "25 days",
               date_labels = ("%B %d"),
               limits = c(min(full_herd_projection$date), max(full_herd_projection$date)+1)) +
   
@@ -757,7 +758,7 @@ The percent to herd immunity calculations presented in the figure above assume t
 
 Such uncertainty could lead to herd immunity being achieved either more quickly or more slowly than projected above. Thus, this figure is meant to illustrate a rough approximation of the country's progress towards herd immunity, rather than a definitive projection.   
 
-**At the rolling seven-day average vaccination and case rates, the U.S. is projected to achieve herd immunity `r herd_date`.**    
+**At the rolling seven-day average vaccination and case rates, the U.S. is projected to achieve herd immunity `r herd_date`.** All assumptions considered, this is likely a conservative date - assuming single-dose vaccines are introduced into distribution from Johnson & Johnson and/or AstraZeneca, and the rate of daily vaccinations continues to increase.   
 
 What is more certain is that to achieve herd immunity by Covid-19 infection alone, as some [fringe public health commentators](https://www.politico.com/news/2020/12/16/trump-appointee-demanded-herd-immunity-strategy-446408) and [right-wing politicians](https://www.washingtonpost.com/politics/trump-coronavirus-scott-atlas-herd-immunity/2020/08/30/925e68fe-e93b-11ea-970a-64c73a1c2392_story.html) have previously suggested the U.S. do, **approximately `r deaths_to_herd` more Americans would die!**  
 
@@ -964,10 +965,10 @@ ggplot(aes(x = date,
 **Questions or comments?** *Please reach out!*  
 
   
-**Data Sources:**  
-- [NY Times Covid-19 github repo](https://github.com/nytimes/covid-19-data)  
-- [NY Times vaccine distribution data](https://www.nytimes.com/interactive/2020/us/covid-19-vaccine-doses.html)  
+**Data Sources:** 
 - [CDC vaccine distribution data](https://covid.cdc.gov/covid-data-tracker/#vaccinations)  
+- [NY Times Covid-19 github repo](https://github.com/nytimes/covid-19-data)  
+  
 
 *Created in R.*
 
