@@ -669,7 +669,7 @@ ggplot(map_data, aes(x = long,
   labs(x = NULL, 
        y = NULL,
        title = paste0("~", us_perc_to_immunity, "% of the way to 70% U.S. herd immunity threshold"),
-       subtitle = paste0("Projected herd immunity date: ", vax_day,"\nLast updated: ",
+       subtitle = paste0("Projected herd immunity date: ",format(full_herd_projection$date[nrow(full_herd_projection)],"%B %d, %Y"),"\nLast updated: ",
          format(as.Date(Sys.Date(),"%Y-%m-%d"), "%B %d, %Y")),
        caption = "Data from The New York Times and the CDC.",
        fill = "% to herd immunity") +
@@ -687,8 +687,12 @@ ggsave(filename = "herd_map.png", device = "png", width = 7, height = 5)
 
 # deaths to herd immunity
 deaths_to_herd <- format(round(sum(master_summary$total_deaths)/(sum(master_summary$perc_pop_covid)/100) - sum(master_summary$total_deaths),0),format = "d", big.mark = ",")
-```
 
+# herd date
+herd_date <- format(full_herd_projection$date[nrow(full_herd_projection)],"%B %d, %Y")
+```
+  
+  
 ```{r projected_herd_timeline, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center'}
 herd_first_area <- full_herd_projection %>% filter(date <= Sys.Date())
 herd_second_area <- full_herd_projection %>% filter(date > max(herd_first_area$date))
@@ -753,7 +757,7 @@ The percent to herd immunity calculations presented in the figure above assume t
 
 Such uncertainty could lead to herd immunity being achieved either more quickly or more slowly than projected above. Thus, this figure is meant to illustrate a rough approximation of the country's progress towards herd immunity, rather than a definitive projection.   
 
-**At the current vaccination rate, the U.S. is not projected to achieve herd immunity until `r vax_day`.**    
+**At the rolling seven-day average vaccination and case rates, the U.S. is projected to achieve herd immunity `r herd_date`.**    
 
 What is more certain is that to achieve herd immunity by Covid-19 infection alone, as some [fringe public health commentators](https://www.politico.com/news/2020/12/16/trump-appointee-demanded-herd-immunity-strategy-446408) and [right-wing politicians](https://www.washingtonpost.com/politics/trump-coronavirus-scott-atlas-herd-immunity/2020/08/30/925e68fe-e93b-11ea-970a-64c73a1c2392_story.html) have previously suggested the U.S. do, **approximately `r deaths_to_herd` more Americans would die!**  
 
