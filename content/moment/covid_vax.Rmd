@@ -634,6 +634,8 @@ full_herd_projection$protection_mil[1] <- full_herd_projection$protection_mil[1]
 
 current_herd_total <- sum(full_herd_projection$protection_mil)
 
+date <- Sys.Date() + 1
+
 while(current_herd_total <= 231) {
   
   add_row <- data.frame(date,seven_day_average_rate + seven_day_average_covid_case_rate)
@@ -990,13 +992,15 @@ daily_tweet <- paste0("Daily update ", format(as.Date(Sys.Date(),"%Y-%m-%d"), "%
 
 # tweet! and change image each day
 tweet_image_func <- function(){
-  x <- sample(1:3)
+  x <- sample(1:4)
   if(x==1){
     "herd_map.png"
   } else if (x==2) {
     "vax_map.png"
-  } else {
+  } else if (x==3){
     "daily_vax.png"
+  } else {
+    "projected_herd_date.png"
   }
 }
 tweet_image <- tweet_image_func()
