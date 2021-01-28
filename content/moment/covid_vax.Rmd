@@ -1,7 +1,7 @@
 ---
 title: "U.S. Covid-19 vaccination live tracker"
 author: "Tanner Gildea"
-date: "2020-12-28"
+date: "2020-01-28"
 output: html_document
 tags:
   - "healthcare"
@@ -30,6 +30,9 @@ library(psych)
 library(lubridate)
 library(networkD3)
 library(reactable)
+library(readbitmap)
+library(png)
+
 
 # download and unzip shape files
 download.file("https://www2.census.gov/geo/tiger/GENZ2018/shp/cb_2018_us_state_20m.zip", destfile = "states.zip")
@@ -351,7 +354,7 @@ for(i in 1:nrow(projected_vax_100)){
 }
 
 first_area <- projected_vax_100 %>% filter(date <= Sys.Date())
-second_area <- projected_vax_100 %>% filter(date > max(first_area$date))
+second_area <- projected_vax_100 %>% filter(date > max(first_area$date)-1)
 
 projected_vax_100 %>%
 ggplot(aes(x = date, y = total)) +
@@ -373,12 +376,12 @@ ggplot(aes(x = date, y = total)) +
   
   # 100 mil doses day
   geom_col(aes(x = projected_vax_100$date[nrow(projected_vax_100)],
-               y = 1.05,
+               y = 1.13,
                fill = "100 million doses")) +
   
     # biden 100 days
   geom_col(aes(x = date('2021-04-30'),
-           y = 1.05,
+           y = 1.13,
            fill = "Biden's 100 days")) +
   
   # geom_smooth(data = daily_vax_doses_no_backlog, 
@@ -594,7 +597,12 @@ tooltip = "text") %>%
 ``` 
   
   
-Though the vaccines were [developed and approved in record time](https://learningenglish.voanews.com/a/how-covid-19-vaccines-developed-in-record-time/5703115.html), the vaccine distribution campaign is off to a [slow and concerning start](https://www.nbcnews.com/politics/white-house/biden-talk-covid-harris-gets-vaccine-n1252464). The federal government's [Operation Warp Speed](https://www.hhs.gov/coronavirus/explaining-operation-warp-speed/index.html) fell far short of its [initial goal to deliver 20 million vaccinations](https://www.npr.org/sections/coronavirus-live-updates/2020/12/31/952208601/u-s-likely-will-miss-goal-of-vaccinating-20-million-by-the-new-year) by the end of December, and drastic improvements in distribution will be necessary to hit the new Biden administration's goal of [100 million vaccine doses in his first 100 days](https://www.theguardian.com/us-news/2020/dec/08/joe-biden-coronavirus-vaccine-health-team).  
+Though the vaccines were [developed and approved in record time](https://learningenglish.voanews.com/a/how-covid-19-vaccines-developed-in-record-time/5703115.html), the vaccine distribution campaign is off to a [slow and concerning start](https://www.nbcnews.com/politics/white-house/biden-talk-covid-harris-gets-vaccine-n1252464). Though the federal government's [Operation Warp Speed](https://www.hhs.gov/coronavirus/explaining-operation-warp-speed/index.html) fell far short of its [initial goal to deliver 20 million vaccinations](https://www.npr.org/sections/coronavirus-live-updates/2020/12/31/952208601/u-s-likely-will-miss-goal-of-vaccinating-20-million-by-the-new-year) by the end of December, improvements in distribution make it quite clear the U.S. will hit the Biden administration's goal of [100 million vaccine doses in his first 100 days](https://www.theguardian.com/us-news/2020/dec/08/joe-biden-coronavirus-vaccine-health-team). It now appears Biden is aiming for 1.5 million doses per day in his 100 days, which again, seems reasonable if not certain.  
+
+But forget goals - what if the U.S. distributed all the vaccine supply promised to it by Moderna and Pfizer (220 million doses by end of Q1 2021)? We could hit herd immunity by early June.  
+```{r Q1 figure, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center'}
+knitr::include_graphics("Q1_supply_herd_date.png")
+```
   
 ***
 # When Will the U.S. Achieve Herd Immunity?  
@@ -723,7 +731,7 @@ ggplot(aes(x = date, y = total)) +
   
     # herd day
   geom_col(aes(x = max(full_herd_projection$date),
-           y = .8,
+           y = .83,
            fill = "Herd Immunity Day!!")) +
   
   theme_tufte() +
