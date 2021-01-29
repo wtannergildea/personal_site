@@ -1052,11 +1052,11 @@ tweet_image_func <- function(){
 }
 tweet_image <- tweet_image_func()
 
-# # SECTION TO UNCOMMENT ONCE WHEN KNITTING
+# SECTION TO UNCOMMENT ONCE WHEN KNITTING
 # updateStatus(text = daily_tweet,
 #              mediaPath = tweet_image,
 #              bypassCharLimit = TRUE)
-# 
+
 # # overwrite existing csv to include today's number, to be used tomorrow
 #  write_csv(daily_vax_doses, "vax_time_series.csv")
 
