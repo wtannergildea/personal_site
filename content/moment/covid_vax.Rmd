@@ -149,7 +149,9 @@ vax <- vax_html_raw %>%
   html_table() 
 
 full_states <- read_csv("full_states_nyt_html.csv", 
-    col_names = FALSE)
+    col_names = FALSE) %>%
+  arrange(X1) %>%
+  filter(X1!="Name")
 
 names(vax) <- c(1,2,3,4,5,6)
 
@@ -161,7 +163,10 @@ vax <- vax %>%
  mutate(doses_received = parse_number(doses_received),
         shots_given = parse_number(shots_given),
         perc_vax = as.numeric(sub("%", "", perc_vax))/100) %>%
-  select(1,2,4,5) 
+  select(1,2,4,5) %>%
+  arrange(state) %>%
+  filter(!is.na(perc_vax))
+  
 
 for(i in 1:nrow(vax)){
   vax$state[i] <- full_states$X1[i]
