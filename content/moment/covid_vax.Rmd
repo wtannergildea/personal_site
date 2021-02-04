@@ -309,7 +309,7 @@ ggplot(aes(x = date, y = daily_vaccinations)) +
            color = "black",
            size = 3,
            font = "Georgia") +
-  geom_segment(aes(x = daily_vax_doses$date[34], y = 0, xend= daily_vax_doses$date[34], yend = 2.1)) +
+  geom_segment(aes(x = daily_vax_doses$date[33], y = 0, xend= daily_vax_doses$date[33], yend = 2.1)) +
 
   theme_tufte() +
   
@@ -321,8 +321,7 @@ ggplot(aes(x = date, y = daily_vaccinations)) +
   labs(x = NULL,
        y = "Total doses (in millions)",
        title = paste0("~", cdc_vax_total_doses, " million total doses given in U.S."),
-       subtitle = paste0("Since vaccinations began, the U.S. has averaged ", average_daily_rate, " million total doses per day.\n",
-                         "Seven day rolling average: ", seven_day_average_rate, " million total doses per day.\n",
+       subtitle = paste0("Seven day rolling average: ", seven_day_average_rate, " million total doses per day.\n",
                          "Last updated: ", format(as.Date(Sys.Date(),"%Y-%m-%d"), "%B %d, %Y")),
        caption = "Data from CDC.gov") +
   
@@ -393,12 +392,12 @@ ggplot(aes(x = date, y = total)) +
   
   # 100 mil doses day
   geom_col(aes(x = projected_vax_100$date[nrow(projected_vax_100)],
-               y = 1.1,
+               y = 1.15,
                fill = "100 million doses")) +
   
     # biden 100 days
   geom_col(aes(x = date('2021-04-30'),
-           y = 1.1,
+           y = 1.15,
            fill = "Biden's 100 days")) +
   
   # geom_smooth(data = daily_vax_doses_no_backlog, 
@@ -745,7 +744,7 @@ ggplot(aes(x = date, y = total)) +
   
     # herd day
   geom_col(aes(x = max(full_herd_projection$date),
-           y = .78,
+           y = .85,
            fill = "Herd Immunity Day!!")) +
   
   theme_tufte() +
@@ -774,7 +773,6 @@ ggplot(aes(x = date, y = total)) +
         axis.text.x = element_text(angle = 40, vjust = 1, hjust = 1, size = 10),
         panel.grid.major.y = element_line(colour = "grey", size = .5),
         panel.grid.minor.y = element_line(colour = "grey90", size = 0.3))
-
 ggsave(filename = "projected_herd_date.png", device = "png", width = 10, height = 6)
 
 ```
