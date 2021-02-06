@@ -238,7 +238,7 @@ ggplot(map_data, aes(x = long,
        caption = "Data from The New York Times; the CDC; U.S. Department of Health and Human Services; and state surveys and announcements.",
        fill = NULL) +
   
-  scale_fill_gradient(low = "grey", high = "light blue", labels = scales::percent) +
+  scale_fill_gradient(low = "light blue", high = "blue", labels = scales::percent) +
   
   theme_map() +
 
