@@ -1,13 +1,15 @@
 ---
 title: "U.S. Covid-19 vaccination live tracker"
 author: "Tanner Gildea"
-date: "2021-01-28"
-output: html_document
+date: '2021-01-28'
+output:
+  html_document: default
+  pdf_document: default
 tags:
-  - "healthcare"
-  - "NY Times"
-  - "Covid-19"
-  - "Tanner Gildea"
+- healthcare
+- NY Times
+- Covid-19
+- Tanner Gildea
 ---
 
 ```{r setup, include=FALSE}
