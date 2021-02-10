@@ -394,12 +394,12 @@ ggplot(aes(x = date, y = total)) +
   
   # 100 mil doses day
   geom_col(aes(x = projected_vax_100$date[nrow(projected_vax_100)],
-               y = 1.23,
+               y = 1.28,
                fill = "100 million doses")) +
   
     # biden 100 days
   geom_col(aes(x = date('2021-04-30'),
-           y = 1.23,
+           y = 1.28,
            fill = "Biden's 100 days")) +
   
   # geom_smooth(data = daily_vax_doses_no_backlog, 
@@ -746,7 +746,7 @@ ggplot(aes(x = date, y = total)) +
   
     # herd day
   geom_col(aes(x = max(full_herd_projection$date),
-           y = .9,
+           y = .93,
            fill = "Herd Immunity Day!!")) +
   
   theme_tufte() +
@@ -1043,15 +1043,17 @@ twitter_bearer_token <- "AAAAAAAAAAAAAAAAAAAAAIUMLQEAAAAAe0G%2FxEMgbhwZ1ve99ZSq8
 setup_twitter_oauth(twitter_api_key, twitter_api_secret, "1345057778822504448-exYE3x4CTA33PabgXpQFUEyHYWwU59", "GUGstuQfV1GpPXwysI5snwJh3gon6Va6LKghAr8XNe5We")
 
 # post a tweet from R
-daily_tweet <- paste0("Daily update ", format(as.Date(Sys.Date(),"%Y-%m-%d"), "%m/%d/%Y"), ":\n",
-                      "\n",
-                      total_vax_perc, "% of the U.S. population has been vaccinated against Covid-19. That's ", cdc_vax_total_first_doses, " million first doses.\n",
-                      "\n",
-                      "The seven day rolling average is ", seven_day_average_rate, " million doses per day.\n",
-                      "\n",
-                      "The U.S. is ~", us_perc_to_immunity, "% of the way to herd immunity.\n",
-                      "\n",
-                      "Live tracker: https://bit.ly/covid_vax_tracker"
+daily_tweet <- paste0("🚨 Daily update ", format(as.Date(Sys.Date(),"%Y-%m-%d"), "%m/%d/%Y"), ":\n",
+
+                      "💉 Daily new doses: ", today_vax_doses, " million \\n",
+                      "📈 7-day rolling average: ", seven_day_average_rate, " million doses/day\n",
+
+                      "⚕️ % received at least one dose: ~", total_vax_perc, "% \n",
+
+                      "📊 % to 70% herd immunity: ~", us_perc_to_immunity, "% \n",
+                      "📅 Projected herd immunity date: ", herd_date, "\n",
+
+                      "👀 Live tracker: https://bit.ly/covid_vax_tracker"
                       )
 
 # tweet! and change image each day
@@ -1076,6 +1078,5 @@ tweet_image <- tweet_image_func()
 
 # # overwrite existing csv to include today's number, to be used tomorrow
 #write_csv(daily_vax_doses, "vax_time_series.csv")
-
 ```
  
