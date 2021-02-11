@@ -1076,7 +1076,8 @@ tweet_image <- tweet_image_func()
 #              mediaPath = tweet_image,
 #              bypassCharLimit = TRUE)
 
-# # overwrite existing csv to include today's number, to be used tomorrow
 #write_csv(daily_vax_doses, "vax_time_series.csv")
+
 ```
+
  
