@@ -296,7 +296,7 @@ ggplot(aes(x = date, y = daily_vaccinations)) +
               fullrange=FALSE) +
   
   annotate(geom="text", 
-           x= daily_vax_doses$date[8], 
+           x= daily_vax_doses$date[10], 
            y = 2.35, 
            label= "Includes backlog from Dec. 14 - Jan. 1, 2021", 
            color = "black",
@@ -306,8 +306,18 @@ ggplot(aes(x = date, y = daily_vaccinations)) +
   #snow storm
   annotate(geom="text", 
            x= daily_vax_doses$date[31], 
-           y = 2.1, 
+           y = 2.2, 
            label= "Nor'Easter", 
+           color = "black",
+           size = 3,
+           font = "Georgia") +
+  geom_segment(aes(x = daily_vax_doses$date[46], y = 0, xend= daily_vax_doses$date[46], yend = 2.35)) +
+  
+  #president's day
+  annotate(geom="text", 
+           x= daily_vax_doses$date[42], 
+           y = 2.42, 
+           label= "Presidents Day Holiday", 
            color = "black",
            size = 3,
            font = "Georgia") +
@@ -394,12 +404,12 @@ ggplot(aes(x = date, y = total)) +
   
   # 100 mil doses day
   geom_col(aes(x = projected_vax_100$date[nrow(projected_vax_100)],
-               y = 1.3,
+               y = 1.35,
                fill = "100 million doses")) +
   
     # biden 100 days
   geom_col(aes(x = date('2021-04-30'),
-           y = 1.3,
+           y = 1.35,
            fill = "Biden's 100 days")) +
   
   # geom_smooth(data = daily_vax_doses_no_backlog, 
@@ -746,7 +756,7 @@ ggplot(aes(x = date, y = total)) +
   
     # herd day
   geom_col(aes(x = max(full_herd_projection$date),
-           y = .96,
+           y = .99,
            fill = "Herd Immunity Day!!")) +
   
   theme_tufte() +
@@ -1077,7 +1087,6 @@ tweet_image <- tweet_image_func()
 # updateStatus(text = daily_tweet,
 #              mediaPath = tweet_image,
 #              bypassCharLimit = TRUE)
-
 
 
 ```
