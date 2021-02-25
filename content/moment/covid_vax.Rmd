@@ -1091,4 +1091,77 @@ tweet_image <- tweet_image_func()
 
 ```
 
+```{r new herd graph, include=FALSE}
+# daily cases
+# daily_cases <- read_csv(url("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv")) %>%
+#   group_by(date) %>%
+#   summarize(cases = sum(cases)) %>%
+#   mutate(cases = 4.6*cases/1000000)
+# 
+# # daily vax
+# daily_vaccines <- daily_vax_doses 
+# 
+# for(i in 1:nrow(daily_vaccines)){
+#   daily_vaccines$total[i] <- sum(daily_vaccines$daily_vaccinations[1:i])
+# }
+# 
+# daily_vaccines <- daily_vaccines %>% mutate(total = total/2) %>%
+#   select(date,total) %>%
+#   rename(vax_protected = total)
+# 
+# # protection
+# 
+# protection <- left_join(daily_cases, daily_vaccines, by = c("date"="date")) %>%
+#   mutate(total_protected = cases + vax_protected)
+# 
+# total_protected <- max(protection$total_protected, na.rm = TRUE)
+# 
+# date <- Sys.Date() + 1
+# 
+# while(total_protected <= 297) {
+#   
+#   add_new_row <- data.frame(date, 
+#                             4.6*seven_day_average_covid_case_rate + max(protection$cases, na.rm = TRUE),
+#                             seven_day_average_rate + max(protection$vax_protected, na.rm = TRUE),
+#                             4.6*seven_day_average_covid_case_rate + max(protection$cases, na.rm = TRUE) + seven_day_average_rate + max(protection$vax_protected, na.rm = TRUE))
+#   
+#   names(add_new_row) <- c("date","cases","vax_protected","total_protected")
+# 
+#   protection <- rbind(protection,add_new_row)
+#   
+#   total_protected <- max(protection$total_protected, na.rm = TRUE)
+#   date <- date + 1
+# }
+# 
+# protection <- protection %>% mutate(date = as.Date(date))
+# protection %>%
+#   ggplot(aes(x=date, y = total_protected)) +
+#   geom_area(fill = "#19EEEC") +
+#   geom_area(aes(x=date,y=cases), fill = "#FF364C") +
+#   theme_tufte()+
+#   
+#     scale_x_date(date_breaks = "60 days",
+#               date_labels = ("%B %d, %Y")) +
+#   
+#   labs(x = NULL,
+#        y = "People protected (in millions)",
+#        fill = NULL,
+#        title = paste0("An optimistic path to herd immunity"),
+#        subtitle = paste0("At 90% threshold, projected date: ", format(protection$date[nrow(protection)],"%B %d, %Y"), "\n"),
+#        caption = paste0("Last updated: ", format(as.Date(Sys.Date(),"%Y-%m-%d"), "%B %d, %Y"))) +
+#   
+#   theme(plot.caption = element_text(size = 12, face = "italic"),
+#         plot.title = element_text(size=16, face = "bold"),
+#         plot.subtitle = element_text(size=12),
+#         text=element_text(family="Georgia"),
+#         axis.title.y = element_text(size = 12),
+#         axis.text = element_text(size = 14, face = "bold"),
+#         axis.text.x = element_text(angle = 40, vjust = 1, hjust = 1, size = 10),
+#         panel.grid.major.y = element_line(colour = "grey", size = .5),
+#         panel.grid.minor.y = element_line(colour = "grey90", size = 0.3))
+# 
+# ggsave(filename = "aggressive_herd_date.png", device = "png", width = 10, height = 6)
+  
+```
+
  
