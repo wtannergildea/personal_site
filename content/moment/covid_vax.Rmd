@@ -1055,17 +1055,17 @@ twitter_bearer_token <- "AAAAAAAAAAAAAAAAAAAAAIUMLQEAAAAAe0G%2FxEMgbhwZ1ve99ZSq8
 setup_twitter_oauth(twitter_api_key, twitter_api_secret, "1345057778822504448-exYE3x4CTA33PabgXpQFUEyHYWwU59", "GUGstuQfV1GpPXwysI5snwJh3gon6Va6LKghAr8XNe5We")
 
 # post a tweet from R
-daily_tweet <- paste0("🚨 Daily update ", format(as.Date(Sys.Date(),"%Y-%m-%d"), "%m/%d/%Y"), ":\n",
+daily_tweet <- paste0("Daily update ", format(as.Date(Sys.Date(),"%Y-%m-%d"), "%m/%d/%Y"), ":\n",
 
-                      "💉 Daily new doses: ", today_vax_doses, " million \\n",
-                      "📈 7-day rolling average: ", seven_day_average_rate, " million doses/day\n",
+                      "Daily new doses: ", today_vax_doses, " million \\n",
+                      "7-day rolling average: ", seven_day_average_rate, " million doses/day\n",
 
-                      "⚕️ % received at least one dose: ~", total_vax_perc, "% \n",
+                      "% received at least one dose: ~", total_vax_perc, "% \n",
 
-                      "📊 % to 70% herd immunity: ~", us_perc_to_immunity, "% \n",
-                      "📅 Projected herd immunity date: ", herd_date, "\n",
+                      "% to 70% herd immunity: ~", us_perc_to_immunity, "% \n",
+                      "Projected herd immunity date: ", herd_date, "\n",
 
-                      "👀 Live tracker: https://bit.ly/covid_vax_tracker"
+                      "Live tracker: https://bit.ly/covid_vax_tracker"
                       )
 
 # tweet! and change image each day
