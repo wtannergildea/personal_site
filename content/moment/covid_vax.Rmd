@@ -201,7 +201,7 @@ state_centers <- cbind(state_centers,state_abbv) %>%
 
 # topline values for map titles
 nyt_html_raw <- content(GET("https://www.nytimes.com/interactive/2020/us/covid-19-vaccine-doses.html")) %>%
-  html_node('p.g-body') %>%
+  html_nodes('p.g-body ') %>%
   html_text()
 
 # first doses
@@ -209,8 +209,8 @@ cdc_vax_total_doses<- as.numeric(unlist(regmatches(nyt_html_raw,
                              gregexpr("[[:digit:]]+\\.*[[:digit:]]*",nyt_html_raw))))
 
 
-cdc_vax_total_first_doses <- round(cdc_vax_total_doses[1],2)
-cdc_vax_total_second_doses <- round(cdc_vax_total_doses[3],2)
+cdc_vax_total_first_doses <- round(cdc_vax_total_doses[2],2)
+cdc_vax_total_second_doses <- round(cdc_vax_total_doses[4],2)
 # total doses 
 cdc_vax_total_doses <- cdc_vax_total_first_doses + cdc_vax_total_second_doses       
        
