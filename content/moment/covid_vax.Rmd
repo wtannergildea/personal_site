@@ -280,6 +280,7 @@ seven_day_average_rate <- round(sum(daily_vax_doses$daily_vaccinations[(nrow-6):
 daily_vax_doses_no_backlog <- daily_vax_doses %>%
   filter(date!='2021-01-01')
 
+
 # ready now to plot
 daily_vax_doses %>%
 ggplot(aes(x = date, y = daily_vaccinations)) +
@@ -1044,7 +1045,7 @@ ggplot(aes(x = date,
 ```{r twitter, include=FALSE}
 library(twitteR)
 
-#readr::write_csv(daily_vax_doses, "vax_time_series.csv")
+#daily_vaxreadr::write_csv(daily_vax_doses, "vax_time_series.csv")
 
 # connect to app
 twitter_app_name <- "US_covid_vax"
