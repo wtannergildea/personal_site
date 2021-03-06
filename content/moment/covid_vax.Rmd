@@ -1100,7 +1100,7 @@ tweet_image <- tweet_image_func()
 #   mutate(cases = 4.6*cases/1000000)
 # 
 # # daily vax
-# daily_vaccines <- daily_vax_doses 
+# daily_vaccines <- daily_vax_doses
 # 
 # for(i in 1:nrow(daily_vaccines)){
 #   daily_vaccines$total[i] <- sum(daily_vaccines$daily_vaccinations[1:i])
@@ -1120,16 +1120,16 @@ tweet_image <- tweet_image_func()
 # date <- Sys.Date() + 1
 # 
 # while(total_protected <= 297) {
-#   
-#   add_new_row <- data.frame(date, 
+# 
+#   add_new_row <- data.frame(date,
 #                             4.6*seven_day_average_covid_case_rate + max(protection$cases, na.rm = TRUE),
 #                             seven_day_average_rate + max(protection$vax_protected, na.rm = TRUE),
 #                             4.6*seven_day_average_covid_case_rate + max(protection$cases, na.rm = TRUE) + seven_day_average_rate + max(protection$vax_protected, na.rm = TRUE))
-#   
+# 
 #   names(add_new_row) <- c("date","cases","vax_protected","total_protected")
 # 
 #   protection <- rbind(protection,add_new_row)
-#   
+# 
 #   total_protected <- max(protection$total_protected, na.rm = TRUE)
 #   date <- date + 1
 # }
@@ -1140,17 +1140,17 @@ tweet_image <- tweet_image_func()
 #   geom_area(fill = "#19EEEC") +
 #   geom_area(aes(x=date,y=cases), fill = "#FF364C") +
 #   theme_tufte()+
-#   
+# 
 #     scale_x_date(date_breaks = "60 days",
 #               date_labels = ("%B %d, %Y")) +
-#   
+# 
 #   labs(x = NULL,
 #        y = "People protected (in millions)",
 #        fill = NULL,
 #        title = paste0("An optimistic path to herd immunity"),
 #        subtitle = paste0("At 90% threshold, projected date: ", format(protection$date[nrow(protection)],"%B %d, %Y"), "\n"),
 #        caption = paste0("Last updated: ", format(as.Date(Sys.Date(),"%Y-%m-%d"), "%B %d, %Y"))) +
-#   
+# 
 #   theme(plot.caption = element_text(size = 12, face = "italic"),
 #         plot.title = element_text(size=16, face = "bold"),
 #         plot.subtitle = element_text(size=12),
