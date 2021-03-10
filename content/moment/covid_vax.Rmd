@@ -137,8 +137,12 @@ covid_summary <- daily_states %>%
   arrange(perc_pop_covid) %>%
   mutate(state = factor(state, levels = state))
 ```
-**Last updated:** *`r format(as.Date(Sys.Date(),"%Y-%m-%d"), "%B %d, %Y")`*      
+**FINAL UPDATE:** *`r format(as.Date(Sys.Date(),"%Y-%m-%d"), "%B %d, %Y")`*      
 Best viewed on desktop.  
+
+When I launched this project late December 2020, major outlets were not tracking daily vaccination progress nor the path to herd immunity. Now, major publications have well-developed dashboards.
+
+Thanks to the small but loyal following. I leave this project very optimistic about the progress of the vaccination campaign, and encourage everyone to be vaccinated when it's your turn in line!
   
 # U.S. Covid-19 Vaccine Campaign Progress  
 ```{r web scrape vax, echo = FALSE, message=FALSE, warning=FALSE,fig.align='center'}
@@ -209,8 +213,8 @@ cdc_vax_total_doses<- as.numeric(unlist(regmatches(nyt_html_raw,
                              gregexpr("[[:digit:]]+\\.*[[:digit:]]*",nyt_html_raw))))
 
 
-cdc_vax_total_first_doses <- round(cdc_vax_total_doses[2],2)
-cdc_vax_total_second_doses <- round(cdc_vax_total_doses[4],2)
+cdc_vax_total_first_doses <- round(cdc_vax_total_doses[1],2)
+cdc_vax_total_second_doses <- round(cdc_vax_total_doses[3],2)
 # total doses 
 cdc_vax_total_doses <- cdc_vax_total_first_doses + cdc_vax_total_second_doses       
        
